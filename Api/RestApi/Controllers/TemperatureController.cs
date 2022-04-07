@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using RestAPI.Models;
+﻿
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace RestAPI.Controllers
+using Api.Models;
+using Microsoft.AspNetCore.Mvc;
+
+namespace Api.RestApi.Controllers
 {
     [Route("[controller]/{greenhouseId:int}")]
     [ApiController]
