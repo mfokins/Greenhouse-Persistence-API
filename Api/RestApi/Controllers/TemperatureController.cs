@@ -2,42 +2,42 @@
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
+using Api.Mappers;
 using Api.Models;
+using Core.Interfaces.Temperature;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.RestApi.Controllers
 {
-    [Route("[controller]/{greenhouseId:int}")]
+    [Route("[controller]/{greenhouseId}")]
     [ApiController]
     public class TemperatureController : ControllerBase
     {
+        private ITemperatureService _service;
+
+        public TemperatureController(ITemperatureService service)
+        {
+            _service = service;
+        }
         // GET: api/<TemperatureContoller>
         [HttpGet]
-        public IEnumerable<TemperatureMeasurement> Get([FromQuery] bool latest)
+        public IEnumerable<TemperatureMeasurement> Get([FromRoute] string greenhouseId, [FromQuery] bool latest)
         {
             if (latest)
             {
-
-                return new TemperatureMeasurement[1] {
-                    new TemperatureMeasurement()
-                    {
-                        Temperature =  Random.Shared.Next(-20, 55),
-                        Time = DateTimeOffset.Now.ToUnixTimeSeconds()
-                    }};
-                //return new TemperatureMeasurementcs[] { "value1", "value2" };
+                return new[] { DomToApi.Convert(_service.GetLatest(greenhouseId)) };
             }
-            return new TemperatureMeasurement[] {
-                    new TemperatureMeasurement()
-                    {
-                        Temperature =  Random.Shared.Next(-20, 55),
-                        Time = DateTimeOffset.Now.ToUnixTimeSeconds()
-                    },
-                    new TemperatureMeasurement()
-                    {
-                        Temperature =  Random.Shared.Next(-20, 55),
-                        Time = DateTimeOffset.Now.ToUnixTimeSeconds()
-                    }};
-
+            else
+            {
+                return _service.GetAll(greenhouseId).Select(x => DomToApi.Convert(x));
+            }
+        }
+        //Added so I can test the database
+        [HttpPost]
+        public void Post([FromRoute] string greenhouseId, [FromBody] TemperatureMeasurement value)
+        {
+            value.GreenHouseId = greenhouseId;
+            _service.Add(ApiToDom.Convert(value));
         }
     }
 }

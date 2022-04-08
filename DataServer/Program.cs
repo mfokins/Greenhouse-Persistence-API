@@ -1,4 +1,7 @@
+using Core.Interfaces.Temperature;
+using Core.Services;
 using Data;
+using Data.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,6 +13,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<GreenHouseDbContext>();
+builder.Services.AddScoped<ITemperatureRepository, TemperatureRepository>();
+builder.Services.AddScoped<ITemperatureService, TemperatureService>();
 
 
 var app = builder.Build();

@@ -8,5 +8,8 @@ namespace Core.Models
 {
     public class TemperatureMesurment
     {
+        public int Temperature { get; set; }
+        public DateTime Time { get; set; }
+        public string GreenHouseId { get; set; }
     }
 }

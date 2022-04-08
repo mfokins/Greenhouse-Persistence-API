@@ -1,14 +1,11 @@
 ﻿using Core.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Core.Interfaces.Temperature
 {
-    public interface ITemperatureRepository
+    public interface ITemperatureRepository : IDataReadRepository<TemperatureMesurment>, IDataWriteRepository<TemperatureMesurment>
     {
-        void Add(TemperatureMesurment temperature);
+        //Some extra stuff here if needed
+        IEnumerable<TemperatureMesurment> GetAll(string greenhouseId);
+        TemperatureMesurment GetLatest(string greenhouseId);
     }
 }
