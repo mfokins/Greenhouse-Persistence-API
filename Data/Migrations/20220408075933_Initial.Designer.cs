@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(GreenHouseDbContext))]
-    [Migration("20220407191324_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20220408075933_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
