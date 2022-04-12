@@ -12,7 +12,6 @@ namespace Data.Mappers
         {
             return new Core.Models.TemperatureMesurment()
             {
-                GreenHouseId = temperatureMesurment.GreenHouseId,
                 Temperature = temperatureMesurment.Temperature,
                 Time = temperatureMesurment.Time,
             };

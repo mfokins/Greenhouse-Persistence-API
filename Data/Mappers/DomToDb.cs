@@ -12,7 +12,6 @@ namespace Data.Mappers
         {
             return new Models.TemperatureMesurment()
             {
-                GreenHouseId = entity.GreenHouseId,
                 Temperature = entity.Temperature,
                 Time = entity.Time
             };

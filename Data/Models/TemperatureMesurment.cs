@@ -12,7 +12,5 @@ namespace Data.Models
         public DateTime Time { get; set; }
         [Key]
         public int Id { get; set; }
-        [Required]
-        public string GreenHouseId { get; set; }
     }
 }

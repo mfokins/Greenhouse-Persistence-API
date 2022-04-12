@@ -2,6 +2,8 @@
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
+using System.Collections.Generic;
+using System.Linq;
 using Api.Mappers;
 using Api.Models;
 using Core.Interfaces.Temperature;
