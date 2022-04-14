@@ -15,35 +15,35 @@ namespace Core.Services
         {
             _repository = repository;
         }
-        public void Add(TemperatureMesurment entity)
+        public void Add(TemperatureMeasurement entity)
         {
             _repository.Add(entity);
         }
 
-        public void Delete(TemperatureMesurment entity)
+        public void Delete(TemperatureMeasurement entity)
         {
             _repository.Delete(entity);
         }
 
-        public TemperatureMesurment Get(int id)
+        public TemperatureMeasurement Get(int id)
         {
             return _repository.Get(id);
         }
 
 
-        public IEnumerable<TemperatureMesurment> GetAll(string greenhouseId)
+        public IEnumerable<TemperatureMeasurement> GetAll(string greenhouseId)
         {
             return _repository.GetAll(greenhouseId);
         }
 
 
-        public TemperatureMesurment GetLatest(string greenhouseId)
+        public TemperatureMeasurement GetLatest(string greenhouseId)
         {
             return _repository.GetLatest(greenhouseId);
 
         }
 
-        public void Update(TemperatureMesurment entity)
+        public void Update(TemperatureMeasurement entity)
         {
              _repository.Update(entity);
         }

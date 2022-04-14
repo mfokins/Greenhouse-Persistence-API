@@ -8,12 +8,22 @@ namespace Data.Mappers
 {
     public class DbToDom
     {
-        public static Core.Models.TemperatureMesurment Convert(Models.TemperatureMesurment temperatureMesurment)
+        public static Core.Models.TemperatureMeasurement Convert(Models.TemperatureMeasurement temperatureMeasurement)
         {
-            return new Core.Models.TemperatureMesurment()
+            return new Core.Models.TemperatureMeasurement()
             {
-                Temperature = temperatureMesurment.Temperature,
-                Time = temperatureMesurment.Time,
+                Temperature = temperatureMeasurement.Temperature,
+                Time = temperatureMeasurement.Time,
+            };
+        }
+
+        public static Core.Models.LuminosityMeasurement Convert(Models.LuminosityMeasurement luminosityMeasurement)
+        {
+            return new Core.Models.LuminosityMeasurement()
+            {
+                Lux = luminosityMeasurement.Lux,
+                IsLit = luminosityMeasurement.IsLit,
+                Time = luminosityMeasurement.Time
             };
         }
     }

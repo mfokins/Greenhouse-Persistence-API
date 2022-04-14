@@ -1,10 +1,11 @@
 ﻿
 
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace Data.Models
 {
-    public  class TemperatureMesurment
+    public  class TemperatureMeasurement
     {   
         [Required]
         public int Temperature { get; set; }

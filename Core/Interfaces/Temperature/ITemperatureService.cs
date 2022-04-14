@@ -3,8 +3,8 @@ using Core.Models;
 
 namespace Core.Interfaces.Temperature
 {
-    public interface ITemperatureService : IDataTemplateService<TemperatureMesurment>
+    public interface ITemperatureService : IDataTemplateService<TemperatureMeasurement>
     {
-        TemperatureMesurment GetLatest(string greenhouseId);
+        TemperatureMeasurement GetLatest(string greenhouseId);
     }
 }

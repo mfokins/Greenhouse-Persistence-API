@@ -2,7 +2,7 @@
 
 namespace Data.Models
 {
-    public class CO2Mesurment
+    public class CO2Measurement
     {
         [Key]
         public int Id { get; set; }

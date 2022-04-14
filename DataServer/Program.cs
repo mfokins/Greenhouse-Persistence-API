@@ -1,8 +1,12 @@
+using Core.Interfaces.Luminosity;
 using Core.Interfaces.Temperature;
 using Core.Services;
 using Data;
 using Data.Repositories;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +19,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<GreenHouseDbContext>();
 builder.Services.AddScoped<ITemperatureRepository, TemperatureRepository>();
 builder.Services.AddScoped<ITemperatureService, TemperatureService>();
+builder.Services.AddScoped<ILuminosityRepository, LuminosityRepository>();
+builder.Services.AddScoped<ILuminosityService, LuminosityService>();
 
 
 var app = builder.Build();

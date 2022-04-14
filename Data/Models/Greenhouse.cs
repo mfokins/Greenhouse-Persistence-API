@@ -12,13 +12,13 @@ namespace Data.Models
         [Key]
         public string GreenHouseId { get; set; }
         [Required]
-        public IList<TemperatureMesurment> TemperatureMesurments { get; set; }
+        public IList<TemperatureMeasurement> TemperatureMesurments { get; set; }
         [Required]
-        public IList<CO2Mesurment> CO2Mesurments { get; set; }
+        public IList<CO2Measurement> CO2Mesurments { get; set; }
         [Required]
-        public IList<HumidityMesurment> HumidityMesurments { get; set; }
+        public IList<HumidityMeasurement> HumidityMesurments { get; set; }
         [Required]
-        public IList<LuminosityMesurment> LuminosityMesurments { get; set; }
+        public IList<LuminosityMeasurement> LuminosityMesurments { get; set; }
 
         [Required]
         public IList<Pot> Pots { get; set; }

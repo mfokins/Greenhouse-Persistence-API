@@ -1,4 +1,6 @@
-﻿using Core.Interfaces.Temperature;
+﻿using System;
+using System.Collections.Generic;
+using Core.Interfaces.Temperature;
 using Core.Models;
 using Data.Mappers;
 using Microsoft.EntityFrameworkCore;
@@ -14,7 +16,7 @@ namespace Data.Repositories
             _dbContext = dbContext;
         }
 
-        public void Add(TemperatureMesurment entity)
+        public void Add(TemperatureMeasurement entity)
         {
             throw new NotImplementedException();
 
@@ -22,7 +24,7 @@ namespace Data.Repositories
             //_dbContext.SaveChanges();
         }
 
-        public void Delete(TemperatureMesurment entity)
+        public void Delete(TemperatureMeasurement entity)
         {
             throw new NotImplementedException();
 
@@ -30,7 +32,7 @@ namespace Data.Repositories
             //_dbContext.SaveChanges();
         }
 
-        public TemperatureMesurment Get(int id)
+        public TemperatureMeasurement Get(int id)
         {
             throw new NotImplementedException();
 
@@ -38,7 +40,7 @@ namespace Data.Repositories
         }
 
 
-        public IEnumerable<TemperatureMesurment> GetAll(string greenhouseId)
+        public IEnumerable<TemperatureMeasurement> GetAll(string greenhouseId)
         {
             throw new NotImplementedException();
             // return _dbContext.TemperatureMesurments.Where(i => i.GreenHouseId == greenhouseId).Select(x => DbToDom.Convert(x));
@@ -46,7 +48,7 @@ namespace Data.Repositories
 
 
 
-        public TemperatureMesurment GetLatest(string greenhouseId)
+        public TemperatureMeasurement GetLatest(string greenhouseId)
         {
             throw new NotImplementedException();
             //return _dbContext.TemperatureMesurments
@@ -57,7 +59,7 @@ namespace Data.Repositories
             //    .FirstOrDefault();
         }
 
-        public void Update(TemperatureMesurment entity)
+        public void Update(TemperatureMeasurement entity)
         {
             throw new NotImplementedException();
         }

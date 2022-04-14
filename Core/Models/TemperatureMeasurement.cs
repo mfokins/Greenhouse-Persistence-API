@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Core.Models
 {
-    public class TemperatureMesurment
+    public class TemperatureMeasurement
     {
         public int Temperature { get; set; }
         public DateTime Time { get; set; }
