@@ -26,5 +26,14 @@ namespace Data.Mappers
                 Time = entity.Time
             };
         }
+        public static Models.DioxideCarbonMeasurement Convert(Core.Models.DioxideCarbonMeasurement entity)
+        {
+            return new Models.DioxideCarbonMeasurement()
+            {
+                Co2Measurement = entity.Co2Measurement,
+                Time = entity.Time
+            };
+        }
+        
     }
 }

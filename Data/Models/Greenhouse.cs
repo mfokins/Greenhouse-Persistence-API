@@ -14,9 +14,9 @@ namespace Data.Models
         [Required]
         public IList<TemperatureMeasurement> TemperatureMesurments { get; set; }
         [Required]
-        public IList<CO2Measurement> CO2Mesurments { get; set; }
+        public IList<DioxideCarbonMeasurement> Co2Measurements { get; set; }
         [Required]
-        public IList<HumidityMeasurement> HumidityMesurments { get; set; }
+        public IList<HumidityMeasurement> HumidityMeasurements { get; set; }
         [Required]
         public IList<LuminosityMeasurement> LuminosityMesurments { get; set; }
 
