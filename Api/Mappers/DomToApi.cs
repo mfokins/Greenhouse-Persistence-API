@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using LuminosityMeasurement = Api.Models.LuminosityMeasurement;
 using CoreLuminosityMeasurement = Core.Models.LuminosityMeasurement;
 using TemperatureMeasurement = Core.Models.TemperatureMeasurement;
+using HumidityMeasurement = Core.Models.HumidityMeasurement;
 
 
 namespace Api.Mappers
@@ -32,6 +33,16 @@ namespace Api.Mappers
                 IsLit = luminosityMeasurement.Lux >=
                         200, //if data is received from IoT here we can assign boolean value ourselves
                 Time = ((DateTimeOffset) luminosityMeasurement.Time).ToUnixTimeSeconds()
+            };
+        }
+        
+        public static Models.HumidityMeasurement Convert(HumidityMeasurement humidityMeasurement)
+        {
+            return new Api.Models.HumidityMeasurement()
+            {       
+                GreenHouseId = humidityMeasurement.GreenHouseId,
+                Humidity = humidityMeasurement.Humidity,
+                Time = ((DateTimeOffset) humidityMeasurement.Time).ToUnixTimeSeconds()
             };
         }
     }

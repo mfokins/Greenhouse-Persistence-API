@@ -1,3 +1,4 @@
+using Core.Interfaces.Humidity;
 using Core.Interfaces.Luminosity;
 using Core.Interfaces.Temperature;
 using Core.Services;
@@ -17,10 +18,15 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<GreenHouseDbContext>();
+
 builder.Services.AddScoped<ITemperatureRepository, TemperatureRepository>();
 builder.Services.AddScoped<ITemperatureService, TemperatureService>();
+
 builder.Services.AddScoped<ILuminosityRepository, LuminosityRepository>();
 builder.Services.AddScoped<ILuminosityService, LuminosityService>();
+
+builder.Services.AddScoped<IHumidityRepository, HumidityRepository>();
+builder.Services.AddScoped<IHumidityService, HumidityService>();
 
 
 var app = builder.Build();

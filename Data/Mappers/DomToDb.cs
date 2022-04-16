@@ -26,5 +26,14 @@ namespace Data.Mappers
                 Time = entity.Time
             };
         }
+        
+        public static Models.HumidityMeasurement Convert(Core.Models.HumidityMeasurement entity)
+        {
+            return new Models.HumidityMeasurement()
+            {
+                Humidity = entity.Humidity,
+                Time = entity.Time
+            };
+        }
     }
 }

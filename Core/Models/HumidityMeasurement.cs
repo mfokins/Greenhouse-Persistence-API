@@ -1,15 +1,12 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace Data.Models
+namespace Core.Models
 {
     public class HumidityMeasurement
     {
-        [Key]
-        public int Id { get; set; }
-        [Required]
+        public string GreenHouseId { get; set; }
         public int Humidity { get; set; }
-        [Required]
         public DateTime Time { get; set; }
         
     }
