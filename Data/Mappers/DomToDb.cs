@@ -26,7 +26,15 @@ namespace Data.Mappers
                 Time = entity.Time
             };
         }
-        
+        public static Models.DioxideCarbonMeasurement Convert(Core.Models.DioxideCarbonMeasurement entity)
+        {
+            return new Models.DioxideCarbonMeasurement()
+            {
+                Co2Measurement = entity.Co2Measurement,
+                Time = entity.Time
+            };
+        }
+
         public static Models.HumidityMeasurement Convert(Core.Models.HumidityMeasurement entity)
         {
             return new Models.HumidityMeasurement()
@@ -34,6 +42,6 @@ namespace Data.Mappers
                 Humidity = entity.Humidity,
                 Time = entity.Time
             };
-        }
+        }        
     }
 }

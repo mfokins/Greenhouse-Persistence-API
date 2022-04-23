@@ -26,7 +26,15 @@ namespace Data.Mappers
                 Time = luminosityMeasurement.Time
             };
         }
-        
+        public static Core.Models.DioxideCarbonMeasurement Convert(Models.DioxideCarbonMeasurement dioxideCarbonMeasurement)
+        {
+            return new Core.Models.DioxideCarbonMeasurement()
+            {
+                Co2Measurement = dioxideCarbonMeasurement.Co2Measurement,
+                Time = dioxideCarbonMeasurement.Time
+            };
+        }
+
         public static Core.Models.HumidityMeasurement Convert(Models.HumidityMeasurement humidityMeasurement)
         {
             return new Core.Models.HumidityMeasurement()
