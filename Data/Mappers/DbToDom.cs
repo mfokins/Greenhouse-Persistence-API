@@ -26,5 +26,14 @@ namespace Data.Mappers
                 Time = luminosityMeasurement.Time
             };
         }
+        
+        public static Core.Models.HumidityMeasurement Convert(Models.HumidityMeasurement humidityMeasurement)
+        {
+            return new Core.Models.HumidityMeasurement()
+            {
+                Humidity = humidityMeasurement.Humidity,
+                Time = humidityMeasurement.Time
+            };
+        }
     }
 }
