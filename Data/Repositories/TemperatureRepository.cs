@@ -18,31 +18,40 @@ namespace Data.Repositories
 
         public void Add(TemperatureMeasurement entity)
         {
-            throw new NotImplementedException();
 
-            //_dbContext.TemperatureMesurments.Add(DomToDb.Convert(entity));
-            //_dbContext.SaveChanges();
+            _dbContext.Greenhouses
+                .Include(g => g.TemperatureMesurments)
+                .FirstOrDefault(g => g.GreenHouseId == entity.GreenHouseId)
+                .TemperatureMesurments
+                    .Add(DomToDb.Convert(entity));
+            _dbContext.SaveChanges();
         }
 
         public void Delete(TemperatureMeasurement entity)
         {
-            throw new NotImplementedException();
-
+            _dbContext.Greenhouses
+                .Include(g => g.TemperatureMesurments)
+                .FirstOrDefault(g => g.GreenHouseId == entity.GreenHouseId)
+                .TemperatureMesurments
+                    .Remove(DomToDb.Convert(entity));
             //_dbContext.TemperatureMesurments.Remove(DomToDb.Convert(entity));
-            //_dbContext.SaveChanges();
+            _dbContext.SaveChanges();
         }
 
         public TemperatureMeasurement Get(int id)
         {
             throw new NotImplementedException();
-
-            // return DbToDom.Convert(_dbContext.TemperatureMesurments.FirstOrDefault(x => x.Id == id));
+            //TODO Have to change this method
         }
 
 
         public IEnumerable<TemperatureMeasurement> GetAll(string greenhouseId)
         {
-            throw new NotImplementedException();
+            return _dbContext.Greenhouses
+                    .Include(g => g.TemperatureMesurments)
+                    .FirstOrDefault(g => g.GreenHouseId == greenhouseId)
+                    .TemperatureMesurments
+                        .Select(t => DbToDom.Convert(t));
             // return _dbContext.TemperatureMesurments.Where(i => i.GreenHouseId == greenhouseId).Select(x => DbToDom.Convert(x));
         }
 
@@ -50,13 +59,17 @@ namespace Data.Repositories
 
         public TemperatureMeasurement GetLatest(string greenhouseId)
         {
-            throw new NotImplementedException();
+
+            return _dbContext.Greenhouses
+                    .Include(g => g.TemperatureMesurments)
+                    .FirstOrDefault(g => g.GreenHouseId == greenhouseId)
+                    .TemperatureMesurments
+                     .OrderByDescending(m => m.Time)
+                     .Take(1)
+                     .Select(x => DbToDom.Convert(x))
+                     .FirstOrDefault();
             //return _dbContext.TemperatureMesurments
-            //    .Where(x => x.GreenHouseId == greenhouseId)
-            //    .OrderByDescending(m => m.Time)
-            //    .Take(1)
-            //    .Select(x => DbToDom.Convert(x))
-            //    .FirstOrDefault();
+
         }
 
         public void Update(TemperatureMeasurement entity)
