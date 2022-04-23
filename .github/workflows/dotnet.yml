@@ -29,7 +29,7 @@ jobs:
           dotnet-version: '6.0' # SDK Version to use; x will use the latest version of the 3.1 channel
       
       - name: Publish prod
-        run: cd [yourAppFolder]; dotnet restore; dotnet publish -r linux-x64 --configuration "Release" --self-contained "true" -o ../site;
+        run: cd DataServer; dotnet restore; dotnet publish -r linux-x64 --configuration "Release" --self-contained "true" -o ../site;
 
       - name: Generate deployment package 
         run: cd site; zip ../site.zip *;
