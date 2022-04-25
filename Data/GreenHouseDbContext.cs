@@ -7,6 +7,8 @@ namespace Data
     {
        public DbSet<Greenhouse> Greenhouses { get; set; }
        public DbSet<DioxideCarbonMeasurement> DioxideCarbonMeasurement { get; set; }
+       
+       public DbSet<HumidityMeasurement> HumidityMeasurements { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
