@@ -1,8 +1,11 @@
-﻿namespace Core.Models;
+﻿using System;
 
-public class DioxideCarbonMeasurement
+namespace Core.Models
 {
-    public double Co2Measurement { get; set; }
-    public DateTime Time { get; set; }
-    public string GreenHouseId { get; set; }
+    public class DioxideCarbonMeasurement
+    {
+        public double Co2Measurement { get; set; }
+        public DateTime Time { get; set; }
+        public string GreenHouseId { get; set; }
+    }
 }
