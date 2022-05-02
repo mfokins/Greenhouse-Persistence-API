@@ -4,7 +4,6 @@ using Core.Models;
 
 namespace Core.Services
 {
-
     public class DioxideCarbonService : IDioxideCarbonRepository
     {
         private readonly IDioxideCarbonRepository _repository;

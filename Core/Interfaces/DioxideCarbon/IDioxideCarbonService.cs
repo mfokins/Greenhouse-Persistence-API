@@ -1,13 +1,16 @@
-﻿using Core.Models;
+﻿using Core.Interfaces;
+using Core.Models;
 
-namespace Core.Interfaces.DioxideCarbon;
-
-public interface IDioxideCarbonService  : IDataTemplateService<DioxideCarbonMeasurement>
+namespace Core.Interfaces.DioxideCarbon
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="greenhouseId"></param>
-    /// <returns></returns>
-    DioxideCarbonMeasurement GetLatest(string greenhouseId);
+
+    public interface IDioxideCarbonService : IDataTemplateService<DioxideCarbonMeasurement>
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="greenhouseId"></param>
+        /// <returns></returns>
+        DioxideCarbonMeasurement GetLatest(string greenhouseId);
+    }
 }

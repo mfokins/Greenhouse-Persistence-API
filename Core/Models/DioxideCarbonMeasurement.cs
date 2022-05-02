@@ -2,7 +2,6 @@
 
 namespace Core.Models
 {
-
     public class DioxideCarbonMeasurement
     {
         public double Co2Measurement { get; set; }
