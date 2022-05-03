@@ -16,14 +16,14 @@ namespace Data.Repositories
         {
             _dbContext = dbContext;
         }
+
+
         public HumidityMeasurement Get(int id)
         {
-            return DbToDom.Convert(
-                _dbContext.HumidityMeasurements
-                    .FirstOrDefault(h => h.Id == id));
+            throw new System.NotImplementedException();
         }
 
-        IEnumerable<HumidityMeasurement> IHumidityRepository.GetAll(string greenhouseId)
+        public IEnumerable<HumidityMeasurement> GetAll(string greenhouseId)
         {
             return _dbContext.Greenhouses
                 .Include(g => g.HumidityMeasurements)
@@ -43,11 +43,7 @@ namespace Data.Repositories
                 .Select(x => DbToDom.Convert(x))
                 .FirstOrDefault();
         }
-
-        IEnumerable<HumidityMeasurement> IDataReadRepository<HumidityMeasurement>.GetAll(string greenhouseId)
-        {
-            throw new System.NotImplementedException();
-        }
+        
 
         public void Add(HumidityMeasurement entity)
         {
@@ -60,9 +56,9 @@ namespace Data.Repositories
 
         public void Update(HumidityMeasurement entity)
         {
-            _dbContext.HumidityMeasurements.Update(DomToDb.Convert(entity));
-            _dbContext.SaveChanges();
+            throw new System.NotImplementedException();
         }
+
 
         public void Delete(HumidityMeasurement entity)
         {
