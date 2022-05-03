@@ -9,10 +9,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Data.Repositories
 {
-
     public class DioxideCarbonRepository : IDioxideCarbonRepository
     {
-
         private GreenHouseDbContext _dbContext;
 
         public DioxideCarbonRepository(GreenHouseDbContext dbContext)
@@ -38,7 +36,6 @@ namespace Data.Repositories
         IEnumerable<DioxideCarbonMeasurement> IDataReadRepository<DioxideCarbonMeasurement>.GetAll(string greenhouseId)
         {
             throw new NotImplementedException();
-
         }
 
         public async void Add(DioxideCarbonMeasurement entity)
