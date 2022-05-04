@@ -8,7 +8,7 @@ namespace Data
        public DbSet<Greenhouse> Greenhouses { get; set; }
        public DbSet<DioxideCarbonMeasurement> DioxideCarbonMeasurement { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+       protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer("Server=database-2.citlownhihib.eu-central-1.rds.amazonaws.com,1433;Database=GreenHouse;User Id=admin; Password=12345678;");
         }

@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Api.RestApi.Controllers
 {
+    [Route("[controller]/{greenhouseId}")]
+    [ApiController]
     public class HumidityController:ControllerBase
     {
         private IHumidityService _service;
@@ -17,7 +19,6 @@ namespace Api.RestApi.Controllers
         }
 
         [HttpGet]
-        [Route("{id:int}")]
         public IEnumerable<HumidityMeasurement> Get([FromRoute] string greenhouseId, [FromQuery] bool latest)
         {
             if (latest)
@@ -28,6 +29,12 @@ namespace Api.RestApi.Controllers
             {
                 return _service.GetAll(greenhouseId).Select(x => DomToApi.Convert(x));
             }
+        }
+        [HttpPost]
+        public void Post([FromRoute] string greenhouseId, [FromBody] HumidityMeasurement value)
+        {
+            value.GreenHouseId = greenhouseId;
+            _service.Add(ApiToDom.Convert(value));
         }
     }
 }

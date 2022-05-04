@@ -68,8 +68,8 @@ namespace Data.Migrations
                     b.Property<string>("GreenHouseId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("Humidity")
-                        .HasColumnType("int");
+                    b.Property<double>("Humidity")
+                        .HasColumnType("float");
 
                     b.Property<DateTime>("Time")
                         .HasColumnType("datetime2");
