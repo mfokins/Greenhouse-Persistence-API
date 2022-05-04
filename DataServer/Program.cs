@@ -28,6 +28,9 @@ builder.Services.AddScoped<ILuminosityService, LuminosityService>();
 builder.Services.AddScoped<IHumidityRepository, HumidityRepository>();
 builder.Services.AddScoped<IHumidityService, HumidityService>();
 
+Api.BridgeIot.BridgeMain.startBridge();
+
+Api.BridgeIot.Class1.initClass1();
 
 var app = builder.Build();
 
@@ -45,3 +48,5 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+
