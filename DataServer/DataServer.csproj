@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Api\Api.csproj" />
+    <ProjectReference Include="..\Api\BridgeIot\Api.BridgeIot.csproj" />
     <ProjectReference Include="..\Api\RestApi\Api.RestApi.csproj" />
     <ProjectReference Include="..\Core\Core.csproj" />
     <ProjectReference Include="..\Data\Data.csproj" />

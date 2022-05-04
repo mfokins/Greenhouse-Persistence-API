@@ -1,13 +1,11 @@
+using Api.BridgeIot;
 using Core.Interfaces.Humidity;
 using Core.Interfaces.Luminosity;
 using Core.Interfaces.Temperature;
 using Core.Services;
 using Data;
 using Data.Repositories;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,25 +25,22 @@ builder.Services.AddScoped<ILuminosityService, LuminosityService>();
 
 builder.Services.AddScoped<IHumidityRepository, HumidityRepository>();
 builder.Services.AddScoped<IHumidityService, HumidityService>();
+builder.Services.AddHostedService<Class2>();
 
-Api.BridgeIot.BridgeMain.startBridge();
-
-Api.BridgeIot.Class1.initClass1();
 
 var app = builder.Build();
+BridgeMain.startBridge();
 
-// Configure the HTTP request pipeline.
-//if (app.Environment.IsDevelopment())
-//{
-    app.UseSwagger();
+app.UseSwagger();
     app.UseSwaggerUI();
 //}
-
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
 app.MapControllers();
+
+//Adding static services 
 
 app.Run();
 

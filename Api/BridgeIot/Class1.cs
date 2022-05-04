@@ -1,18 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Core.Interfaces.Temperature;
 using Core.Models;
-using Core.Interfaces;
-using Core.Services;
-using Core.Interfaces.Temperature;
+using Data.Repositories;
+
 
 namespace Api.BridgeIot
 {
     public class Class1
     {
-        ITemperatureRepository tempRep;
+        TemperatureRepository tempRep;
         private ITemperatureService _service;
 
         public Class1(ITemperatureService service)
@@ -34,8 +29,9 @@ namespace Api.BridgeIot
             _service.Add(myTemperature);
         }
 
-        public static void initClass1(){
-            Class1 myClass = new Class1(null);
+        public static void initClass1(ITemperatureService service)
+        {
+            Class1 myClass = new Class1(service);
             myClass.testMethod();
         }
     }
