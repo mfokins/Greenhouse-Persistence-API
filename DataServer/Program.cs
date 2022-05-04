@@ -5,6 +5,8 @@ using Core.Interfaces.Temperature;
 using Core.Services;
 using Data;
 using Data.Repositories;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
 
 
 var builder = WebApplication.CreateBuilder(args);

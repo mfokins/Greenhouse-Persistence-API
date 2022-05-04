@@ -1,4 +1,5 @@
-﻿using Core.Interfaces.Temperature;
+﻿using System;
+using Core.Interfaces.Temperature;
 using Core.Models;
 using Data.Repositories;
 

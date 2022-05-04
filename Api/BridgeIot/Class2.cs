@@ -1,4 +1,6 @@
-﻿using Core.Interfaces.Temperature;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using Core.Interfaces.Temperature;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
