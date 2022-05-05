@@ -22,31 +22,29 @@ namespace Api.BridgeIot
         }
 
         public void HandleRxMessage(RxMessage message){
+            int? temperature = null;
             if (message.port == 2){
-                int temperature = this.extractFromHexToInt(message.data, 2,3); //this is hardcoded value to know that temperature is on oth and 1st byte
+                temperature = this.extractFromHexToInt(message.data, 2,3); //this is hardcoded value to know that temperature is on oth and 1st byte
                 Console.WriteLine("the temp is: {0}",temperature/10.0);
 
+                
+            }
+            if (message.port == 3){
+                temperature = this.extractFromHexToInt(message.data, 0,1); //this is hardcoded value to know that temperature is on oth and 1st byte
+                Console.WriteLine("the temp (v3) is: {0}",temperature/10.0);
+            }
+
+            if (temperature != null){
                 TemperatureMeasurement thisTemp = new TemperatureMeasurement();
-                thisTemp.Temperature = temperature / 10; //TODO change after the temperature will be changed to float
-                thisTemp.GreenHouseId = "test";
+                thisTemp.Temperature = (int)temperature / 10; //TODO change after the temperature will be changed to float
+                thisTemp.GreenHouseId = "test"; //Change to message.EUI when database will be able to create new greenhouse records
 
                 long unixInSec = message.ts / 1000; // I get time in milisec from epoch, C# need it in seconds
                 thisTemp.Time = DateTimeOffset.FromUnixTimeSeconds(unixInSec).DateTime.ToLocalTime();
                 
-
                 _tempService.Add(thisTemp);
             }
-            if (message.port == 3){
-                int temperature = this.extractFromHexToInt(message.data, 0,1); //this is hardcoded value to know that temperature is on oth and 1st byte
-                Console.WriteLine("the temp (v3) is: {0}",temperature/10.0);
-
-                TemperatureMeasurement thisTemp = new TemperatureMeasurement();
-                thisTemp.Temperature = temperature/10; //TODO change after the temperature will be changed to float
-                thisTemp.GreenHouseId = message.EUI;
-                thisTemp.Time = new DateTime(1970, 1, 1, 0, 0, 0, 0).AddSeconds(message.ts);
-
-                _tempService.Add(thisTemp);
-            }
+            
             
         }
 
