@@ -27,11 +27,11 @@ builder.Services.AddScoped<ILuminosityService, LuminosityService>();
 
 builder.Services.AddScoped<IHumidityRepository, HumidityRepository>();
 builder.Services.AddScoped<IHumidityService, HumidityService>();
-builder.Services.AddHostedService<Class2>();
-
+//builder.Services.AddHostedService<Class2>();
+builder.Services.AddHostedService<BridgeMain>();
+//Class1.testMethod();
 
 var app = builder.Build();
-BridgeMain.startBridge();
 
 app.UseSwagger();
     app.UseSwaggerUI();

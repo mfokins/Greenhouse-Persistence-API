@@ -8,53 +8,64 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading;
 
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Core.Interfaces.Temperature;
+
 namespace Api.BridgeIot
 {
-    public class BridgeMain
+    public class BridgeMain : BackgroundService
     {
-        static ClientWebSocket ws = new ClientWebSocket();
-        public static void startBridge(){
-            Console.WriteLine("connection initialised!");
+        private IServiceScopeFactory _scopeFactory;
 
-            Uri loraWanUri = new Uri("wss://iotnet.teracom.dk/app?token=*********");
-            ws.ConnectAsync(loraWanUri,CancellationToken.None).ContinueWith(async (t)=>{
-                Thread.Sleep(2000);
-                Console.WriteLine("connected sucessfully!");
-                
-                await readFromDevice("0004A30B00E7E7C1");
-                
-                Console.WriteLine("connection gonna close");
-                await ws.CloseAsync(WebSocketCloseStatus.NormalClosure,null,CancellationToken.None);
-            });
+        static ClientWebSocket ws = new ClientWebSocket();
+        static MessageHandler messageHandler;
+
+        public BridgeMain(IServiceScopeFactory factory){
+            _scopeFactory = factory;
         }
 
-        private static async Task<UplinkFormat?> readFromDevice(string EUI){
-            /*//make object to be send
-            UplinkFormat packetToSend = new UplinkFormat(EUI,1,"", null);
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken){
+            messageHandler = new MessageHandler(_scopeFactory.CreateScope().ServiceProvider.GetService<ITemperatureService>());
 
-            // serialize the obejct to string and make byte array to be send
-            string s = JsonSerializer.Serialize(packetToSend);
-            byte[] dataToServer = Encoding.ASCII.GetBytes(s);
+            Console.WriteLine(">>> Bridge: connection initialised!");
 
-            await ws.SendAsync(dataToServer,WebSocketMessageType.Text,true,CancellationToken.None);*/
+            Uri loraWanUri = new Uri("wss://iotnet.teracom.dk/app?token=*********");
+            await ws.ConnectAsync(loraWanUri,CancellationToken.None);
 
-            // now receive data from the lorawan
-            byte[] dataFromServer = new byte[10000];
+            Thread.Sleep(2000);
+            Console.WriteLine(">>> Bridge: connected sucessfully!");
+            
+            while (!stoppingToken.IsCancellationRequested){
+                LoraWANMessage message = await readFromDevices();
+                receive(message);
+            }
+             
+            Console.WriteLine(">>> Bridge: connection gonna close");
+            await ws.CloseAsync(WebSocketCloseStatus.NormalClosure,null,CancellationToken.None);
+        }
+
+        private void receive(LoraWANMessage message){//TODO remove this
+            if (message.cmd == "rx"){
+                RxMessage theMessage = RxMessage.GetRxMessage(message.json);
+                messageHandler.HandleRxMessage(theMessage);
+            }
+        }
+
+        private static async Task<LoraWANMessage> readFromDevices(){
+            // make a buffer that will be big eneught to get json from lorawan
+            byte[] dataFromServer = new byte[3000];
+
+            //wait until I get some message
             WebSocketReceiveResult answer = await ws.ReceiveAsync(dataFromServer,CancellationToken.None);
 
-            Console.WriteLine("I have received something");
+            Console.WriteLine(">>> Bridge: Message received form lorawan");
 
             string response = Encoding.ASCII.GetString(dataFromServer, 0, answer.Count);
 
-            Console.WriteLine("the response that we got : {0}",response);
+            LoraWANMessage? returnMessage = LoraWANMessage.getLoraWANMessage(response);//JsonSerializer.Deserialize<LoraWANMessage>(response);
 
-            UplinkFormat? returnMessage = JsonSerializer.Deserialize<UplinkFormat>(response);
-
-            Console.WriteLine("object: {0}",returnMessage);
-
-            if (returnMessage != null){
-                Console.WriteLine("the cmd is: {0}",returnMessage.cmd);
-            }
+            
 
             return returnMessage;
         }
