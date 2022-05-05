@@ -25,6 +25,16 @@ namespace Api.BridgeIot
             if (message.port == 2){
                 int temperature = this.extractFromHexToInt(message.data, 2,3); //this is hardcoded value to know that temperature is on oth and 1st byte
                 Console.WriteLine("the temp is: {0}",temperature/10.0);
+
+                TemperatureMeasurement thisTemp = new TemperatureMeasurement();
+                thisTemp.Temperature = temperature / 10; //TODO change after the temperature will be changed to float
+                thisTemp.GreenHouseId = "test";
+
+                long unixInSec = message.ts / 1000; // I get time in milisec from epoch, C# need it in seconds
+                thisTemp.Time = DateTimeOffset.FromUnixTimeSeconds(unixInSec).DateTime.ToLocalTime();
+                
+
+                _tempService.Add(thisTemp);
             }
             if (message.port == 3){
                 int temperature = this.extractFromHexToInt(message.data, 0,1); //this is hardcoded value to know that temperature is on oth and 1st byte

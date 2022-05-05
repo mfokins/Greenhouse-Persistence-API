@@ -30,7 +30,15 @@ namespace Api.BridgeIot
 
             Console.WriteLine(">>> Bridge: connection initialised!");
 
-            Uri loraWanUri = new Uri("wss://iotnet.teracom.dk/app?token=*********");
+            string? token = Environment.GetEnvironmentVariable("BRIDGE_TOKEN");
+
+            if (token == null)
+            {
+                Console.WriteLine("set up enviroment variables first");
+                return;
+            }
+
+            Uri loraWanUri = new Uri("wss://iotnet.teracom.dk/app?token=" + token);
             await ws.ConnectAsync(loraWanUri,CancellationToken.None);
 
             Thread.Sleep(2000);
