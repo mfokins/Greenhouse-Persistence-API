@@ -15,7 +15,6 @@ env:
   APPLICATION_NAME: sepDemo2
   ENVIRONMENT_NAME: Sepdemo2-env
   AWS_REGION: eu-central-1
-  BRIDGE_TOKEN: vnoUeQAAABFpb3RuZXQudGVyYWNvbS5kayL9sv9it8LFL5jggp-rve4=
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
