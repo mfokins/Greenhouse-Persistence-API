@@ -18,7 +18,6 @@ namespace Api.Mappers
         {
             return new TemperatureMeasurement
             {
-                GreenHouseId = value.GreenHouseId,
                 Temperature = value.Temperature,
                 Time = UnixTimeStampToDateTime(value.Time),
             };
@@ -28,7 +27,6 @@ namespace Api.Mappers
         {
             return new LuminosityMeasurement()
             {
-                GreenHouseId = value.GreenHouseId,
                 Lux = value.Lux,
                 IsLit = value.Lux >= 200, //if data is received from IoT here we can assign boolean value ourselves
                 Time = UnixTimeStampToDateTime(value.Time),
@@ -39,7 +37,6 @@ namespace Api.Mappers
         {
             return new HumidityMeasurement()
             {
-                GreenHouseId = value.GreenHouseId,
                 Humidity = value.Humidity,
                 Time = UnixTimeStampToDateTime(value.Time),
             };

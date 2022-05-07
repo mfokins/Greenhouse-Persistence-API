@@ -9,7 +9,7 @@ namespace Api.RestApi.Controllers
 {
     [Route("[controller]/{greenhouseId}")]
     [ApiController]
-    public class HumidityController:ControllerBase
+    public class HumidityController : ControllerBase
     {
         private IHumidityService _service;
 
@@ -23,7 +23,7 @@ namespace Api.RestApi.Controllers
         {
             if (latest)
             {
-                return new[] {DomToApi.Convert(_service.GetLatest(greenhouseId))};
+                return new[] { DomToApi.Convert(_service.GetLatest(greenhouseId)) };
             }
             else
             {
@@ -33,8 +33,9 @@ namespace Api.RestApi.Controllers
         [HttpPost]
         public void Post([FromRoute] string greenhouseId, [FromBody] HumidityMeasurement value)
         {
-            value.GreenHouseId = greenhouseId;
-            _service.Add(ApiToDom.Convert(value));
+            var convertedValue = ApiToDom.Convert(value);
+            convertedValue.GreenHouseId = greenhouseId;
+            _service.Add(convertedValue);
         }
     }
 }

@@ -28,7 +28,6 @@ namespace Api.Mappers
         {
             return new LuminosityMeasurement()
             {
-                GreenHouseId = luminosityMeasurement.GreenHouseId,
                 Lux = luminosityMeasurement.Lux,
                 IsLit = luminosityMeasurement.Lux >=
                         200, //if data is received from IoT here we can assign boolean value ourselves
@@ -40,7 +39,6 @@ namespace Api.Mappers
         {
             return new Api.Models.HumidityMeasurement()
             {       
-                GreenHouseId = humidityMeasurement.GreenHouseId,
                 Humidity = humidityMeasurement.Humidity,
                 Time = ((DateTimeOffset) humidityMeasurement.Time).ToUnixTimeSeconds()
             };
