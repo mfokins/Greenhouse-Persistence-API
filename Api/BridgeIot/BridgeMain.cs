@@ -17,10 +17,9 @@ namespace Api.BridgeIot
     public class BridgeMain : BackgroundService
     {
         private IServiceScopeFactory _scopeFactory;
-
         static ClientWebSocket ws = new ClientWebSocket();
         static MessageHandler messageHandler;
-
+        
         public BridgeMain(IServiceScopeFactory factory){
             _scopeFactory = factory;
         }

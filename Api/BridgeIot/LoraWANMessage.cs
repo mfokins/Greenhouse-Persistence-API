@@ -13,12 +13,14 @@ namespace Api.BridgeIot
         public string cmd {get;set;}
         public string EUI {get;set;}
         public string json {get;set;}
+       
 
         //constructor to be used be deserializer
         public LoraWANMessage(string cmd, string EUI,string json){
             this.cmd = cmd;
             this.EUI = EUI;
             this.json = "";
+            
         }
 
         public static LoraWANMessage getLoraWANMessage(string json){
@@ -28,5 +30,6 @@ namespace Api.BridgeIot
             }
             return theMessage;
         }
+        
     }
 }
