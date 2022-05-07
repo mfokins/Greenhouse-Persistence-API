@@ -1,13 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
 using System.Collections;
-
 using Core.Interfaces.Temperature;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Core.Models;
 
 namespace Api.BridgeIot
@@ -36,7 +28,7 @@ namespace Api.BridgeIot
 
             if (temperature != null){
                 TemperatureMeasurement thisTemp = new TemperatureMeasurement();
-                thisTemp.Temperature = (int)temperature / 10; //TODO change after the temperature will be changed to float
+                thisTemp.Temperature = (float)temperature / 10.0F; //TODO change after the temperature will be changed to float
                 thisTemp.GreenHouseId = "test"; //Change to message.EUI when database will be able to create new greenhouse records
 
                 long unixInSec = message.ts / 1000; // I get time in milisec from epoch, C# need it in seconds
