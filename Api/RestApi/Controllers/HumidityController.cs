@@ -19,7 +19,7 @@ namespace Api.RestApi.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<HumidityMeasurement> Get([FromRoute] string greenhouseId, [FromQuery] bool latest, [FromQuery] int page = 0, [FromQuery] int pageSize = 25)
+        public IEnumerable<HumidityMeasurement> Get([FromRoute] string greenhouseId, [FromQuery] bool latest, [FromQuery] int page = 0, [FromQuery] int itemsPerPage = 25)
         {
             if (latest)
             {
