@@ -27,7 +27,7 @@ namespace Api.RestApi.Controllers
             }
             else
             {
-                return _service.GetAll(greenhouseId,page,pageSize).Select(x => DomToApi.Convert(x));
+                return _service.GetAll(greenhouseId,page,itemsPerPage).Select(x => DomToApi.Convert(x));
             }
         }
         [HttpPost]
