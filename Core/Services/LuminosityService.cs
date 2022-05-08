@@ -33,9 +33,9 @@ namespace Core.Services
             return _repository.Get(id);
         }
 
-        public IEnumerable<LuminosityMeasurement> GetAll(string greenhouseId)
+        public IEnumerable<LuminosityMeasurement> GetAll(string greenhouseId, int pageNumber = 0, int pageSize = 25)
         {
-            return _repository.GetAll(greenhouseId);
+            return _repository.GetAll(greenhouseId, pageNumber, pageSize);
         }
 
         public LuminosityMeasurement GetLatest(string greenhouseId)

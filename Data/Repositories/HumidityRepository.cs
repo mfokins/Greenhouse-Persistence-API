@@ -1,6 +1,3 @@
-using System.Collections.Generic;
-using System.Linq;
-using Core.Interfaces;
 using Core.Interfaces.Humidity;
 using Core.Models;
 using Data.Mappers;
@@ -8,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Data.Repositories
 {
-    public class HumidityRepository:IHumidityRepository
+    public class HumidityRepository : IHumidityRepository
     {
         private GreenHouseDbContext _dbContext;
 
@@ -23,27 +20,28 @@ namespace Data.Repositories
             throw new System.NotImplementedException();
         }
 
-        public IEnumerable<HumidityMeasurement> GetAll(string greenhouseId)
+        public IEnumerable<HumidityMeasurement> GetAll(string greenhouseId, int pageNumber = 0, int pageSize = 25)
         {
             return _dbContext.Greenhouses
                 .Include(g => g.HumidityMeasurements)
                 .FirstOrDefault(g => g.GreenHouseId == greenhouseId)
                 .HumidityMeasurements
+                .Skip(pageNumber * pageSize)
+                .Take(pageSize)
                 .Select(t => DbToDom.Convert(t));
         }
 
         public HumidityMeasurement GetLatest(string greenhouseId)
         {
-            return _dbContext.Greenhouses
+            return DbToDom.Convert(_dbContext.Greenhouses
                 .Include(g => g.HumidityMeasurements)
                 .FirstOrDefault(g => g.GreenHouseId == greenhouseId)
                 .HumidityMeasurements
                 .OrderByDescending(m => m.Time)
-                .Take(1)
-                .Select(x => DbToDom.Convert(x))
-                .FirstOrDefault();
+                .FirstOrDefault());
+
         }
-        
+
 
         public void Add(HumidityMeasurement entity)
         {

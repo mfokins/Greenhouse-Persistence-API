@@ -1,48 +1,55 @@
-﻿using System.Collections.Generic;
+﻿using Core.Interfaces;
 using Core.Interfaces.DioxideCarbon;
+using Core.Interfaces.Greenhouse;
 using Core.Models;
 
 namespace Core.Services
 {
-    public class DioxideCarbonService : IDioxideCarbonRepository
+    public class DioxideCarbonService : IDataTemplateService<DioxideCarbonMeasurement>
     {
-        private readonly IDioxideCarbonRepository _repository;
+        private readonly IDioxideCarbonRepository _dioxiderepository;
+        private readonly IGreenhouseService _greenhouseService;
 
-        public DioxideCarbonService(IDioxideCarbonRepository repository)
+        public DioxideCarbonService(IDioxideCarbonRepository dioxiderepository, IGreenhouseService greenhouseService)
         {
-            _repository = repository;
+            _dioxiderepository = dioxiderepository;
+            _greenhouseService = greenhouseService;
         }
 
         public void Add(DioxideCarbonMeasurement entity)
         {
-            _repository.Add(entity);
+            if (!_greenhouseService.IsCreated(entity.GreenHouseId))
+            {
+                _greenhouseService.Create(entity.GreenHouseId);
+            }
+            _dioxiderepository.Add(entity);
         }
 
         public void Delete(DioxideCarbonMeasurement entity)
         {
-            _repository.Delete(entity);
+            _dioxiderepository.Delete(entity);
         }
 
         public DioxideCarbonMeasurement Get(int id)
         {
-            return _repository.Get(id);
+            return _dioxiderepository.Get(id);
         }
 
 
-        public IEnumerable<DioxideCarbonMeasurement> GetAll(string greenhouseId)
+        public IEnumerable<DioxideCarbonMeasurement> GetAll(string greenhouseId, int pageNumber = 0, int pageSize = 25)
         {
-            return _repository.GetAll(greenhouseId);
+            return _greenhouseService.IsCreated(greenhouseId) ? _dioxiderepository.GetAll(greenhouseId, pageNumber, pageSize) : null;
         }
 
 
         public DioxideCarbonMeasurement GetLatest(string greenhouseId)
         {
-            return _repository.GetLatest(greenhouseId);
+            return _greenhouseService.IsCreated(greenhouseId) ? _dioxiderepository.GetLatest(greenhouseId) : null;
         }
 
         public void Update(DioxideCarbonMeasurement entity)
         {
-            _repository.Update(entity);
+            _dioxiderepository.Update(entity);
         }
     }
 }

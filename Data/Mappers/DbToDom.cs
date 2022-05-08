@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Data.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -32,6 +33,14 @@ namespace Data.Mappers
             {
                 Co2Measurement = dioxideCarbonMeasurement.Co2Measurement,
                 Time = dioxideCarbonMeasurement.Time
+            };
+        }
+
+        internal static Core.Models.Greenhouse Convert(Greenhouse greenhouse)
+        {
+            return new()
+            {
+                GreenHouseId = greenhouse.GreenHouseId,
             };
         }
 

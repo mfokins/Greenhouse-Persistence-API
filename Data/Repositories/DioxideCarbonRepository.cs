@@ -23,17 +23,14 @@ namespace Data.Repositories
             throw new NotImplementedException();
         }
 
-        IEnumerable<DioxideCarbonMeasurement> IDioxideCarbonRepository.GetAll(string greenhouseId)
-        {
-            throw new NotImplementedException();
-        }
+
 
         public DioxideCarbonMeasurement GetLatest(string greenhouseId)
         {
             throw new NotImplementedException();
         }
 
-        IEnumerable<DioxideCarbonMeasurement> IDataReadRepository<DioxideCarbonMeasurement>.GetAll(string greenhouseId)
+        IEnumerable<DioxideCarbonMeasurement> IDataReadRepository<DioxideCarbonMeasurement>.GetAll(string greenhouseId, int pageNumber = 0, int pageSize = 25)
         {
             throw new NotImplementedException();
         }

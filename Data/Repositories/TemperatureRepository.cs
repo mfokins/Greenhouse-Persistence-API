@@ -13,7 +13,7 @@ namespace Data.Repositories
     public class TemperatureRepository : ITemperatureRepository
     {
         private GreenHouseDbContext _dbContext;
-
+#pragma warning disable CS8602
         public TemperatureRepository(GreenHouseDbContext dbContext)
         {
             _dbContext = dbContext;
@@ -48,12 +48,15 @@ namespace Data.Repositories
         }
 
 
-        public IEnumerable<TemperatureMeasurement> GetAll(string greenhouseId)
+        public IEnumerable<TemperatureMeasurement> GetAll(string greenhouseId, int pageNumber = 0, int pageSize = 25)
         {
             return _dbContext.Greenhouses
                     .Include(g => g.TemperatureMesurments)
                     .FirstOrDefault(g => g.GreenHouseId == greenhouseId)
                     .TemperatureMesurments
+                        .OrderByDescending(m => m.Time)
+                        .Skip(pageNumber * pageSize)
+                        .Take(pageSize)
                         .Select(t => DbToDom.Convert(t));
             // return _dbContext.TemperatureMesurments.Where(i => i.GreenHouseId == greenhouseId).Select(x => DbToDom.Convert(x));
         }

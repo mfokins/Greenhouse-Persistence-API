@@ -19,7 +19,7 @@ namespace Api.RestApi.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<HumidityMeasurement> Get([FromRoute] string greenhouseId, [FromQuery] bool latest)
+        public IEnumerable<HumidityMeasurement> Get([FromRoute] string greenhouseId, [FromQuery] bool latest, [FromQuery] int page = 0, [FromQuery] int pageSize = 25)
         {
             if (latest)
             {
@@ -27,7 +27,7 @@ namespace Api.RestApi.Controllers
             }
             else
             {
-                return _service.GetAll(greenhouseId).Select(x => DomToApi.Convert(x));
+                return _service.GetAll(greenhouseId,page,pageSize).Select(x => DomToApi.Convert(x));
             }
         }
         [HttpPost]

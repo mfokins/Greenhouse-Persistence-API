@@ -1,4 +1,5 @@
 using Api.BridgeIot;
+using Core.Interfaces.Greenhouse;
 using Core.Interfaces.Humidity;
 using Core.Interfaces.Luminosity;
 using Core.Interfaces.Temperature;
@@ -27,6 +28,10 @@ builder.Services.AddScoped<ILuminosityService, LuminosityService>();
 
 builder.Services.AddScoped<IHumidityRepository, HumidityRepository>();
 builder.Services.AddScoped<IHumidityService, HumidityService>();
+
+builder.Services.AddScoped<IGreenhouseService, GreenhouseService>();
+builder.Services.AddScoped<IGreenhouseRepository,GreenhouseRepository>();
+
 //builder.Services.AddHostedService<Class2>();
 builder.Services.AddHostedService<BridgeMain>();
 //Class1.testMethod();

@@ -9,6 +9,6 @@ namespace Core.Interfaces
     public interface  IDataReadRepository<T>
     {
         public T Get(int id);
-        public IEnumerable<T> GetAll(string greenhouseId);
+        public IEnumerable<T> GetAll(string greenhouseId, int pageNumber = 0, int pageSize = 25);
     }
 }

@@ -30,7 +30,7 @@ namespace Data.Repositories
             throw new System.NotImplementedException();
         }
 
-        IEnumerable<LuminosityMeasurement> IDataReadRepository<LuminosityMeasurement>.GetAll(string greenhouseId)
+        IEnumerable<LuminosityMeasurement> IDataReadRepository<LuminosityMeasurement>.GetAll(string greenhouseId, int pageNumber = 0, int pageSize = 25)
         {
             throw new System.NotImplementedException();
         }

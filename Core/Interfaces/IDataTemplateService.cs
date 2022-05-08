@@ -13,7 +13,7 @@ namespace Core.Interfaces
         void Delete(T entity);
         T Get(int id);
         
-        IEnumerable<T> GetAll(string greenhouseId);
+        IEnumerable<T> GetAll(string greenhouseId, int pageNumber = 0, int pageSize = 25);
         
     }
 }
