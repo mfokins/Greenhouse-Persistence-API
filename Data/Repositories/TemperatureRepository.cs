@@ -41,7 +41,7 @@ namespace Data.Repositories
             _dbContext.SaveChanges();
         }
 
-        public TemperatureMeasurement Get(int id)
+        public TemperatureMeasurement Get(int id, string greenHouseId)
         {
             throw new NotImplementedException();
             //TODO Have to change this method

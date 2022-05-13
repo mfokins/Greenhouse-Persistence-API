@@ -30,9 +30,9 @@ namespace Core.Services
             _dioxiderepository.Delete(entity);
         }
 
-        public DioxideCarbonMeasurement Get(int id)
+        public DioxideCarbonMeasurement Get(int id, string greenHouseId)
         {
-            return _dioxiderepository.Get(id);
+            return _dioxiderepository.Get( id,  greenHouseId);
         }
 
 

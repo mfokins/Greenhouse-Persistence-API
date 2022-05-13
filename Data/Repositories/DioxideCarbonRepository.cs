@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using Core.Interfaces;
+﻿using Core.Interfaces;
 using Core.Interfaces.DioxideCarbon;
 using Core.Models;
-using Data;
 using Data.Mappers;
-using Microsoft.EntityFrameworkCore;
 
 namespace Data.Repositories
 {
@@ -18,7 +14,7 @@ namespace Data.Repositories
             _dbContext = dbContext;
         }
 
-        public DioxideCarbonMeasurement Get(int id)
+        public DioxideCarbonMeasurement Get(int id, string greenHouseId)
         {
             throw new NotImplementedException();
         }

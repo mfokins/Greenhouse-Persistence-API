@@ -34,9 +34,9 @@ namespace Core.Services
             _humidityRepository.Delete(entity);
         }
 
-        public HumidityMeasurement Get(int id)
+        public HumidityMeasurement Get(int id, string greenHouseId)
         {
-            return _humidityRepository.Get(id);
+            return _humidityRepository.Get( id,  greenHouseId);
         }
 
         public IEnumerable<HumidityMeasurement> GetAll(string greenhouseId, int pageNumber = 0, int pageSize = 25)

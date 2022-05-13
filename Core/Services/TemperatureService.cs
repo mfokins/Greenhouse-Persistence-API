@@ -1,7 +1,6 @@
 ﻿using Core.Interfaces.Greenhouse;
 using Core.Interfaces.Temperature;
 using Core.Models;
-using System;
 
 namespace Core.Services
 {
@@ -30,9 +29,9 @@ namespace Core.Services
             _temperatureRepository.Delete(entity);
         }
 
-        public TemperatureMeasurement Get(int id)
+        public TemperatureMeasurement Get(int id, string greenHouseId)
         {
-            return _temperatureRepository.Get(id);
+            return _temperatureRepository.Get( id,  greenHouseId);
         }
 
 

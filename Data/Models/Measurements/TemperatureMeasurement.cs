@@ -1,9 +1,7 @@
 ﻿
-
-using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace Data.Models
+namespace Data.Models.Measurements
 {
     public  class TemperatureMeasurement
     {   

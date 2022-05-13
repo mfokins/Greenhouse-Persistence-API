@@ -1,52 +1,51 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
 
 namespace Data.Mappers
 {
     public class DomToDb
     {
-        public static Models.TemperatureMeasurement Convert(Core.Models.TemperatureMeasurement entity)
+        public static Models.Measurements.TemperatureMeasurement Convert(Core.Models.TemperatureMeasurement entity)
         {
-            return new Models.TemperatureMeasurement()
+            return new Models.Measurements.TemperatureMeasurement()
             {
                 Temperature = entity.Temperature,
                 Time = entity.Time
             };
         }
 
-        public static Models.LuminosityMeasurement Convert(Core.Models.LuminosityMeasurement entity)
-        {
-            return new Models.LuminosityMeasurement()
-            {
-                Lux = entity.Lux,
-                IsLit = entity.IsLit,
-                Time = entity.Time
-            };
-        }
 
         public static Models.Greenhouse Convert(Core.Models.Greenhouse entity)
         {
             return new Models.Greenhouse() { GreenHouseId = entity.GreenHouseId };
         }
 
-        public static Models.DioxideCarbonMeasurement Convert(Core.Models.DioxideCarbonMeasurement entity)
+        public static Models.Measurements.DioxideCarbonMeasurement Convert(Core.Models.DioxideCarbonMeasurement entity)
         {
-            return new Models.DioxideCarbonMeasurement()
+            return new Models.Measurements.DioxideCarbonMeasurement()
             {
                 Co2Measurement = entity.Co2Measurement,
                 Time = entity.Time
             };
         }
 
-        public static Models.HumidityMeasurement Convert(Core.Models.HumidityMeasurement entity)
+        internal static Models.Pot Convert(Core.Models.Pot entity)
         {
-            return new Models.HumidityMeasurement()
+            return new Models.Pot
+            {
+                moistureThreshold = entity.moistureThreshold,
+                Name = entity.Name,
+                Id = entity.Id,
+                
+            };
+        }
+
+        public static Models.Measurements.HumidityMeasurement Convert(Core.Models.HumidityMeasurement entity)
+        {
+            return new Models.Measurements.HumidityMeasurement()
             {
                 Humidity = entity.Humidity,
                 Time = entity.Time
+
             };
         }
     }

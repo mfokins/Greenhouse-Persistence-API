@@ -15,7 +15,7 @@ namespace Data.Repositories
         }
 
 
-        public HumidityMeasurement Get(int id)
+        public HumidityMeasurement Get(int id, string greenHouseId)
         {
             throw new System.NotImplementedException();
         }
@@ -23,7 +23,7 @@ namespace Data.Repositories
         public IEnumerable<HumidityMeasurement> GetAll(string greenhouseId, int pageNumber = 0, int pageSize = 25)
         {
             return _dbContext.Greenhouses
-                .Include(g => g.HumidityMeasurements)
+                    
                 .FirstOrDefault(g => g.GreenHouseId == greenhouseId)
                 .HumidityMeasurements
                 .Skip(pageNumber * pageSize)

@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
 
 namespace Core.Models
 {
-    internal class Pot
+    public class Pot
     {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public double moistureThreshold { get; set; }
+        public string GreenHouseId { get; set; }
+        
     }
 }
