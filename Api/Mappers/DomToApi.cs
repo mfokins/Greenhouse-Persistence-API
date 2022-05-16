@@ -1,7 +1,8 @@
 ﻿
+using Api.Models;
 using TemperatureMeasurement = Core.Models.TemperatureMeasurement;
 using HumidityMeasurement = Core.Models.HumidityMeasurement;
-
+using DioxideCarbonMeasurement = Core.Models.DioxideCarbonMeasurement;
 
 namespace Api.Mappers
 {
@@ -24,6 +25,14 @@ namespace Api.Mappers
             {       
                 Humidity = humidityMeasurement.Humidity,
                 Time = ((DateTimeOffset) humidityMeasurement.Time).ToUnixTimeSeconds()
+            };
+        }
+        public static Models.DioxideCarbonMeasurement Convert(DioxideCarbonMeasurement dioxideCarbonMeasurement)
+        {
+            return new Api.Models.DioxideCarbonMeasurement()
+            {       
+                Co2Measurement = dioxideCarbonMeasurement.Co2Measurement,
+                Time = ((DateTimeOffset) dioxideCarbonMeasurement.Time).ToUnixTimeSeconds()
             };
         }
 

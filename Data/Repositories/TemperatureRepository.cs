@@ -13,7 +13,7 @@ namespace Data.Repositories
     public class TemperatureRepository : ITemperatureRepository
     {
         private GreenHouseDbContext _dbContext;
-#pragma warning disable CS8602
+
         public TemperatureRepository(GreenHouseDbContext dbContext)
         {
             _dbContext = dbContext;
