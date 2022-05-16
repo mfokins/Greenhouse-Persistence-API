@@ -29,6 +29,7 @@ builder.Services.AddScoped<IHumidityRepository, HumidityRepository>();
 builder.Services.AddScoped<IHumidityService, HumidityService>();
 //builder.Services.AddHostedService<Class2>();
 builder.Services.AddHostedService<BridgeMain>();
+builder.Services.AddSingleton<DownlinkHandler>();
 //Class1.testMethod();
 
 var app = builder.Build();

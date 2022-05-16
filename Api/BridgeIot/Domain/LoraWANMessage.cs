@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Text;
 using System.Text.Json;
 
-namespace Api.BridgeIot
+namespace Api.BridgeIot.Domain
 {
     public class LoraWANMessage
     {
