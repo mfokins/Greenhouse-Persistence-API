@@ -67,6 +67,7 @@ namespace Api.BridgeIot
                     break;
                 case "tx": //this is message from lorawan about succesfull enquee
                     //do nothing this just say that the messsage was enqued
+                    //Console.WriteLine(message.json);
                     TxMessage txMessage = TxMessage.GetTxMessage(message.json);
                     messageHandler.HandleTxMessage(txMessage);
                     break;
@@ -81,7 +82,7 @@ namespace Api.BridgeIot
         public void send(TxMessage message){
             //TODO finish the convert from object to socket
             string jsonMessage = message.getJson();
-            Console.WriteLine("message: "+jsonMessage);
+            //Console.WriteLine("message: "+jsonMessage);
             byte[] dataToServer = Encoding.ASCII.GetBytes(jsonMessage);
             ws.SendAsync(dataToServer,WebSocketMessageType.Text,true,CancellationToken.None);
         }
