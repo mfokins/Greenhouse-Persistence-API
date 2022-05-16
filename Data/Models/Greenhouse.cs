@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Data.Models.Measurements;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Data.Models
 {
@@ -13,13 +9,13 @@ namespace Data.Models
         public string GreenHouseId { get; set; }
         [Required]
         public IList<TemperatureMeasurement> TemperatureMesurments { get; set; }
+        
         [Required]
-        public IList<DioxideCarbonMeasurement> Co2Measurements { get; set; }
+        public IList<DioxideCarbonMeasurement> DioxideCarbonMeasurements { get; set; }
+        
         [Required]
         public IList<HumidityMeasurement> HumidityMeasurements { get; set; }
-        [Required]
-        public IList<LuminosityMeasurement> LuminosityMesurments { get; set; }
-
+        
         [Required]
         public IList<Pot> Pots { get; set; }
 

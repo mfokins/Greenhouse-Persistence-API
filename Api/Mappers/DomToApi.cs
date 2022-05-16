@@ -1,15 +1,8 @@
-﻿using Api.Models;
-using Core.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using LuminosityMeasurement = Api.Models.LuminosityMeasurement;
-using CoreLuminosityMeasurement = Core.Models.LuminosityMeasurement;
+﻿
+using Api.Models;
 using TemperatureMeasurement = Core.Models.TemperatureMeasurement;
 using HumidityMeasurement = Core.Models.HumidityMeasurement;
-
+using DioxideCarbonMeasurement = Core.Models.DioxideCarbonMeasurement;
 
 namespace Api.Mappers
 {
@@ -24,16 +17,7 @@ namespace Api.Mappers
             };
         }
 
-        public static LuminosityMeasurement Convert(CoreLuminosityMeasurement luminosityMeasurement)
-        {
-            return new LuminosityMeasurement()
-            {
-                Lux = luminosityMeasurement.Lux,
-                IsLit = luminosityMeasurement.Lux >=
-                        200, //if data is received from IoT here we can assign boolean value ourselves
-                Time = ((DateTimeOffset) luminosityMeasurement.Time).ToUnixTimeSeconds()
-            };
-        }
+
         
         public static Models.HumidityMeasurement Convert(HumidityMeasurement humidityMeasurement)
         {
@@ -41,6 +25,24 @@ namespace Api.Mappers
             {       
                 Humidity = humidityMeasurement.Humidity,
                 Time = ((DateTimeOffset) humidityMeasurement.Time).ToUnixTimeSeconds()
+            };
+        }
+        public static Models.DioxideCarbonMeasurement Convert(DioxideCarbonMeasurement dioxideCarbonMeasurement)
+        {
+            return new Api.Models.DioxideCarbonMeasurement()
+            {       
+                Co2Measurement = dioxideCarbonMeasurement.Co2Measurement,
+                Time = ((DateTimeOffset) dioxideCarbonMeasurement.Time).ToUnixTimeSeconds()
+            };
+        }
+
+        public static Models.Pot Convert(Core.Models.Pot pot)
+        {
+            return new Models.Pot()
+            {
+                LowerMoistureThreshold = pot.moistureThreshold,
+                Name = pot.Name,
+                Id = pot.Id,
             };
         }
     }

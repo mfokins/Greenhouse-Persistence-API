@@ -5,10 +5,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using LuminosityMeasurement = Core.Models.LuminosityMeasurement;
-using ApiLuminosityMeasurement = Api.Models.LuminosityMeasurement;
+using DioxideCarbonMeasurement = Core.Models.DioxideCarbonMeasurement;
 using TemperatureMeasurement = Core.Models.TemperatureMeasurement;
 using HumidityMeasurement = Core.Models.HumidityMeasurement;
+using Pot = Core.Models.Pot;
 
 namespace Api.Mappers
 {
@@ -23,15 +23,6 @@ namespace Api.Mappers
             };
         }
 
-        public static LuminosityMeasurement Convert(ApiLuminosityMeasurement value)
-        {
-            return new LuminosityMeasurement()
-            {
-                Lux = value.Lux,
-                IsLit = value.Lux >= 200, //if data is received from IoT here we can assign boolean value ourselves
-                Time = UnixTimeStampToDateTime(value.Time),
-            };
-        }
         
         public static HumidityMeasurement Convert(Models.HumidityMeasurement value)
         {
@@ -39,6 +30,24 @@ namespace Api.Mappers
             {
                 Humidity = value.Humidity,
                 Time = UnixTimeStampToDateTime(value.Time),
+            };
+        }
+        public static DioxideCarbonMeasurement Convert(Models.DioxideCarbonMeasurement value)
+        {
+            return new DioxideCarbonMeasurement()
+            {
+                Co2Measurement = value.Co2Measurement,
+                Time = UnixTimeStampToDateTime(value.Time),
+            };
+        }
+
+        public static Pot Convert(Models.Pot pot)
+        {
+            return new Pot()
+            {
+                moistureThreshold = pot.LowerMoistureThreshold,
+                Name = pot.Name,
+                Id = pot.Id,
             };
         }
 

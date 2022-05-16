@@ -22,7 +22,7 @@ namespace Api.RestApi.Controllers
 
         // GET: api/<TemperatureContoller>
         [HttpGet]
-        public IEnumerable<TemperatureMeasurement> Get([FromRoute] string greenhouseId, [FromQuery] bool latest)
+        public IEnumerable<TemperatureMeasurement> Get([FromRoute] string greenhouseId, [FromQuery] bool latest, [FromQuery] int page = 0, [FromQuery] int itemsPerPage = 25)
         {
             if (latest)
             {
@@ -30,7 +30,7 @@ namespace Api.RestApi.Controllers
             }
             else
             {
-                return _service.GetAll(greenhouseId).Select(x => DomToApi.Convert(x));
+                return _service.GetAll(greenhouseId,page, itemsPerPage).Select(x => DomToApi.Convert(x));
             }
         }
 

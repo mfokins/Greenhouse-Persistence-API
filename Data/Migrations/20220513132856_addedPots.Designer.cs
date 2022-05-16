@@ -4,6 +4,7 @@ using Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,13 +12,14 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(GreenHouseDbContext))]
-    partial class GreenHouseDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220513132856_addedPots")]
+    partial class addedPots
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.5")
+                .HasAnnotation("ProductVersion", "6.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
@@ -41,8 +43,8 @@ namespace Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("Co2Measurement")
-                        .HasColumnType("int");
+                    b.Property<double>("Co2Measurement")
+                        .HasColumnType("float");
 
                     b.Property<string>("GreenHouseId")
                         .HasColumnType("nvarchar(450)");
@@ -157,7 +159,7 @@ namespace Data.Migrations
             modelBuilder.Entity("Data.Models.Measurements.DioxideCarbonMeasurement", b =>
                 {
                     b.HasOne("Data.Models.Greenhouse", null)
-                        .WithMany("DioxideCarbonMeasurements")
+                        .WithMany("Co2Measurements")
                         .HasForeignKey("GreenHouseId");
                 });
 
@@ -191,7 +193,7 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Data.Models.Greenhouse", b =>
                 {
-                    b.Navigation("DioxideCarbonMeasurements");
+                    b.Navigation("Co2Measurements");
 
                     b.Navigation("HumidityMeasurements");
 

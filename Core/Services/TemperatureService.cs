@@ -1,51 +1,54 @@
-﻿using Core.Interfaces.Temperature;
+﻿using Core.Interfaces.Greenhouse;
+using Core.Interfaces.Temperature;
 using Core.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Core.Services
 {
     public class TemperatureService : ITemperatureService
     {
-        private readonly ITemperatureRepository _repository;
-        public TemperatureService(ITemperatureRepository repository)
+        private readonly ITemperatureRepository _temperatureRepository;
+        private readonly IGreenhouseService _greenhouseService;
+
+        public TemperatureService(ITemperatureRepository temperatureRepository, IGreenhouseService greenhouseService)
         {
-            _repository = repository;
+            _temperatureRepository = temperatureRepository;
+            _greenhouseService = greenhouseService;
         }
         public void Add(TemperatureMeasurement entity)
         {
-            _repository.Add(entity);
+            if (!_greenhouseService.IsCreated(entity.GreenHouseId))
+            {
+                _greenhouseService.Create(entity.GreenHouseId);
+            }
+            _temperatureRepository.Add(entity);
+
         }
 
         public void Delete(TemperatureMeasurement entity)
         {
-            _repository.Delete(entity);
+            _temperatureRepository.Delete(entity);
         }
 
-        public TemperatureMeasurement Get(int id)
+        public TemperatureMeasurement Get(int id, string greenHouseId)
         {
-            return _repository.Get(id);
+            return _temperatureRepository.Get( id,  greenHouseId);
         }
 
 
-        public IEnumerable<TemperatureMeasurement> GetAll(string greenhouseId)
+        public IEnumerable<TemperatureMeasurement> GetAll(string greenhouseId, int pageNumber = 0, int pageSize = 25)
         {
-            return _repository.GetAll(greenhouseId);
+            return _greenhouseService.IsCreated(greenhouseId) ? _temperatureRepository.GetAll(greenhouseId, pageNumber, pageSize) : null;
         }
 
 
         public TemperatureMeasurement GetLatest(string greenhouseId)
         {
-            return _repository.GetLatest(greenhouseId);
-
+            return _greenhouseService.IsCreated(greenhouseId) ? _temperatureRepository.GetLatest(greenhouseId) : null;
         }
 
         public void Update(TemperatureMeasurement entity)
         {
-             _repository.Update(entity);
+            _temperatureRepository.Update(entity);
         }
     }
 }

@@ -41,19 +41,22 @@ namespace Data.Repositories
             _dbContext.SaveChanges();
         }
 
-        public TemperatureMeasurement Get(int id)
+        public TemperatureMeasurement Get(int id, string greenHouseId)
         {
             throw new NotImplementedException();
             //TODO Have to change this method
         }
 
 
-        public IEnumerable<TemperatureMeasurement> GetAll(string greenhouseId)
+        public IEnumerable<TemperatureMeasurement> GetAll(string greenhouseId, int pageNumber = 0, int pageSize = 25)
         {
             return _dbContext.Greenhouses
                     .Include(g => g.TemperatureMesurments)
                     .FirstOrDefault(g => g.GreenHouseId == greenhouseId)
                     .TemperatureMesurments
+                        .OrderByDescending(m => m.Time)
+                        .Skip(pageNumber * pageSize)
+                        .Take(pageSize)
                         .Select(t => DbToDom.Convert(t));
             // return _dbContext.TemperatureMesurments.Where(i => i.GreenHouseId == greenhouseId).Select(x => DbToDom.Convert(x));
         }

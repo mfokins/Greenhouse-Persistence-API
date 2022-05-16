@@ -1,12 +1,12 @@
 using Api.BridgeIot;
+using Core.Interfaces.DioxideCarbon;
+using Core.Interfaces.Greenhouse;
 using Core.Interfaces.Humidity;
-using Core.Interfaces.Luminosity;
+using Core.Interfaces.Pot;
 using Core.Interfaces.Temperature;
 using Core.Services;
 using Data;
 using Data.Repositories;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -22,11 +22,20 @@ builder.Services.AddDbContext<GreenHouseDbContext>();
 builder.Services.AddScoped<ITemperatureRepository, TemperatureRepository>();
 builder.Services.AddScoped<ITemperatureService, TemperatureService>();
 
-builder.Services.AddScoped<ILuminosityRepository, LuminosityRepository>();
-builder.Services.AddScoped<ILuminosityService, LuminosityService>();
 
 builder.Services.AddScoped<IHumidityRepository, HumidityRepository>();
 builder.Services.AddScoped<IHumidityService, HumidityService>();
+
+builder.Services.AddScoped<IDioxideCarbonRepository, DioxideCarbonRepository>();
+builder.Services.AddScoped<IDioxideCarbonService, DioxideCarbonService>();
+
+builder.Services.AddScoped<IPotRepository, PotRepository>();
+builder.Services.AddScoped<IPotService, PotService>();
+
+
+builder.Services.AddScoped<IGreenhouseService, GreenhouseService>();
+builder.Services.AddScoped<IGreenhouseRepository, GreenhouseRepository>();
+
 //builder.Services.AddHostedService<Class2>();
 builder.Services.AddHostedService<BridgeMain>();
 builder.Services.AddSingleton<DownlinkHandler>();
@@ -35,7 +44,7 @@ builder.Services.AddSingleton<DownlinkHandler>();
 var app = builder.Build();
 
 app.UseSwagger();
-    app.UseSwaggerUI();
+app.UseSwaggerUI();
 //}
 app.UseHttpsRedirection();
 
@@ -46,5 +55,3 @@ app.MapControllers();
 //Adding static services 
 
 app.Run();
-
-

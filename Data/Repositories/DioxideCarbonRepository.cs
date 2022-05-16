@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using Core.Interfaces;
+﻿using Core.Interfaces;
 using Core.Interfaces.DioxideCarbon;
 using Core.Models;
-using Data;
 using Data.Mappers;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,47 +15,57 @@ namespace Data.Repositories
             _dbContext = dbContext;
         }
 
-        public DioxideCarbonMeasurement Get(int id)
+        public DioxideCarbonMeasurement Get(int id, string greenHouseId)
         {
             throw new NotImplementedException();
         }
-
-        IEnumerable<DioxideCarbonMeasurement> IDioxideCarbonRepository.GetAll(string greenhouseId)
-        {
-            throw new NotImplementedException();
-        }
-
+        
         public DioxideCarbonMeasurement GetLatest(string greenhouseId)
         {
-            throw new NotImplementedException();
+            return _dbContext.Greenhouses
+                .Include(g => g.DioxideCarbonMeasurements)
+                .FirstOrDefault(g => g.GreenHouseId == greenhouseId)
+                .DioxideCarbonMeasurements
+                .OrderByDescending(m => m.Time)
+                .Take(1)
+                .Select(x => DbToDom.Convert(x))
+                .FirstOrDefault();
         }
 
-        IEnumerable<DioxideCarbonMeasurement> IDataReadRepository<DioxideCarbonMeasurement>.GetAll(string greenhouseId)
+        public IEnumerable<DioxideCarbonMeasurement> GetAll(string greenhouseId,
+            int pageNumber = 0, int pageSize = 25)
         {
-            throw new NotImplementedException();
+            return _dbContext.Greenhouses
+                .Include(g => g.DioxideCarbonMeasurements)
+                .FirstOrDefault(g => g.GreenHouseId == greenhouseId)
+                .DioxideCarbonMeasurements
+                .OrderByDescending(m => m.Time)
+                .Skip(pageNumber * pageSize)
+                .Take(pageSize)
+                .Select(t => DbToDom.Convert(t));
         }
 
         public async void Add(DioxideCarbonMeasurement entity)
         {
-            throw new NotImplementedException();
-
-            await _dbContext.DioxideCarbonMeasurement.AddAsync(DomToDb.Convert(entity));
+            _dbContext.Greenhouses.Include(g => g.DioxideCarbonMeasurements)
+                .FirstOrDefault(g => g.GreenHouseId == entity.GreenHouseId)
+                .DioxideCarbonMeasurements.Add(DomToDb.Convert(entity));
             await _dbContext.SaveChangesAsync();
         }
 
         public async void Update(DioxideCarbonMeasurement entity)
         {
             throw new NotImplementedException();
-            //There is no need an update for CO2
-            _dbContext.DioxideCarbonMeasurement.Update(DomToDb.Convert(entity));
-            await _dbContext.SaveChangesAsync();
         }
 
-        public async void Delete(DioxideCarbonMeasurement entity)
+        public void Delete(DioxideCarbonMeasurement entity)
         {
-            throw new NotImplementedException();
-            _dbContext.DioxideCarbonMeasurement.Remove(DomToDb.Convert(entity));
-            await _dbContext.SaveChangesAsync();
+            _dbContext.Greenhouses
+                .Include(g => g.DioxideCarbonMeasurements)
+                .FirstOrDefault(g => g.GreenHouseId == entity.GreenHouseId)
+                .DioxideCarbonMeasurements
+                .Remove(DomToDb.Convert(entity));
+            _dbContext.SaveChanges();
         }
     }
 }

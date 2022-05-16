@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Data.Models;
 
 namespace Data.Mappers
 {
     public class DbToDom
     {
-        public static Core.Models.TemperatureMeasurement Convert(Models.TemperatureMeasurement temperatureMeasurement)
+        public static Core.Models.TemperatureMeasurement Convert(Models.Measurements.TemperatureMeasurement temperatureMeasurement)
         {
             return new Core.Models.TemperatureMeasurement()
             {
@@ -17,16 +13,7 @@ namespace Data.Mappers
             };
         }
 
-        public static Core.Models.LuminosityMeasurement Convert(Models.LuminosityMeasurement luminosityMeasurement)
-        {
-            return new Core.Models.LuminosityMeasurement()
-            {
-                Lux = luminosityMeasurement.Lux,
-                IsLit = luminosityMeasurement.IsLit,
-                Time = luminosityMeasurement.Time
-            };
-        }
-        public static Core.Models.DioxideCarbonMeasurement Convert(Models.DioxideCarbonMeasurement dioxideCarbonMeasurement)
+        public static Core.Models.DioxideCarbonMeasurement Convert(Models.Measurements.DioxideCarbonMeasurement dioxideCarbonMeasurement)
         {
             return new Core.Models.DioxideCarbonMeasurement()
             {
@@ -35,12 +22,30 @@ namespace Data.Mappers
             };
         }
 
-        public static Core.Models.HumidityMeasurement Convert(Models.HumidityMeasurement humidityMeasurement)
+        internal static Core.Models.Greenhouse Convert(Greenhouse greenhouse)
+        {
+            return new()
+            {
+                GreenHouseId = greenhouse.GreenHouseId,
+            };
+        }
+
+        public static Core.Models.HumidityMeasurement Convert(Models.Measurements.HumidityMeasurement humidityMeasurement)
         {
             return new Core.Models.HumidityMeasurement()
             {
                 Humidity = humidityMeasurement.Humidity,
                 Time = humidityMeasurement.Time
+            };
+        }
+
+        internal static Core.Models.Pot Convert(Pot t)
+        {
+            return new Core.Models.Pot
+            {
+                Id = t.Id,
+                moistureThreshold = t.moistureThreshold,
+                Name = t.Name,
             };
         }
     }
