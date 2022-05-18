@@ -54,3 +54,4 @@ app.MapControllers();
 //Adding static services 
 
 app.Run();
+public partial class Program { }

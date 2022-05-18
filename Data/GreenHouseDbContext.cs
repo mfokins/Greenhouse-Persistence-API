@@ -8,6 +8,11 @@ namespace Data
     {
        public DbSet<Greenhouse> Greenhouses { get; set; }
 
+       public GreenHouseDbContext(DbContextOptions<GreenHouseDbContext> options):base(options)
+       {
+           
+       }
+       
        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer("Server=database-2.citlownhihib.eu-central-1.rds.amazonaws.com,1433;Database=GreenHouse;User Id=admin; Password=12345678;");

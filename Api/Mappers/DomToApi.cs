@@ -16,9 +16,6 @@ namespace Api.Mappers
                 Time = ((DateTimeOffset) temperatureMeasurement.Time).ToUnixTimeSeconds()
             };
         }
-
-
-        
         public static Models.HumidityMeasurement Convert(HumidityMeasurement humidityMeasurement)
         {
             return new Api.Models.HumidityMeasurement()
