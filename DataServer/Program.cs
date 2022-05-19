@@ -1,4 +1,6 @@
 using Api.BridgeIot;
+using Core.Interfaces;
+using Core.Interfaces.DioxideCarbon;
 using Core.Interfaces.Greenhouse;
 using Core.Interfaces.Humidity;
 using Core.Interfaces.Pot;
