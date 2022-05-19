@@ -17,6 +17,8 @@ namespace Data.Models
         public IList<HumidityMeasurement> HumidityMeasurements { get; set; }
         
         [Required]
+        public IList<Threshold> Thresholds { get; set; }
+        [Required]
         public IList<Pot> Pots { get; set; }
 
     }

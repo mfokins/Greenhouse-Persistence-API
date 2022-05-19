@@ -1,5 +1,7 @@
 ﻿
 
+using Data.Models;
+
 namespace Data.Mappers
 {
     public class DomToDb
@@ -32,10 +34,20 @@ namespace Data.Mappers
         {
             return new Models.Pot
             {
-                moistureThreshold = entity.moistureThreshold,
+                MoistureThreshold = Convert(entity.moistureThreshold),
                 Name = entity.Name,
                 Id = entity.Id,
-                
+
+            };
+        }
+
+        public static Threshold Convert(Core.Models.Threshold threshold)
+        {
+            return new Threshold
+            {
+                HigherThreshold = threshold.HigherThreshold,
+                LowerThreshold = threshold.LowerThreshold,
+                Type = (ThresholdType)threshold.Type
             };
         }
 
