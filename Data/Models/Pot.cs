@@ -12,7 +12,7 @@ namespace Data.Models
         public string Name { get; set; }
         [Required]
         
-        public double moistureThreshold { get; set; }
+        public Threshold MoistureThreshold { get; set; }
         [Required]
         public IList<MoistureMeasurement> MoistureMeasurements { get; set; }
     }

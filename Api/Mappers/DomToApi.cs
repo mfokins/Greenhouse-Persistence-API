@@ -29,9 +29,11 @@ namespace Api.Mappers
 
         public static Models.Pot Convert(Core.Models.Pot pot)
         {
+            throw new NotImplementedException();
+            
             return new Models.Pot()
             {
-                LowerMoistureThreshold = pot.moistureThreshold,
+            //    LowerMoistureThreshold = pot.moistureThreshold,
                 Name = pot.Name,
                 Id = pot.Id,
             };

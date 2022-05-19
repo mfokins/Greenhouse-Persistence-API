@@ -6,7 +6,7 @@ namespace Core.Models
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public double moistureThreshold { get; set; }
+        public Threshold moistureThreshold { get; set; }
         public string GreenHouseId { get; set; }
         
     }

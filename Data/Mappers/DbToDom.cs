@@ -30,6 +30,11 @@ namespace Data.Mappers
             };
         }
 
+        internal static Core.Models.Threshold Convert()
+        {
+            throw new NotImplementedException();
+        }
+
         public static Core.Models.HumidityMeasurement Convert(Models.Measurements.HumidityMeasurement humidityMeasurement)
         {
             return new Core.Models.HumidityMeasurement()
@@ -44,9 +49,20 @@ namespace Data.Mappers
             return new Core.Models.Pot
             {
                 Id = t.Id,
-                moistureThreshold = t.moistureThreshold,
+                moistureThreshold = Convert(t.MoistureThreshold),
                 Name = t.Name,
             };
         }
+
+        public static Core.Models.Threshold Convert(Threshold moistureThreshold)
+        {
+            return new Core.Models.Threshold()
+            {
+                HigherThreshold = moistureThreshold.HigherThreshold,
+                LowerThreshold = moistureThreshold.LowerThreshold,
+                Type = (Core.Models.ThresholdType)moistureThreshold.Type
+            };
+        }
     }
+
 }
