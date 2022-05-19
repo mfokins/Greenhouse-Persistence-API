@@ -20,7 +20,7 @@ namespace Api.BridgeIot
         private IServiceScopeFactory _scopeFactory;
 
         static ClientWebSocket ws = new ClientWebSocket();
-        static MessageHandler messageHandler;
+        static IMessageHandler messageHandler;
         static DownlinkHandler downlinkHandler;
 
         public BridgeMain(IServiceScopeFactory factory){
@@ -28,9 +28,15 @@ namespace Api.BridgeIot
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken){
-            messageHandler = new MessageHandler(_scopeFactory.CreateScope().ServiceProvider.GetService<ITemperatureService>(),
+            messageHandler = _scopeFactory.CreateScope().ServiceProvider.GetService<IMessageHandler>();
+            if (messageHandler == null)
+            {
+                Console.WriteLine("no service!");
+                return;
+            }
+            /*new MessageHandler(_scopeFactory.CreateScope().ServiceProvider.GetService<ITemperatureService>(),
                 _scopeFactory.CreateScope().ServiceProvider.GetService<DownlinkHandler>(),
-                this);
+                this);*/
             downlinkHandler = new DownlinkHandler();
 
             Console.WriteLine(">>> Bridge: connection initialised!");
