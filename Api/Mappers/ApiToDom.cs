@@ -24,7 +24,7 @@ namespace Api.Mappers
         }
 
 
-        
+
         public static HumidityMeasurement Convert(Models.HumidityMeasurement value)
         {
             return new HumidityMeasurement()
@@ -36,10 +36,14 @@ namespace Api.Mappers
 
         public static Pot Convert(Models.Pot pot)
         {
-            throw  new NotImplementedException();
+            throw new NotImplementedException();
             return new Pot()
             {
-                //moistureThreshold = pot.LowerMoistureThreshold,
+                moistureThreshold = new Core.Models.Threshold()
+                {
+                    Type = ThresholdType.Moisture,
+                    LowerThreshold = pot.LowerMoistureThreshold
+                },
                 Name = pot.Name,
                 Id = pot.Id,
             };

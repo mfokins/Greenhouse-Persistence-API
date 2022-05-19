@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Api.Models;
+using Core.Interfaces;
+using Api.Mappers;
 
 namespace Api.RestApi.Controllers
 {
@@ -7,11 +9,18 @@ namespace Api.RestApi.Controllers
     [ApiController]
     public class ThresholdController : ControllerBase
     {
+        private readonly IThresholdService thresholdService;
+
+        public ThresholdController(IThresholdService thresholdService)
+        {
+            this.thresholdService = thresholdService;
+        }
+
         [Route("Temperature")]
         [HttpGet]
-        public Threshold GetTemperature()
+        public Threshold GetTemperature([FromRoute] string greenhouseId)
         {
-            return new Threshold();
+            return DomToApi.Convert(thresholdService.GetTemperatureThresholds(greenhouseId));
         }
         [Route("Humidity")]
         [HttpGet]

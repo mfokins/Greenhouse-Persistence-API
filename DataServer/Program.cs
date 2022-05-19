@@ -1,4 +1,5 @@
 using Api.BridgeIot;
+using Core.Interfaces;
 using Core.Interfaces.Greenhouse;
 using Core.Interfaces.Humidity;
 using Core.Interfaces.Pot;
@@ -22,6 +23,8 @@ builder.Services.AddDbContext<GreenHouseDbContext>();
 builder.Services.AddScoped<ITemperatureRepository, TemperatureRepository>();
 builder.Services.AddScoped<ITemperatureService, TemperatureService>();
 
+builder.Services.AddScoped<IThresholdRepository, ThresholdRepository>();
+builder.Services.AddScoped<IThresholdService, ThresholdService>();
 
 
 builder.Services.AddScoped<IHumidityRepository, HumidityRepository>();

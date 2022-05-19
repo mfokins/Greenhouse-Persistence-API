@@ -12,28 +12,37 @@ namespace Api.Mappers
             return new Api.Models.TemperatureMeasurement
             {
                 Temperature = temperatureMeasurement.Temperature,
-                Time = ((DateTimeOffset) temperatureMeasurement.Time).ToUnixTimeSeconds()
+                Time = ((DateTimeOffset)temperatureMeasurement.Time).ToUnixTimeSeconds()
             };
         }
 
 
-        
+
         public static Models.HumidityMeasurement Convert(HumidityMeasurement humidityMeasurement)
         {
             return new Api.Models.HumidityMeasurement()
-            {       
+            {
                 Humidity = humidityMeasurement.Humidity,
-                Time = ((DateTimeOffset) humidityMeasurement.Time).ToUnixTimeSeconds()
+                Time = ((DateTimeOffset)humidityMeasurement.Time).ToUnixTimeSeconds()
             };
         }
 
+        public static Models.Threshold Convert(Core.Models.Threshold threshold)
+        {
+            return new Api.Models.Threshold()
+            {
+                HigherThreshold = threshold.HigherThreshold,
+                LowerThreshold = threshold.LowerThreshold
+            };
+        }
+
+
         public static Models.Pot Convert(Core.Models.Pot pot)
         {
-            throw new NotImplementedException();
-            
+
             return new Models.Pot()
             {
-            //    LowerMoistureThreshold = pot.moistureThreshold,
+                LowerMoistureThreshold = pot.moistureThreshold.LowerThreshold,
                 Name = pot.Name,
                 Id = pot.Id,
             };
