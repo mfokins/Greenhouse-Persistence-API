@@ -40,7 +40,9 @@ builder.Services.AddScoped<IGreenhouseService, GreenhouseService>();
 builder.Services.AddScoped<IGreenhouseRepository, GreenhouseRepository>();
 
 //builder.Services.AddHostedService<Class2>();
+builder.Services.AddScoped<IMessageHandler, MessageHandler>();
 builder.Services.AddHostedService<BridgeMain>();
+builder.Services.AddSingleton<DownlinkHandler>();
 //Class1.testMethod();
 
 var app = builder.Build();
