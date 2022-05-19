@@ -17,19 +17,13 @@ namespace Data.Repositories
         {
             var thresholds = _dbContext.Greenhouses
                 .Include(g => g.Thresholds)
-                ?.FirstOrDefault(t => t.GreenHouseId == greenhouseId)?.Thresholds;
-            if (thresholds.Count == 0)
+                ?.FirstOrDefault(t => t.GreenHouseId == greenhouseId)?.Thresholds
+                .Where(th => th.Type == (Models.ThresholdType)type);
+            if (!thresholds.Any())
             {
                 return Threshold.Empty;
             }
-            foreach (Models.Threshold threshold in thresholds)
-            {
-                if (threshold.Type == (Models.ThresholdType)type)
-                {
-                    return DbToDom.Convert(threshold);
-                }
-            }
-            return Threshold.Empty;
+            return DbToDom.Convert(thresholds.FirstOrDefault());
         }
         private void SetThreshold(string greenhouseId, Threshold threshold)
         {
@@ -47,7 +41,7 @@ namespace Data.Repositories
             }
             else
             {
-               var editableThreshold = thresholdsWithRightType.FirstOrDefault();
+                var editableThreshold = thresholdsWithRightType.FirstOrDefault();
                 editableThreshold.LowerThreshold = threshold.LowerThreshold;
                 editableThreshold.HigherThreshold = threshold.HigherThreshold;
                 _dbContext.SaveChanges();

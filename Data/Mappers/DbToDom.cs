@@ -50,13 +50,13 @@ namespace Data.Mappers
             };
         }
 
-        public static Core.Models.Threshold Convert(Threshold moistureThreshold)
+        public static Core.Models.Threshold Convert(Threshold threshold)
         {
             return new Core.Models.Threshold()
             {
-                HigherThreshold = moistureThreshold.HigherThreshold,
-                LowerThreshold = moistureThreshold.LowerThreshold,
-                Type = (Core.Models.ThresholdType)moistureThreshold.Type
+                HigherThreshold = threshold.HigherThreshold,
+                LowerThreshold = threshold.LowerThreshold,
+                Type = (Core.Models.ThresholdType)threshold.Type
             };
         }
     }
