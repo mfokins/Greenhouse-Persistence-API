@@ -17,7 +17,7 @@ namespace Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.3")
+                .HasAnnotation("ProductVersion", "6.0.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
@@ -41,8 +41,8 @@ namespace Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<double>("Co2Measurement")
-                        .HasColumnType("float");
+                    b.Property<int>("Co2Measurement")
+                        .HasColumnType("int");
 
                     b.Property<string>("GreenHouseId")
                         .HasColumnType("nvarchar(450)");
@@ -157,7 +157,7 @@ namespace Data.Migrations
             modelBuilder.Entity("Data.Models.Measurements.DioxideCarbonMeasurement", b =>
                 {
                     b.HasOne("Data.Models.Greenhouse", null)
-                        .WithMany("Co2Measurements")
+                        .WithMany("DioxideCarbonMeasurements")
                         .HasForeignKey("GreenHouseId");
                 });
 
@@ -191,7 +191,7 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Data.Models.Greenhouse", b =>
                 {
-                    b.Navigation("Co2Measurements");
+                    b.Navigation("DioxideCarbonMeasurements");
 
                     b.Navigation("HumidityMeasurements");
 

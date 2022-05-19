@@ -5,7 +5,7 @@ using Core.Models;
 
 namespace Core.Services
 {
-    public class DioxideCarbonService : IDataTemplateService<DioxideCarbonMeasurement>
+    public class DioxideCarbonService : IDioxideCarbonService
     {
         private readonly IDioxideCarbonRepository _dioxiderepository;
         private readonly IGreenhouseService _greenhouseService;

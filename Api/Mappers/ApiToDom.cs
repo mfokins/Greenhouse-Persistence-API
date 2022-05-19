@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using DioxideCarbonMeasurement = Core.Models.DioxideCarbonMeasurement;
 using TemperatureMeasurement = Core.Models.TemperatureMeasurement;
 using HumidityMeasurement = Core.Models.HumidityMeasurement;
 using Pot = Core.Models.Pot;
@@ -24,12 +24,20 @@ namespace Api.Mappers
         }
 
 
-
+        
         public static HumidityMeasurement Convert(Models.HumidityMeasurement value)
         {
             return new HumidityMeasurement()
             {
                 Humidity = value.Humidity,
+                Time = UnixTimeStampToDateTime(value.Time),
+            };
+        }
+        public static DioxideCarbonMeasurement Convert(Models.DioxideCarbonMeasurement value)
+        {
+            return new DioxideCarbonMeasurement()
+            {
+                Co2Measurement = value.Co2Measurement,
                 Time = UnixTimeStampToDateTime(value.Time),
             };
         }

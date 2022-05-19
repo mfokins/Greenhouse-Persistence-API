@@ -10,7 +10,7 @@ namespace Data.Models.Measurements
         [Key,Column( Order=0)]
         public int Id { get; set; }
         [Required]
-        public double Co2Measurement { get; set; }
+        public int Co2Measurement { get; set; }
         [Required]
         public DateTime Time { get; set; }
     }
