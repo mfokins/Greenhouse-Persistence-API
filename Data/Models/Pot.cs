@@ -10,7 +10,6 @@ namespace Data.Models
         [Required]
         
         public string Name { get; set; }
-        [Required]
         
         public Threshold MoistureThreshold { get; set; }
         [Required]

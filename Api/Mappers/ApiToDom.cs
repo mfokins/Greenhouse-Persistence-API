@@ -24,7 +24,7 @@ namespace Api.Mappers
         }
 
 
-        
+
         public static HumidityMeasurement Convert(Models.HumidityMeasurement value)
         {
             return new HumidityMeasurement()
@@ -54,6 +54,15 @@ namespace Api.Mappers
                 },
                 Name = pot.Name,
                 Id = pot.Id,
+            };
+        }
+
+        public static Core.Models.Threshold Convert(Models.Threshold threshold)
+        {
+            return new Core.Models.Threshold()
+            {
+                LowerThreshold = threshold.LowerThreshold,
+                HigherThreshold = threshold.HigherThreshold,
             };
         }
 

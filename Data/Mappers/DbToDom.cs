@@ -30,10 +30,6 @@ namespace Data.Mappers
             };
         }
 
-        internal static Core.Models.Threshold Convert()
-        {
-            throw new NotImplementedException();
-        }
 
         public static Core.Models.HumidityMeasurement Convert(Models.Measurements.HumidityMeasurement humidityMeasurement)
         {
