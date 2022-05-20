@@ -68,7 +68,7 @@ namespace Data.Repositories
             {
                 return Threshold.Empty;
             }
-            return pot.MoistureThreshold == null ? Threshold.Empty : DbToDom.Convert(pot.MoistureThreshold);
+            return pot.MoistureThresholdId == null ? Threshold.Empty : DbToDom.Convert(_dbContext.Find<Models.Threshold>(pot.MoistureThresholdId));
         }
 
         public Threshold GetTemperatureThresholds(string greenhouseId)
@@ -97,10 +97,8 @@ namespace Data.Repositories
                 throw new Exception("Pot was not found");
             }
             var thresholdStored = pot.MoistureThreshold;
-            if (thresholdStored == null)
-            {
-
-            }
+            throw new NotImplementedException();
+            
         }
 
         public void SetTemperatureThresholds(string greenhouseId, Threshold threshold)

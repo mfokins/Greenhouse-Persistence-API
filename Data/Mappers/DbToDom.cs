@@ -52,6 +52,8 @@ namespace Data.Mappers
 
         public static Core.Models.Threshold Convert(Threshold threshold)
         {
+            if(threshold == null)
+                return Core.Models.Threshold.Empty;
             return new Core.Models.Threshold()
             {
                 HigherThreshold = threshold.HigherThreshold,

@@ -44,7 +44,6 @@ namespace Api.Mappers
 
         public static Pot Convert(Models.Pot pot)
         {
-            throw new NotImplementedException();
             return new Pot()
             {
                 moistureThreshold = new Core.Models.Threshold()
