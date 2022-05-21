@@ -18,7 +18,7 @@ public class MoistureController : ControllerBase
 
     [HttpGet]
     public IEnumerable<MoistureMeasurement> Get([FromRoute] string greenhouseId, [FromRoute] int potId,
-        [FromQuery] bool latest, [FromQuery] int timeinterval, [FromQuery] int page = 0,
+        [FromQuery] bool latest, [FromQuery] int page = 0,
         [FromQuery] int itemsPerPage = 25)
     {
         if (latest)
