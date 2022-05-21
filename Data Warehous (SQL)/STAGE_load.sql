@@ -40,6 +40,35 @@ on grn.GreenhouseId=tmp.GreenhouseId
     on grn.GreenhouseId=dioc.GreenhouseId
 WHERE tmp.Time=hmd.Time AND tmp.Time=dioc.Time AND hmd.Time=dioc.Time
 
+--version 2 of the fact measurement load
+    use [GreenHouseDWH]
+    TRUNCATE TABLE [stage].[Fact_Measurements]
+INSERT INTO [stage].[Fact_Measurements](
+    [GreenHouse_ID],
+    [Temperature],
+    [Humidity],
+    [CarbonDioxide],
+[MeasurementDateTime]
+)
+SELECT
+    src.GreenHouseId,
+    t.Temperature,
+    h.[Humidity],
+    c.[Co2Measurement],
+    src.Time
+FROM (
+         SELECT GreenHouseId,Temperature,Time
+         FROM [GreenhouseDB].[dbo].[TemperatureMeasurement]
+         UNION
+         SELECT GreenHouseId,Humidity,Time
+         FROM [GreenhouseDB].[dbo].[HumidityMeasurement]
+         UNION
+         SELECT GreenHouseId,Co2Measurement,Time
+         FROM [GreenhouseDB].[dbo].[DioxideCarbonMeasurement]
+     ) src
+         LEFT JOIN [GreenhouseDB].[dbo].[TemperatureMeasurement] t on (src.Time=t.Time and src.GreenHouseId=t.GreenHouseId)
+    LEFT JOIN [GreenhouseDB].[dbo].[HumidityMeasurement] h on (src.Time=h.Time and src.GreenHouseId=h.GreenHouseId)
+    LEFT JOIN [GreenhouseDB].[dbo].[DioxideCarbonMeasurement] c on (src.Time=c.Time and src.GreenHouseId=c.GreenHouseId)
 
 
 
