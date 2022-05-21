@@ -33,10 +33,12 @@ public class MoistureController : ControllerBase
 
     //Added so I can test the database
     [HttpPost]
-    public void Post([FromRoute] string greenhouseId, [FromBody] MoistureMeasurement value)
+    public void Post([FromRoute] string greenhouseId,[FromRoute] int potId, [FromBody] MoistureMeasurement value)
     {
         var convertedValue = ApiToDom.Convert(value);
         convertedValue.GreenHouseId = greenhouseId;
+        convertedValue.PotId = potId;
         _service.Add(convertedValue);
+        
     }
 }
