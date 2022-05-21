@@ -16,7 +16,7 @@ public class MoistureController : ControllerBase
         _service = service;
     }
 
-    [HttpGet]
+    [HttpGet("{potId}")]
     public IEnumerable<MoistureMeasurement> Get([FromRoute] string greenhouseId, [FromRoute] int potId,
         [FromQuery] bool latest, [FromQuery] int page = 0,
         [FromQuery] int itemsPerPage = 25)
@@ -30,9 +30,8 @@ public class MoistureController : ControllerBase
             return _service.GetAll(greenhouseId, potId, page, itemsPerPage).Select(x => DomToApi.Convert(x));
         }
     }
-
-    //Added so I can test the database
-    [HttpPost]
+    
+    [HttpPost("{potId}")]
     public void Post([FromRoute] string greenhouseId,[FromRoute] int potId, [FromBody] MoistureMeasurement value)
     {
         var convertedValue = ApiToDom.Convert(value);
