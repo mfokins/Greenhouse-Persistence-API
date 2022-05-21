@@ -51,7 +51,7 @@ namespace Api.BridgeIot
                 Console.WriteLine("the temp (v5) is: {0}, humidity: {1}, CO2: {2}", temperature, humidity,CO2);
             }
 
-            string greenhouseEUI = "test"; //Change to message.EUI when it will be requirement
+            string greenhouseEUI = message.EUI;
             long unixInSec = message.ts / 1000; // I get time in milisec from epoch, C# need it in seconds
 
             //-------------------------------------------------------------------------------------------------
