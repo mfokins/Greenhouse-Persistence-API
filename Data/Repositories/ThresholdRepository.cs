@@ -17,45 +17,34 @@ namespace Data.Repositories
         {
             var thresholds = _dbContext.Greenhouses
                 .Include(g => g.Thresholds)
-                ?.FirstOrDefault(t => t.GreenHouseId == greenhouseId)?.Thresholds;
-            if (thresholds == null)
+                ?.FirstOrDefault(t => t.GreenHouseId == greenhouseId)?.Thresholds
+                .Where(th => th.Type == (Models.ThresholdType)type);
+            if (!thresholds.Any())
             {
                 return Threshold.Empty;
             }
-            foreach (Models.Threshold threshold in thresholds)
-            {
-                if (threshold.Type == (Models.ThresholdType)type)
-                {
-                    return DbToDom.Convert();
-                }
-            }
-            return Threshold.Empty;
+            return DbToDom.Convert(thresholds.FirstOrDefault());
         }
         private void SetThreshold(string greenhouseId, Threshold threshold)
         {
             var thresholds = _dbContext.Greenhouses
-                .Include(g => g.Thresholds)
-                ?.FirstOrDefault(t => t.GreenHouseId == greenhouseId)?.Thresholds;
-            if (thresholds == null)
+                 .Include(g => g.Thresholds)
+                ?.FirstOrDefault(t => t.GreenHouseId == greenhouseId)?
+                .Thresholds;
+            var thresholdsWithRightType = thresholds
+                    .Where(th => th.Type == (Models.ThresholdType)threshold.Type);
+            if (thresholdsWithRightType.Count() == 0)
             {
                 thresholds.Add(DomToDb.Convert(threshold));
                 _dbContext.SaveChanges();
 
             }
-            int? thresholdId = null;
-            foreach (Models.Threshold thresholdInList in thresholds)
+            else
             {
-                if (thresholdInList.Type == (Models.ThresholdType)threshold.Type)
-                {
-                    thresholdId = thresholdInList.Id;
-                    break;
-                }
-            }
-            if (thresholdId != null)
-            {
-                Models.Threshold thresholdConverted = DomToDb.Convert(threshold);
-                thresholdConverted.Id = thresholdId ?? default(int);
-                _dbContext.Update(thresholdConverted);
+                var editableThreshold = thresholdsWithRightType.FirstOrDefault();
+                editableThreshold.LowerThreshold = threshold.LowerThreshold;
+                editableThreshold.HigherThreshold = threshold.HigherThreshold;
+                _dbContext.SaveChanges();
             }
         }
 
@@ -79,12 +68,12 @@ namespace Data.Repositories
             {
                 return Threshold.Empty;
             }
-            return pot.MoistureThreshold == null ? Threshold.Empty : DbToDom.Convert(pot.MoistureThreshold);
+            return pot.MoistureThresholdId == null ? Threshold.Empty : DbToDom.Convert(_dbContext.Find<Models.Threshold>(pot.MoistureThresholdId));
         }
 
         public Threshold GetTemperatureThresholds(string greenhouseId)
         {
-            return GetThreshold(greenhouseId, ThresholdType.Humidity);
+            return GetThreshold(greenhouseId, ThresholdType.Temperature);
         }
 
         public void SetDioxideCarbonThresholds(string greenhouseId, Threshold threshold)
@@ -108,10 +97,8 @@ namespace Data.Repositories
                 throw new Exception("Pot was not found");
             }
             var thresholdStored = pot.MoistureThreshold;
-            if(thresholdStored == null)
-            {
-
-            }
+            throw new NotImplementedException();
+            
         }
 
         public void SetTemperatureThresholds(string greenhouseId, Threshold threshold)

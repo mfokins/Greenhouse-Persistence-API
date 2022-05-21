@@ -24,21 +24,39 @@ namespace Api.RestApi.Controllers
         }
         [Route("Humidity")]
         [HttpGet]
-        public Threshold GetHumidity()
+        public Threshold GetHumidity([FromRoute] string greenhouseId)
         {
-            return new Threshold();
+            return DomToApi.Convert(thresholdService.GetHumidityThresholds(greenhouseId));
         }
-        [Route("DioxideCarbon")]
+        [Route("CO2")]
         [HttpGet]
-        public Threshold GetDioxideCarbon()
+        public Threshold GetDioxideCarbon([FromRoute] string greenhouseId)
         {
-            return new Threshold();
+            return DomToApi.Convert(thresholdService.GetDioxideCarbonThresholds(greenhouseId));
         }
-        [Route("Moisture")]
-        [HttpGet]
-        public MoistureThreshold GetMoisture()
+        [Route("Temperature")]
+        [HttpPatch]
+        public void UpdateTemperature([FromRoute] string greenhouseId, [FromBody] Threshold threshold)
         {
-            return new MoistureThreshold();
+            var convertedThershold = ApiToDom.Convert(threshold);
+            convertedThershold.Type = Core.Models.ThresholdType.Temperature;
+            thresholdService.SetTemperatureThresholds(greenhouseId, convertedThershold);
+        }
+        [Route("Humidity")]
+        [HttpPatch]
+        public void UpdateHumidity([FromRoute] string greenhouseId, [FromBody] Threshold threshold)
+        {
+            var convertedThershold = ApiToDom.Convert(threshold);
+            convertedThershold.Type = Core.Models.ThresholdType.Humidity;
+            thresholdService.SetHumidityThresholds(greenhouseId, convertedThershold);
+        }
+        [Route("CO2")]
+        [HttpPatch]
+        public void UpdateDioxideCarbon([FromRoute] string greenhouseId, [FromBody] Threshold threshold)
+        {
+            var convertedThershold = ApiToDom.Convert(threshold);
+            convertedThershold.Type = Core.Models.ThresholdType.DioxideCarbon;
+            thresholdService.SetDioxideCarbonThresholds(greenhouseId, convertedThershold);
         }
     }
 
