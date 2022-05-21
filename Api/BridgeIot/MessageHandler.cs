@@ -4,34 +4,45 @@ using Core.Models;
 using Api.BridgeIot.Domain;
 using Core.Interfaces.Humidity;
 using Core.Interfaces.DioxideCarbon;
+using Core.Interfaces;
+
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace Api.BridgeIot
 {
     public class MessageHandler : IMessageHandler
     {
         //there are precision that us ised for the tresholds - first min and max for each in temp, hum and co2
-        private static float[] tresholdPrecision = new float[6] {1f,1f,1f, 1f,1f,1f};
+        private static readonly float[] tresholdPrecision = new float[6] {1f,1f,1f, 1f,1f,1f};
         private ITemperatureService _tempService;
         private IHumidityService _humService;
         private IDioxideCarbonService _Co2Service;
+
         private DownlinkHandler _downlinkHandler;
-        //private BridgeMain _socketResponse;
-        public MessageHandler(ITemperatureService tempService, IHumidityService humService, IDioxideCarbonService co2Service, DownlinkHandler downlinkHandler){
+        private Action<TxMessage> _socketResponse;
+        public MessageHandler(ITemperatureService tempService, IHumidityService humService, 
+            IDioxideCarbonService co2Service, DownlinkHandler downlinkHandler)
+        {
             _tempService = tempService;
             _downlinkHandler = downlinkHandler;
-            //_socketResponse = socketResponse;
             _humService = humService;
             _Co2Service = co2Service;
+        }
+
+        public void setResponseAction(Action<TxMessage> responseAction)
+        {
+            _socketResponse = responseAction;
         }
 
         public void HandleRxMessage(RxMessage message){
             float? temperature = null;
             float? humidity = null;
             int? CO2 = null;
+
             if (message.port == 2){
                 temperature = this.extractFromHexToInt(message.data, 2,3) /10.0F; //this is hardcoded value to know that temperature is on oth and 1st byte
                 Console.WriteLine("the temp is: {0}",temperature);
-                
             }
             if (message.port == 3){
                 temperature = this.extractFromHexToInt(message.data, 0,1)/ 10.0F; //this is hardcoded value to know that temperature is on oth and 1st byte
@@ -88,40 +99,45 @@ namespace Api.BridgeIot
                 _Co2Service.Add(thisCo2);
             }
 
-            if (_downlinkHandler.isThresholdChanged(message.EUI)){
-                _downlinkHandler.getTresholds(message.EUI); //don't send messages to arduino, it is not tested.
+            sendTresholds(message.EUI); // check if tresholds were updated, if so, send it to arduino
+        }
+
+        public void HandleTxMessage(TxMessage message)
+        {
+            return;
+        }
+
+        private void sendTresholds(string EUI){
+            if (!_downlinkHandler.isThresholdChanged(EUI))
+            {
+                return;
+
             }
-        }
-
-        public void testMethod(string EUI){
-            if (_downlinkHandler.isThresholdChanged(EUI)){
-                sendTresholds(_downlinkHandler.getTresholds(EUI),EUI);
-            }
-        }
-
-        public void HandleTxMessage(TxMessage message){
-            return;//TODO
-        }
-
-        private void sendTresholds(float[] tresholds,string EUI){
+            float[] tresholds = _downlinkHandler.getTresholds(EUI);
             int[] roundedTresholds = new int[6];
             for (int i = 0; i < 6;i++){
                 roundedTresholds[i] = (int) (tresholds[i]*tresholdPrecision[i]);
             }
             string  myData = "";
 
-            // each number corespont to 2 characters
+            
             for (int i = 0; i<6; i++){
-                myData = convertFromIntToHex(myData,2*i,(2*i)+1,roundedTresholds[5-i]);
+                myData = convertFromIntToHex(
+                    myData,
+                    2*i,
+                    (2*i)+1, // each number corespont to 2 characters
+                    roundedTresholds[5-i] //TODO why is this in opposite order?
+                );
             }
-            TxMessage finalMessage = new TxMessage("tx",EUI,null,true,100,myData);
-            //_socketResponse.send(finalMessage);
+            TxMessage finalMessage = new TxMessage("tx",EUI,"",true,100,myData);
+            Console.WriteLine("Data to be send by bridge: {0}",finalMessage.data);
+            _socketResponse(finalMessage);
 
         }
 
         private string convertFromIntToHex(string data, int firstByte, int lastByte,int number){
-            //I include last and also first byte so I need to add 1
-            //int counter = 0;
+            //I include last and also first byte
+            
             string myString = data;
 
             while(lastByte>=firstByte){

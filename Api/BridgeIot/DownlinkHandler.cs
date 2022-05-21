@@ -1,26 +1,35 @@
 using System.Collections.Generic;
+using Core.Interfaces;
+using Core.Models;
 
 namespace Api.BridgeIot
 {
     public class DownlinkHandler
     {
         private Dictionary<string,DateTime> lastTresholdsSent;
-        public DownlinkHandler(){
+        private IThresholdService _thresholdService;
+        public DownlinkHandler(IThresholdService thresholdService)
+        {
             lastTresholdsSent = new Dictionary<string, DateTime>();
+            _thresholdService = thresholdService;
         }
 
         public bool isThresholdChanged(string EUI){
+            //there is currently no need and no option to check if the treshold was changed so allway return true
+            return true;
+
+            //--------------------------------------------------------------------------------
             if (!lastTresholdsSent.ContainsKey(EUI)){
-                
+                Console.WriteLine("bridge got asked about new treshold and returned true");
                 return true;
             }
 
             DateTime lastTresholdSent = lastTresholdsSent.GetValueOrDefault(EUI);
 
             //mocked up date
-            DateTime lastTresholdUpdate = new DateTime(1990,1,1);
+            DateTime lastTresholdDatabase = new DateTime(1990,1,1);
 
-            if (lastTresholdUpdate > lastTresholdSent){
+            if (lastTresholdDatabase > lastTresholdSent){
                 return true;
             }
             return false;
@@ -29,17 +38,42 @@ namespace Api.BridgeIot
         public float[] getTresholds(string EUI){
             lastTresholdsSent.Add(EUI,DateTime.Now);
             //just mocked up data
-            float min_temp = 0.0f;
-            float max_temp = 50.2f;
+
+            float min_temp = 0;
+            float max_temp = 60; //the way it is implemented there have to be some default values
+            Threshold tempTreshold = _thresholdService.GetTemperatureThresholds(EUI);
+            if (tempTreshold.Type != ThresholdType.Empty)
+            {
+                min_temp = (int) tempTreshold.LowerThreshold;
+
+                //because max treshold can be null I need to check it
+                if (tempTreshold.HigherThreshold != null) max_temp = (int) tempTreshold.HigherThreshold;
+                Console.WriteLine("temperature got changed");
+            }
 
             float min_hum = 0.0f;
             float max_hum = 100.0f;
+            Threshold humTreshold = _thresholdService.GetHumidityThresholds(EUI);
+            if (humTreshold.Type != ThresholdType.Empty)
+            {
+                min_hum = (int)humTreshold.LowerThreshold;
 
-            float min_co2 = 0.0f;
-            float max_co2 = 20000.3f;
+                //because max treshold can be null I need to check it
+                if (humTreshold.HigherThreshold != null) max_hum = (int)humTreshold.HigherThreshold;
+            }
+
+            int min_co2 = 0;
+            int max_co2 = 2000;
+            Threshold co2Treshold = _thresholdService.GetHumidityThresholds(EUI);
+            if (co2Treshold.Type != ThresholdType.Empty)
+            {
+                min_co2 = (int)co2Treshold.LowerThreshold;
+
+                //because max treshold can be null I need to check it
+                if (co2Treshold.HigherThreshold != null) max_co2 = (int)co2Treshold.HigherThreshold;
+            }
 
             return new float[] {min_temp,max_temp,min_hum,max_hum,min_co2,max_co2};
-
         }
     }
 }
