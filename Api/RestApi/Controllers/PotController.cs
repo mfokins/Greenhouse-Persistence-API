@@ -20,11 +20,13 @@ namespace Api.RestApi.Controllers
         {
                 return _service.GetAll(greenhouseId, page, itemsPerPage).Select(x => DomToApi.Convert(x));
         }
+        
         [HttpGet("{PotId:int}")]
         public Pot GetById([FromRoute] string greenhouseId, [FromRoute] int PotId)
         {
             return DomToApi.Convert(_service.Get( PotId, greenhouseId));
         }
+        
         [HttpPost]
         public void Post([FromRoute] string greenhouseId, [FromBody] Pot value)
         {

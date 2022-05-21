@@ -39,6 +39,14 @@ namespace Data.Mappers
                 Time = humidityMeasurement.Time
             };
         }
+        public static Core.Models.MoistureMeasurement Convert(Models.Measurements.MoistureMeasurement moistureMeasurement)
+        {
+            return new Core.Models.MoistureMeasurement()
+            {
+                Moisture = moistureMeasurement.Moisture,
+                Time = moistureMeasurement.Time
+            };
+        }
 
         internal static Core.Models.Pot Convert(Pot t)
         {

@@ -11,7 +11,7 @@ namespace Data.Repositories
     {
         private GreenHouseDbContext _dbContext;
         private readonly IThresholdRepository _thresholdRepository;
-#pragma warning disable CS8602
+
 
         public PotRepository(GreenHouseDbContext dbContext, IThresholdRepository thresholdRepository)
         {
@@ -22,7 +22,7 @@ namespace Data.Repositories
         public void Add(Pot entity)
 
         {
-            var x = DomToDb.Convert(entity);
+           
             _dbContext.Greenhouses
                 .Include(x => x.Pots)
                 .Include(z => z.Thresholds)
