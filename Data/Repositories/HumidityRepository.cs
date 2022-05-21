@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Core.Interfaces.Humidity;
 using Core.Models;
 using Data.Mappers;
@@ -23,9 +26,10 @@ namespace Data.Repositories
         public IEnumerable<HumidityMeasurement> GetAll(string greenhouseId, int pageNumber = 0, int pageSize = 25)
         {
             return _dbContext.Greenhouses
-                    
+                .Include(g => g.HumidityMeasurements)
                 .FirstOrDefault(g => g.GreenHouseId == greenhouseId)
                 .HumidityMeasurements
+                .OrderByDescending(m => m.Time)
                 .Skip(pageNumber * pageSize)
                 .Take(pageSize)
                 .Select(t => DbToDom.Convert(t));
@@ -33,19 +37,22 @@ namespace Data.Repositories
 
         public HumidityMeasurement GetLatest(string greenhouseId)
         {
-            return DbToDom.Convert(_dbContext.Greenhouses
+            return _dbContext.Greenhouses
                 .Include(g => g.HumidityMeasurements)
                 .FirstOrDefault(g => g.GreenHouseId == greenhouseId)
                 .HumidityMeasurements
                 .OrderByDescending(m => m.Time)
-                .FirstOrDefault());
+                .Take(1)
+                .Select(x => DbToDom.Convert(x))
+                .FirstOrDefault();
 
         }
 
 
         public void Add(HumidityMeasurement entity)
         {
-            _dbContext.Greenhouses.Include(g => g.HumidityMeasurements)
+            _dbContext.Greenhouses
+                .Include(g => g.HumidityMeasurements)
                 .FirstOrDefault(g => g.GreenHouseId == entity.GreenHouseId)
                 .HumidityMeasurements
                 .Add(DomToDb.Convert(entity));
