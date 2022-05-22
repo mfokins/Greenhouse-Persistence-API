@@ -8,7 +8,7 @@ INSERT INTO [stage].[Dim_Greenhouse](
 )
 SELECT
     [GreenHouseId]
-FROM Greenhouse.[dbo].Greenhouses
+FROM [GreenhouseDB].[dbo].Greenhouses
 
     /*  
         [Country] ,
@@ -16,7 +16,9 @@ FROM Greenhouse.[dbo].Greenhouses
        to be added to the stage.[Dim_Greenhouse]
     
     */
-    --Populating Fact Measurements
+
+
+ /*     --Populating Fact Measurements (Outdated version)
     TRUNCATE TABLE [stage].[Fact_Measurements]
 INSERT INTO [stage].[Fact_Measurements](
     [GreenHouse_ID],
@@ -38,7 +40,7 @@ on grn.GreenhouseId=tmp.GreenhouseId
     on grn.GreenhouseId=hmd.GreenhouseId
     left join [Greenhouse].[dbo].DioxideCarbonMeasurement dioc
     on grn.GreenhouseId=dioc.GreenhouseId
-WHERE tmp.Time=hmd.Time AND tmp.Time=dioc.Time AND hmd.Time=dioc.Time
+WHERE tmp.Time=hmd.Time AND tmp.Time=dioc.Time AND hmd.Time=dioc.Time  */
 
 --version 2 of the fact measurement load
     use [GreenHouseDWH]
@@ -50,7 +52,7 @@ INSERT INTO [stage].[Fact_Measurements](
     [CarbonDioxide],
 [MeasurementDateTime]
 )
-SELECT
+SELECT DISTINCT
     src.GreenHouseId,
     t.Temperature,
     h.[Humidity],
@@ -71,17 +73,6 @@ FROM (
     LEFT JOIN [GreenhouseDB].[dbo].[DioxideCarbonMeasurement] c on (src.Time=c.Time and src.GreenHouseId=c.GreenHouseId)
 
 
-
---Populating Greenhouse dimension for Fact_MoisturePots
---Might be good to create a new schema
-    TRUNCATE TABLE [stage].[Dim_Greenhouse]
-INSERT INTO [stage].[Dim_Greenhouse](
-[GreenHouse_ID]
-)
-SELECT
-    [GreenHouseId]
-FROM Greenhouse.[dbo].Greenhouses
-
     --Populating Pot dimension for Fact_MoisturePots
     TRUNCATE TABLE [stage].[Dim_Pot]
 INSERT INTO [stage].[Dim_Pot](
@@ -91,24 +82,22 @@ INSERT INTO [stage].[Dim_Pot](
 SELECT
     [Id],
     [Name]
-FROM Greenhouse.[dbo].Pot
+FROM [GreenhouseDB].[dbo].Pot
 
 
     --Populating Fact Moisture Pots
     TRUNCATE TABLE [stage].[Fact_MoisturePots]
 INSERT INTO [stage].[Fact_MoisturePots](
-    [Moisture_ID],
     [Pot_ID],
     [GreenHouse_ID],
     [Moisture],
 [MeasurementDateTime]
 )
 SELECT
-    mst.[Id],
     pot.[Id],
     pot.[GreenHouseId],
     mst.[Moisture],
     mst.Time
-FROM [Greenhouse].[dbo].[Pot] pot
-    inner join [Greenhouse].[dbo].MoistureMeasurement mst
+FROM [GreenhouseDB].[dbo].[Pot] pot
+    inner join [GreenhouseDB].[dbo].MoistureMeasurement mst
 on mst.potId=pot.Id

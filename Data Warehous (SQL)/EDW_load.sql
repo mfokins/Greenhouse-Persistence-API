@@ -2,7 +2,7 @@
 use [GreenHouseDWH]
 go
 
-TRUNCATE TABLE [edw].[Dim_Pot]
+--TRUNCATE TABLE [edw].[Dim_Pot]
 INSERT INTO [edw].[Dim_Pot]
 	([Pot_ID]
 	,[Plant])
@@ -11,7 +11,7 @@ INSERT INTO [edw].[Dim_Pot]
 	[Plant]
 	FROM [stage].[Dim_Pot]
 
-TRUNCATE TABLE [edw].[Dim_Greenhouse]
+--TRUNCATE TABLE [edw].[Dim_Greenhouse]
 INSERT INTO [edw].[Dim_Greenhouse]
 	([GreenHouse_ID],
 	[Country],
@@ -23,7 +23,7 @@ INSERT INTO [edw].[Dim_Greenhouse]
 	FROM [stage].[Dim_Greenhouse]
 
 
-TRUNCATE TABLE [edw].[Fact_Measurements]
+--TRUNCATE TABLE [edw].[Fact_Measurements]
 INSERT INTO [edw].[Fact_Measurements]
 	([G_ID]
       ,[D_ID]
@@ -49,7 +49,7 @@ INSERT INTO [edw].[Fact_Measurements]
 	on t.Hour = DATEPART(HOUR, ms.MeasurementDateTime) 
 	AND t.Minute = DATEPART(MINUTE, ms.MeasurementDateTime)
 
-TRUNCATE TABLE [edw].[Fact_MoisturePots]
+--TRUNCATE TABLE [edw].[Fact_MoisturePots]
 INSERT INTO [edw].[Fact_MoisturePots]
 	([P_ID]
       ,[G_ID]
