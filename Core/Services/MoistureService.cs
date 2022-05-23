@@ -1,6 +1,8 @@
 ﻿using Core.Interfaces;
 using Core.Interfaces.Greenhouse;
+using Core.Interfaces.Pot;
 using Core.Models;
+using Core.Services.Interfaces;
 
 namespace Core.Services;
 
@@ -9,12 +11,17 @@ public class MoistureService : IMoistureService
     private readonly IMoistureRepository _moistureRepository;
 
     private readonly IGreenhouseService _greenhouseService;
+    private readonly IThresholdService _thresholdService;
+    private readonly INotificationService _notificationService;
+    private readonly IPotService _potService;
 
-
-    public MoistureService(IMoistureRepository moistureRepository, IGreenhouseService greenhouseService)
+    public MoistureService(IMoistureRepository moistureRepository, IGreenhouseService greenhouseService, IThresholdService thresholdService, INotificationService notificationService, IPotService potService)
     {
-        this._greenhouseService = greenhouseService;
-        this._moistureRepository = moistureRepository;
+        _moistureRepository = moistureRepository;
+        _greenhouseService = greenhouseService;
+        _thresholdService = thresholdService;
+        _notificationService = notificationService;
+        _potService = potService;
     }
 
     public void Add(MoistureMeasurement entity)
@@ -24,6 +31,17 @@ public class MoistureService : IMoistureService
             _greenhouseService.Create(entity.GreenHouseId);
         }
 
+
+        var threshold = _thresholdService.GetMoisturehresholds(entity.GreenHouseId, entity.PotId);
+        if (threshold.LowerThreshold > entity.Moisture)
+        {
+            //checks if notification wasnt already sent
+            if (!(_moistureRepository.GetLatest(entity.GreenHouseId, entity.PotId).Moisture < threshold.LowerThreshold))
+            {
+                var pot = _potService.Get(entity.PotId, entity.GreenHouseId);
+                _notificationService.SendMoistureThreshold(pot.Name, pot.GreenHouseId);
+            }
+        }
         _moistureRepository.Add(entity);
     }
 
@@ -41,7 +59,7 @@ public class MoistureService : IMoistureService
     {
         return _moistureRepository.Get(id, greenHouseId);
     }
-    
+
     public IEnumerable<MoistureMeasurement> GetAll(string greenhouseId, int potId, int pageNumber = 0,
         int pageSize = 25)
     {

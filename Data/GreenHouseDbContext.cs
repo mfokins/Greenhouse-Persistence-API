@@ -1,5 +1,4 @@
 ﻿using Data.Models;
-using Data.Models.Measurements;
 using Microsoft.EntityFrameworkCore;
 
 namespace Data
