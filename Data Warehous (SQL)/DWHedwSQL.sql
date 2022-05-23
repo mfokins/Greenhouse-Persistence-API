@@ -3,7 +3,12 @@ USE [GreenHouseDWH]
 GO
 
 /* -- CREATE EDW SCHEMA for GreenHouseDWH --*/
-CREATE SCHEMA [edw];
+IF NOT EXISTS 
+  (SELECT  *
+	FROM    sys.schemas
+    WHERE   name = 'edw' )
+EXEC
+	('CREATE SCHEMA [edw]');
 GO
 
 /* -- CREATE and populate Dim_Date TABLE --*/
@@ -121,7 +126,7 @@ CREATE TABLE [edw].[Fact_Measurements] (
  D_ID INT NOT NULL,
  T_ID INT NOT NULL,
  Temperature DECIMAL(7,2),
- Humidity DECIMAL(7,2,
+ Humidity DECIMAL(7,2),
  CarbonDioxide INT
 );
 
