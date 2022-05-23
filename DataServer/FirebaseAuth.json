@@ -1,3 +1,4 @@
+//Only development environment token
 {
   "type": "service_account",
   "project_id": "greehouse-controller",
