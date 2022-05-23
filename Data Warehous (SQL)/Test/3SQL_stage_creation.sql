@@ -1,10 +1,10 @@
-DROP DATABASE IF EXISTS [GreenHouseDWH]
+DROP DATABASE IF EXISTS [TestGreenHouseDWH]
 go
 
-CREATE DATABASE [GreenHouseDWH]
+CREATE DATABASE [TestGreenHouseDWH]
 go
 
-use [GreenHouseDWH];
+use [TestGreenHouseDWH];
 go
 
 create SCHEMA [stage];

@@ -1,8 +1,8 @@
-/* -- To use GreenHouseDWH --*/
-USE [GreenHouseDWH]
+/* -- To use TestGreenHouseDWH --*/
+USE [TestGreenHouseDWH]
 GO
 
-/* -- CREATE EDW SCHEMA for GreenHouseDWH --*/
+/* -- CREATE EDW SCHEMA for TestGreenHouseDWH --*/
 CREATE SCHEMA [edw];
 GO
 
@@ -121,7 +121,7 @@ CREATE TABLE [edw].[Fact_Measurements] (
  D_ID INT NOT NULL,
  T_ID INT NOT NULL,
  Temperature DECIMAL(7,2),
- Humidity DECIMAL(7,2,
+ Humidity DECIMAL(7,2),
  CarbonDioxide INT
 );
 
