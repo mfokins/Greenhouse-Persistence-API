@@ -33,6 +33,9 @@ builder.Services.AddScoped<IHumidityService, HumidityService>();
 builder.Services.AddScoped<IDioxideCarbonRepository, DioxideCarbonRepository>();
 builder.Services.AddScoped<IDioxideCarbonService, DioxideCarbonService>();
 
+builder.Services.AddScoped<IMoistureRepository, MoistureRepository>();
+builder.Services.AddScoped<IMoistureService, MoistureService>();
+
 builder.Services.AddScoped<IPotRepository, PotRepository>();
 builder.Services.AddScoped<IPotService, PotService>();
 

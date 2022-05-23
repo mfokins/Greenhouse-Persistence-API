@@ -8,7 +8,7 @@ namespace Data.Repositories;
 
 public class MoistureRepository : IMoistureRepository
 {
-    private GreenHouseDbContext _dbContext;
+    private readonly GreenHouseDbContext _dbContext;
 
     public MoistureRepository(GreenHouseDbContext dbContext)
     {
@@ -17,7 +17,9 @@ public class MoistureRepository : IMoistureRepository
 
     public void Add(MoistureMeasurement entity)
     {
-        _dbContext.Greenhouses.Include(pot => pot.Pots).FirstOrDefault(g => g.GreenHouseId == entity.GreenHouseId)
+        _dbContext.Greenhouses.Include(pot => pot.Pots)
+            .ThenInclude(m=>m.MoistureMeasurements)
+            .FirstOrDefault(g => g.GreenHouseId == entity.GreenHouseId)
             .Pots.FirstOrDefault(p => p.Id == entity.PotId).MoistureMeasurements.Add(DomToDb.Convert(entity));
         _dbContext.SaveChangesAsync();
     }
@@ -41,7 +43,9 @@ public class MoistureRepository : IMoistureRepository
 
     public MoistureMeasurement GetLatest(string greenhouseId, int potId)
     {
-        return DbToDom.Convert(_dbContext.Greenhouses.Include(pot => pot.Pots)
+        return DbToDom.Convert(_dbContext.Greenhouses
+            .Include(pot => pot.Pots)
+            .ThenInclude(m=>m.MoistureMeasurements)
             .FirstOrDefault(g => g.GreenHouseId == greenhouseId).Pots.FirstOrDefault(p => p.Id == potId)
             .MoistureMeasurements.OrderByDescending(t => t.Time).FirstOrDefault());
     }

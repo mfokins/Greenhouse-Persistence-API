@@ -11,7 +11,7 @@ namespace Data.Models.Measurements
         public double Moisture { get; set; }
         [Required]
         public DateTime Time { get; set; }
-        [ForeignKey("PotId")]
-        public Pot PotId  { get; set; }
+        
+        
     }
 }
