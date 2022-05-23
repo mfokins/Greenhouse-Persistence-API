@@ -6,6 +6,7 @@ using Core.Interfaces.Humidity;
 using Core.Interfaces.Pot;
 using Core.Interfaces.Temperature;
 using Core.Services;
+using Core.Services.Interfaces;
 using Data;
 using Data.Repositories;
 
@@ -14,7 +15,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-var test = new NotificationService();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -42,6 +42,9 @@ builder.Services.AddScoped<IPotService, PotService>();
 
 builder.Services.AddScoped<IGreenhouseService, GreenhouseService>();
 builder.Services.AddScoped<IGreenhouseRepository, GreenhouseRepository>();
+
+builder.Services.AddSingleton<INotificationService, NotificationService>();
+
 
 //builder.Services.AddHostedService<Class2>();
 builder.Services.AddScoped<IMessageHandler, MessageHandler>();

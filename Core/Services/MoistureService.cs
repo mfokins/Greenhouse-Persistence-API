@@ -36,10 +36,19 @@ public class MoistureService : IMoistureService
         if (threshold.LowerThreshold > entity.Moisture)
         {
             //checks if notification wasnt already sent
-            if (!(_moistureRepository.GetLatest(entity.GreenHouseId, entity.PotId).Moisture < threshold.LowerThreshold))
+            try
             {
+                if (!(_moistureRepository.GetLatest(entity.GreenHouseId, entity.PotId).Moisture < threshold.LowerThreshold))
+                {
+                    var pot = _potService.Get(entity.PotId, entity.GreenHouseId);
+                    _notificationService.SendMoistureThreshold(pot.Name, entity.GreenHouseId);
+                }
+            }
+            catch (NullReferenceException exception)
+            {
+                //no previous mesurments
                 var pot = _potService.Get(entity.PotId, entity.GreenHouseId);
-                _notificationService.SendMoistureThreshold(pot.Name, pot.GreenHouseId);
+                _notificationService.SendMoistureThreshold(pot.Name, entity.GreenHouseId);
             }
         }
         _moistureRepository.Add(entity);
