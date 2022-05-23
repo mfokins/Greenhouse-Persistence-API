@@ -101,11 +101,11 @@ namespace Api.BridgeIot
             //wait until I get some message
             WebSocketReceiveResult answer = await ws.ReceiveAsync(dataFromServer,CancellationToken.None);
 
-            Console.WriteLine(">>> Bridge: Message received form lorawan");
-
             string response = Encoding.ASCII.GetString(dataFromServer, 0, answer.Count);
 
             LoraWANMessage? returnMessage = LoraWANMessage.getLoraWANMessage(response);//JsonSerializer.Deserialize<LoraWANMessage>(response);
+
+            Console.WriteLine(">>> Bridge: Message received form lorawan ("+ returnMessage.cmd +")");
 
             return returnMessage;
         }

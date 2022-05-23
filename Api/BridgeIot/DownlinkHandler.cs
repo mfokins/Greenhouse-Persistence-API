@@ -36,7 +36,8 @@ namespace Api.BridgeIot
         }
 
         public float[] getTresholds(string EUI){
-            lastTresholdsSent.Add(EUI,DateTime.Now);
+            //do not add it because we send it every time
+            //lastTresholdsSent.Add(EUI,DateTime.Now); 
             //just mocked up data
 
             float min_temp = 0;
@@ -51,17 +52,6 @@ namespace Api.BridgeIot
                 Console.WriteLine("temperature got changed");
             }
 
-            float min_hum = 0.0f;
-            float max_hum = 100.0f;
-            Threshold humTreshold = _thresholdService.GetHumidityThresholds(EUI);
-            if (humTreshold.Type != ThresholdType.Empty)
-            {
-                min_hum = (int)humTreshold.LowerThreshold;
-
-                //because max treshold can be null I need to check it
-                if (humTreshold.HigherThreshold != null) max_hum = (int)humTreshold.HigherThreshold;
-            }
-
             int min_co2 = 0;
             int max_co2 = 2000;
             Threshold co2Treshold = _thresholdService.GetHumidityThresholds(EUI);
@@ -73,7 +63,7 @@ namespace Api.BridgeIot
                 if (co2Treshold.HigherThreshold != null) max_co2 = (int)co2Treshold.HigherThreshold;
             }
 
-            return new float[] {min_temp,max_temp,min_hum,max_hum,min_co2,max_co2};
+            return new float[] {min_temp,max_temp,min_co2,max_co2}; // this is definition for the order of values
         }
     }
 }

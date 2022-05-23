@@ -1,3 +1,10 @@
+/*
+ * MessageHandler.cs
+ *
+ * Created: 5/23/2022 2:13:02 PM
+ *  Author: Lukas
+ */
+
 using System.Collections;
 using Core.Interfaces.Temperature;
 using Core.Models;
@@ -14,7 +21,8 @@ namespace Api.BridgeIot
     public class MessageHandler : IMessageHandler
     {
         //there are precision that us ised for the tresholds - first min and max for each in temp, hum and co2
-        private static readonly float[] tresholdPrecision = new float[6] {1f,1f,1f, 1f,1f,1f};
+        private static readonly float[] tresholdPrecision = new float[4] {0.1f,0.1f,1f,1f};
+        private static readonly int tresholdCount = 4;
         private ITemperatureService _tempService;
         private IHumidityService _humService;
         private IDioxideCarbonService _Co2Service;
@@ -41,24 +49,24 @@ namespace Api.BridgeIot
             int? CO2 = null;
 
             if (message.port == 2){
-                temperature = this.extractFromHexToInt(message.data, 2,3) /10.0F; //this is hardcoded value to know that temperature is on oth and 1st byte
+                temperature = this.extractFromHexToInt(message.data, 2,3,true) /10.0F; //this is hardcoded value to know that temperature is on oth and 1st byte
                 Console.WriteLine("the temp is: {0}",temperature);
             }
             if (message.port == 3){
-                temperature = this.extractFromHexToInt(message.data, 0,1)/ 10.0F; //this is hardcoded value to know that temperature is on oth and 1st byte
+                temperature = this.extractFromHexToInt(message.data, 0,1, true)/ 10.0F; //this is hardcoded value to know that temperature is on oth and 1st byte
                 Console.WriteLine("the temp (v3) is: {0}",temperature);
             }
             if (message.port == 4)
             {
-                temperature = this.extractFromHexToInt(message.data, 0, 1) / 10.0F; //this is hardcoded value to know that temperature is on oth and 1st byte
-                humidity = this.extractFromHexToInt(message.data, 2, 3) / 10.0F;
+                temperature = this.extractFromHexToInt(message.data, 0, 1, true) / 10.0F; //this is hardcoded value to know that temperature is on oth and 1st byte
+                humidity = this.extractFromHexToInt(message.data, 2, 3, false) / 10.0F;
                 Console.WriteLine("the temp (v4) is: {0}, and humidity: {1}", temperature, humidity);
             }
             if (message.port == 5)
             {
-                temperature = this.extractFromHexToInt(message.data, 0, 1) / 10.0F;
-                humidity = this.extractFromHexToInt(message.data, 2, 3) / 10.0F;
-                CO2 = this.extractFromHexToInt(message.data, 4, 5);
+                temperature = this.extractFromHexToInt(message.data, 0, 1, true) / 10.0F;
+                humidity = this.extractFromHexToInt(message.data, 2, 3, false) / 10.0F;
+                CO2 = this.extractFromHexToInt(message.data, 4, 5, false);
                 Console.WriteLine("the temp (v5) is: {0}, humidity: {1}, CO2: {2}", temperature, humidity,CO2);
             }
 
@@ -99,7 +107,7 @@ namespace Api.BridgeIot
                 _Co2Service.Add(thisCo2);
             }
 
-            sendTresholds(message.EUI); // check if tresholds were updated, if so, send it to arduino
+            sendTresholds(message.EUI); // checking if tresholds were updated and sending it
         }
 
         public void HandleTxMessage(TxMessage message)
@@ -114,22 +122,22 @@ namespace Api.BridgeIot
 
             }
             float[] tresholds = _downlinkHandler.getTresholds(EUI);
-            int[] roundedTresholds = new int[6];
-            for (int i = 0; i < 6;i++){
-                roundedTresholds[i] = (int) (tresholds[i]*tresholdPrecision[i]);
+            int[] roundedTresholds = new int[tresholdCount];
+            for (int i = 0; i < tresholdCount; i++){
+                roundedTresholds[i] = (int) (tresholds[i]/tresholdPrecision[i]);
             }
             string  myData = "";
 
             
-            for (int i = 0; i<6; i++){
+            for (int i = 0; i< tresholdCount; i++){
                 myData = convertFromIntToHex(
                     myData,
-                    2*i,
-                    (2*i)+1, // each number corespont to 2 characters
-                    roundedTresholds[5-i] //TODO why is this in opposite order?
+                    4*i,
+                    (4*i)+3, // each number corespont to 2 characters
+                    roundedTresholds[tresholdCount - 1 - i] //this is in opposite order so it can utilise simple string concat
                 );
             }
-            TxMessage finalMessage = new TxMessage("tx",EUI,"",true,100,myData);
+            TxMessage finalMessage = new TxMessage("tx",EUI,"",true,1,myData);
             Console.WriteLine("Data to be send by bridge: {0}",finalMessage.data);
             _socketResponse(finalMessage);
 
@@ -137,13 +145,15 @@ namespace Api.BridgeIot
 
         private string convertFromIntToHex(string data, int firstByte, int lastByte,int number){
             //I include last and also first byte
-            
             string myString = data;
 
             while(lastByte>=firstByte){
                 char tmpCh;
                 int tempNum = number% 16;
                 number = number/16;
+
+                if (number < 0) tempNum += 16; // in case if the number is negative make it to compliment
+
                 if (tempNum >=0 && tempNum <9) tmpCh = Convert.ToChar(tempNum + '0');
                 else tmpCh = Convert.ToChar(tempNum - 10 + 'a');
                 myString = tmpCh + myString;
@@ -154,10 +164,10 @@ namespace Api.BridgeIot
 
         // this method convert hex values to integers. 
         // data is string of the entire data part, data is then in first byte and last byte inclusvely
-        private int extractFromHexToInt(string data,int firstByte, int lastByte){
+        private int extractFromHexToInt(string data,int firstByte, int lastByte, bool isSigned){
             ArrayList hexChar = new ArrayList();
 
-            //calculate the birst and last char index for the string
+            //calculate the first and last char index for the string
             int startIndex = firstByte*2;
             int lastIndex = lastByte*2+1;
 
@@ -167,7 +177,16 @@ namespace Api.BridgeIot
             do {
                 finalValue *= 16; // multiply the previous by 16 because we are at different index now
                 //Console.WriteLine("char: {0}, is {1}",data[curentIndex],convertCharToHex(data[curentIndex]));
-                finalValue += convertCharToHex(data[curentIndex]);
+                int value = convertCharToHex(data[curentIndex]);
+
+                if (isSigned) {
+                    int maxPositiveValue = (int)Math.Pow(2, 8 * (lastByte - firstByte + 1)) / 2 - 1;
+                    //                       bit value^|      ^bit count |^ byte count   |      ^max number in signed int
+                    if (value > maxPositiveValue) value = (maxPositiveValue * 2 - value);
+                } 
+                
+                
+                finalValue += value;
                 //Console.WriteLine(finalValue);
                 curentIndex++;
             } while (curentIndex <=lastIndex);
