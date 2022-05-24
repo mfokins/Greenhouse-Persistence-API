@@ -24,7 +24,7 @@ namespace Api.Mappers
         {
             return new Api.Models.HumidityMeasurement()
             {
-                Humidity = humidityMeasurement.Humidity,
+                Humidity = Math.Round(humidityMeasurement.Humidity, 2),
                 Time = ((DateTimeOffset)humidityMeasurement.Time).ToUnixTimeSeconds()
             };
         }
