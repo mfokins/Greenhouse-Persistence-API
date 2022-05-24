@@ -10,7 +10,9 @@ using System.Threading.Tasks;
 using Api.Models;
 using Data.Models;
 using FluentAssertions;
+using FluentAssertions.Common;
 using FluentAssertions.Numeric;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Xunit;
@@ -19,16 +21,17 @@ namespace IntegrationTesting;
 
 public class TemperatureMeasurementTest : MeasurementControllerTests
 {
-    public TemperatureMeasurementTest()
-    {
-       // _testGreenhouse.HumidityMeasurements.
-    }
+    private Greenhouse _testGreenhouse;
 
     [Fact]
     public async Task GetLatestTemperatureMeasurement_Null()
     {
         //Set
-
+        _testGreenhouse = new Greenhouse();
+        _testGreenhouse.GreenHouseId = "Qwerty1234567";
+        _testGreenhouse.TemperatureMesurments = new List<Data.Models.Measurements.TemperatureMeasurement>();
+        await CreateTemperatureMeasurementAsync(_testGreenhouse.GreenHouseId, new TemperatureMeasurement{Temperature = 12, Time = 1234311});
+        
         //Act
         List<TemperatureMeasurement> model = null;
         TestClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -46,7 +49,8 @@ public class TemperatureMeasurementTest : MeasurementControllerTests
     public async Task GetLatestTemperatureMeasurement_OneMeasurement()
     {
         //Set
-        await CreateTemperatureMeasurementAsync(new TemperatureMeasurement {Temperature = 14, Time = 1234311});
+        await CreateTemperatureMeasurementAsync(_testGreenhouse.GreenHouseId,
+            new TemperatureMeasurement {Temperature = 14, Time = 1234311});
 
         //Act
         List<TemperatureMeasurement> model = null;
@@ -65,7 +69,8 @@ public class TemperatureMeasurementTest : MeasurementControllerTests
     public async Task GetLatestTemperatureMeasurement_TwoMeasurements()
     {
         //Set
-        await CreateTemperatureMeasurementAsync(new TemperatureMeasurement {Temperature = 14, Time = 1234311});
+        await CreateTemperatureMeasurementAsync(_testGreenhouse.GreenHouseId,
+            new TemperatureMeasurement {Temperature = 14, Time = 1234311});
 
         //Act
         List<TemperatureMeasurement> model = null;
@@ -84,7 +89,8 @@ public class TemperatureMeasurementTest : MeasurementControllerTests
     public async Task GetLatestTemperatureMeasurement_MultipleMeasurements()
     {
         //Set
-        await CreateTemperatureMeasurementAsync(new TemperatureMeasurement {Temperature = 14, Time = 1234311});
+        await CreateTemperatureMeasurementAsync(_testGreenhouse.GreenHouseId,
+            new TemperatureMeasurement {Temperature = 14, Time = 1234311});
 
         //Act
         List<TemperatureMeasurement> model = null;
@@ -103,7 +109,8 @@ public class TemperatureMeasurementTest : MeasurementControllerTests
     public async Task GetLatestTemperatureMeasurement_NonExistingGreenhouse()
     {
         //Set
-        await CreateTemperatureMeasurementAsync(new TemperatureMeasurement {Temperature = 14, Time = 1234311});
+        await CreateTemperatureMeasurementAsync(_testGreenhouse.GreenHouseId,
+            new TemperatureMeasurement {Temperature = 14, Time = 1234311});
 
         //Act
         List<TemperatureMeasurement> model = null;
@@ -123,7 +130,8 @@ public class TemperatureMeasurementTest : MeasurementControllerTests
     public async Task GetAllTemperatureMeasurement()
     {
         //Set
-        await CreateTemperatureMeasurementAsync(new TemperatureMeasurement {Temperature = 14, Time = 1234311});
+        await CreateTemperatureMeasurementAsync(_testGreenhouse.GreenHouseId,
+            new TemperatureMeasurement {Temperature = 14, Time = 1234311});
 
         //Act
         List<TemperatureMeasurement> model = null;
@@ -142,7 +150,8 @@ public class TemperatureMeasurementTest : MeasurementControllerTests
     public async Task GetAllTemperatureMeasurement_NonExistingGreenhouse()
     {
         //Set
-        await CreateTemperatureMeasurementAsync(new TemperatureMeasurement {Temperature = 14, Time = 1234311});
+        await CreateTemperatureMeasurementAsync(_testGreenhouse.GreenHouseId,
+            new TemperatureMeasurement {Temperature = 14, Time = 1234311});
 
         //Act
         List<TemperatureMeasurement> model = null;
@@ -161,7 +170,8 @@ public class TemperatureMeasurementTest : MeasurementControllerTests
     public async Task GetAllTemperatureMeasurement_MoreElementsThanExpected()
     {
         //Set
-        await CreateTemperatureMeasurementAsync(new TemperatureMeasurement {Temperature = 14, Time = 1234311});
+        await CreateTemperatureMeasurementAsync(_testGreenhouse.GreenHouseId,
+            new TemperatureMeasurement {Temperature = 14, Time = 1234311});
 
         //Act
         List<TemperatureMeasurement> model = null;
@@ -180,7 +190,8 @@ public class TemperatureMeasurementTest : MeasurementControllerTests
     public async Task GetAllTemperatureMeasurement_LessElementsThanExpected()
     {
         //Set
-        await CreateTemperatureMeasurementAsync(new TemperatureMeasurement {Temperature = 14, Time = 1234311});
+        await CreateTemperatureMeasurementAsync(_testGreenhouse.GreenHouseId,
+            new TemperatureMeasurement {Temperature = 14, Time = 1234311});
 
         //Act
         List<TemperatureMeasurement> model = null;
@@ -198,7 +209,8 @@ public class TemperatureMeasurementTest : MeasurementControllerTests
     [Fact]
     public async Task GetLatestTemperature_WithExistingTemperature()
     {
-        await CreateTemperatureMeasurementAsync(new TemperatureMeasurement {Temperature = 4, Time = 1234311});
+        await CreateTemperatureMeasurementAsync(_testGreenhouse.GreenHouseId,
+            new TemperatureMeasurement {Temperature = 4, Time = 1234311});
         //Act
         var response = await TestClient.GetAsync($"Temperature/{_testGreenhouse.GreenHouseId}");
 
