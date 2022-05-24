@@ -50,24 +50,24 @@ namespace Api.BridgeIot
 
             if (message.port == 2){
                 temperature = this.extractFromHexToInt(message.data, 2,3,true) /10.0F; //this is hardcoded value to know that temperature is on oth and 1st byte
-                Console.WriteLine("the temp is: {0}",temperature);
+                Console.WriteLine(">>> Bridge: the temp is: {0}", temperature);
             }
             if (message.port == 3){
                 temperature = this.extractFromHexToInt(message.data, 0,1, true)/ 10.0F; //this is hardcoded value to know that temperature is on oth and 1st byte
-                Console.WriteLine("the temp (v3) is: {0}",temperature);
+                Console.WriteLine(">>> Bridge: the temp (v3) is: {0}", temperature);
             }
             if (message.port == 4)
             {
                 temperature = this.extractFromHexToInt(message.data, 0, 1, true) / 10.0F; //this is hardcoded value to know that temperature is on oth and 1st byte
                 humidity = this.extractFromHexToInt(message.data, 2, 3, false) / 10.0F;
-                Console.WriteLine("the temp (v4) is: {0}, and humidity: {1}", temperature, humidity);
+                Console.WriteLine(">>> Bridge: the temp (v4) is: {0}, and humidity: {1}", temperature, humidity);
             }
             if (message.port == 5)
             {
                 temperature = this.extractFromHexToInt(message.data, 0, 1, true) / 10.0F;
                 humidity = this.extractFromHexToInt(message.data, 2, 3, false) / 10.0F;
                 CO2 = this.extractFromHexToInt(message.data, 4, 5, false);
-                Console.WriteLine("the temp (v5) is: {0}, humidity: {1}, CO2: {2}", temperature, humidity,CO2);
+                Console.WriteLine(">>> Bridge: the temp (v5) is: {0}, humidity: {1}, CO2: {2}", temperature, humidity,CO2);
             }
 
             string greenhouseEUI = message.EUI;
@@ -138,7 +138,7 @@ namespace Api.BridgeIot
                 );
             }
             TxMessage finalMessage = new TxMessage("tx",EUI,"",true,1,myData);
-            Console.WriteLine("Data to be send by bridge: {0}",finalMessage.data);
+            Console.WriteLine(">>> Bridge: Data to be send (tx): {0}", finalMessage.data);
             _socketResponse(finalMessage);
 
         }

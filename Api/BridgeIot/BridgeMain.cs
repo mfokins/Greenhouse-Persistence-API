@@ -80,7 +80,7 @@ namespace Api.BridgeIot
                 case "gw": //this message do not have reason for our project, it gives info about gateway
                     break;
                 case "txd": //this is confirmation about downlik if requested
-                    Console.WriteLine(">>> Bridge: "+message.json);
+                    //Console.WriteLine(">>> Bridge: "+message.json);
                     break;
             }
         }
@@ -89,7 +89,7 @@ namespace Api.BridgeIot
             //TODO finish the convert from object to socket
 
             string jsonMessage = message.getJson();
-            Console.WriteLine("message: "+jsonMessage);
+            //Console.WriteLine("message: "+jsonMessage);
             byte[] dataToServer = Encoding.ASCII.GetBytes(jsonMessage);
             ws.SendAsync(dataToServer,WebSocketMessageType.Text,true,CancellationToken.None);
         }
