@@ -105,7 +105,7 @@ namespace Api.BridgeIot
 
             LoraWANMessage? returnMessage = LoraWANMessage.getLoraWANMessage(response);//JsonSerializer.Deserialize<LoraWANMessage>(response);
 
-            Console.WriteLine(">>> Bridge: Message received form lorawan ("+ returnMessage.cmd +")");
+            Console.WriteLine(">>> Bridge: Message received form lorawan ("+ returnMessage.cmd +") , from: "+returnMessage.EUI);
 
             return returnMessage;
         }

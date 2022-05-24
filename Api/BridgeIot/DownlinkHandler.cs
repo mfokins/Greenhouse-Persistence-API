@@ -40,7 +40,7 @@ namespace Api.BridgeIot
             //lastTresholdsSent.Add(EUI,DateTime.Now); 
             //just mocked up data
 
-            float min_temp = 0;
+            float min_temp = -20;
             float max_temp = 60; //the way it is implemented there have to be some default values
             Threshold tempTreshold = _thresholdService.GetTemperatureThresholds(EUI);
             if (tempTreshold.Type != ThresholdType.Empty)
@@ -53,7 +53,7 @@ namespace Api.BridgeIot
             }
 
             int min_co2 = 0;
-            int max_co2 = 2000;
+            int max_co2 = 5000;
             Threshold co2Treshold = _thresholdService.GetHumidityThresholds(EUI);
             if (co2Treshold.Type != ThresholdType.Empty)
             {
