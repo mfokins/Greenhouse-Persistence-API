@@ -204,6 +204,12 @@ INSERT INTO [edw].[Fact_Measurements]
 	WHERE g.ValidTo = 99990101
 GO
 
+--to update last load date for measurements
+DECLARE @NewLoadDate int
+SET @NewLoadDate = CONVERT(CHAR(8), GETDATE(), 112)
+INSERT INTO [etl].[LogUpdate] ([Table], [LastLoadDate]) VALUES ('Fact_Measurements', @NewLoadDate)
+GO
+
 -------------------------------------------------------------------------------
 
 ---stage.Fact_MoisturePots table insert from source (only for data after the last load date)
@@ -259,4 +265,10 @@ INSERT INTO [edw].[Fact_MoisturePots]
 	AND t.Minute = DATEPART(MINUTE, m.MeasurementDateTime)
 	WHERE g.ValidTo = 99990101
 	and p.ValidTo = 99990101
+GO
+
+--to update last load date for moisture pots
+DECLARE @NewLoadDate int
+SET @NewLoadDate = CONVERT(CHAR(8), GETDATE(), 112)
+INSERT INTO [etl].[LogUpdate] ([Table], [LastLoadDate]) VALUES ('Fact_MoisturePots', @NewLoadDate)
 GO
