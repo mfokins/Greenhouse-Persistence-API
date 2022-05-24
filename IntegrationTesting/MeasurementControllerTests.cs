@@ -32,7 +32,7 @@ public class MeasurementControllerTests
         });
         TestClient = appFactory.CreateClient();
         _testGreenhouse = new Greenhouse();
-        _testGreenhouse.GreenHouseId = "testtesttesttesttesttesttest";
+        _testGreenhouse.GreenHouseId = "QWERTY123456";
         _testGreenhouse.TemperatureMesurments = new List<Data.Models.Measurements.TemperatureMeasurement>();
     }
 
@@ -44,15 +44,23 @@ public class MeasurementControllerTests
     }
 
     protected async Task<Api.Models.DioxideCarbonMeasurement> CreateDioxideCarbonMeasurementAsync(
-        TemperatureMeasurement request)
+        DioxideCarbonMeasurement request)
     {
         var response = await TestClient.PostAsJsonAsync($"Humidity/{_testGreenhouse.GreenHouseId}", request);
-        return await response.Content.ReadFromJsonAsync<DioxideCarbonMeasurement>();
+        return await response.Content.ReadAsAsync<DioxideCarbonMeasurement>();
     }
 
-    protected async Task<Api.Models.HumidityMeasurement> CreateHumidityMeasurementAsync(TemperatureMeasurement request)
+    protected async Task<Api.Models.HumidityMeasurement> CreateHumidityMeasurementAsync(HumidityMeasurement request)
     {
         var response = await TestClient.PostAsJsonAsync($"DioxideCarbon/{_testGreenhouse.GreenHouseId}", request);
-        return await response.Content.ReadFromJsonAsync<Api.Models.HumidityMeasurement>();
+        return await response.Content.ReadAsAsync<Api.Models.HumidityMeasurement>();
     }
+
+    protected async Task<Api.Models.Pot> CreatePotAsync(Api.Models.Pot request)
+    {
+        var response = await TestClient.PostAsJsonAsync($"Pot/{_testGreenhouse.GreenHouseId}", request);
+        return await response.Content.ReadAsAsync<Api.Models.Pot>();
+    }
+    
+
 }
