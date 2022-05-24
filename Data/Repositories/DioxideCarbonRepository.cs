@@ -45,12 +45,13 @@ namespace Data.Repositories
                 .Select(t => DbToDom.Convert(t));
         }
 
-        public async void Add(DioxideCarbonMeasurement entity)
+        public  void Add(DioxideCarbonMeasurement entity)
         {
+
             _dbContext.Greenhouses.Include(g => g.DioxideCarbonMeasurements)
                 .FirstOrDefault(g => g.GreenHouseId == entity.GreenHouseId)
                 .DioxideCarbonMeasurements.Add(DomToDb.Convert(entity));
-            await _dbContext.SaveChangesAsync();
+             _dbContext.SaveChanges();
         }
 
         public async void Update(DioxideCarbonMeasurement entity)

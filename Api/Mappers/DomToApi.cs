@@ -3,6 +3,7 @@ using Api.Models;
 using TemperatureMeasurement = Core.Models.TemperatureMeasurement;
 using HumidityMeasurement = Core.Models.HumidityMeasurement;
 using DioxideCarbonMeasurement = Core.Models.DioxideCarbonMeasurement;
+using MoistureMeasurement = Core.Models.MoistureMeasurement;
 
 namespace Api.Mappers
 {
@@ -23,7 +24,7 @@ namespace Api.Mappers
         {
             return new Api.Models.HumidityMeasurement()
             {
-                Humidity = humidityMeasurement.Humidity,
+                Humidity = Math.Round(humidityMeasurement.Humidity, 2),
                 Time = ((DateTimeOffset)humidityMeasurement.Time).ToUnixTimeSeconds()
             };
         }
@@ -33,6 +34,14 @@ namespace Api.Mappers
             {       
                 Co2Measurement = dioxideCarbonMeasurement.Co2Measurement,
                 Time = ((DateTimeOffset) dioxideCarbonMeasurement.Time).ToUnixTimeSeconds()
+            };
+        }
+        public static Models.MoistureMeasurement Convert(MoistureMeasurement moistureMeasurement)
+        {
+            return new Api.Models.MoistureMeasurement()
+            {       
+                Moisture = moistureMeasurement.Moisture,
+                Time = ((DateTimeOffset) moistureMeasurement.Time).ToUnixTimeSeconds()
             };
         }
 

@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using DioxideCarbonMeasurement = Core.Models.DioxideCarbonMeasurement;
 using TemperatureMeasurement = Core.Models.TemperatureMeasurement;
 using HumidityMeasurement = Core.Models.HumidityMeasurement;
+using MoistureMeasurement = Core.Models.MoistureMeasurement;
 using Pot = Core.Models.Pot;
 
 namespace Api.Mappers
@@ -24,7 +25,6 @@ namespace Api.Mappers
         }
 
 
-
         public static HumidityMeasurement Convert(Models.HumidityMeasurement value)
         {
             return new HumidityMeasurement()
@@ -33,11 +33,21 @@ namespace Api.Mappers
                 Time = UnixTimeStampToDateTime(value.Time),
             };
         }
+
         public static DioxideCarbonMeasurement Convert(Models.DioxideCarbonMeasurement value)
         {
             return new DioxideCarbonMeasurement()
             {
                 Co2Measurement = value.Co2Measurement,
+                Time = UnixTimeStampToDateTime(value.Time),
+            };
+        }
+
+        public static MoistureMeasurement Convert(Models.MoistureMeasurement value)
+        {
+            return new MoistureMeasurement()
+            {
+                Moisture = value.Moisture,
                 Time = UnixTimeStampToDateTime(value.Time),
             };
         }
