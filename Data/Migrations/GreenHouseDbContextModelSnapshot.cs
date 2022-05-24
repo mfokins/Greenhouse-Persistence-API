@@ -140,18 +140,47 @@ namespace Data.Migrations
                     b.Property<string>("GreenHouseId")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<int>("MoistureThresholdId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<double>("moistureThreshold")
-                        .HasColumnType("float");
 
                     b.HasKey("Id");
 
                     b.HasIndex("GreenHouseId");
 
+                    b.HasIndex("MoistureThresholdId");
+
                     b.ToTable("Pot");
+                });
+
+            modelBuilder.Entity("Data.Models.Threshold", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("GreenHouseId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<double?>("HigherThreshold")
+                        .HasColumnType("float");
+
+                    b.Property<double>("LowerThreshold")
+                        .HasColumnType("float");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GreenHouseId");
+
+                    b.ToTable("Threshold");
                 });
 
             modelBuilder.Entity("Data.Models.Measurements.DioxideCarbonMeasurement", b =>
@@ -187,6 +216,21 @@ namespace Data.Migrations
                     b.HasOne("Data.Models.Greenhouse", null)
                         .WithMany("Pots")
                         .HasForeignKey("GreenHouseId");
+
+                    b.HasOne("Data.Models.Threshold", "MoistureThreshold")
+                        .WithMany()
+                        .HasForeignKey("MoistureThresholdId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("MoistureThreshold");
+                });
+
+            modelBuilder.Entity("Data.Models.Threshold", b =>
+                {
+                    b.HasOne("Data.Models.Greenhouse", null)
+                        .WithMany("Thresholds")
+                        .HasForeignKey("GreenHouseId");
                 });
 
             modelBuilder.Entity("Data.Models.Greenhouse", b =>
@@ -198,6 +242,8 @@ namespace Data.Migrations
                     b.Navigation("Pots");
 
                     b.Navigation("TemperatureMesurments");
+
+                    b.Navigation("Thresholds");
                 });
 
             modelBuilder.Entity("Data.Models.Pot", b =>

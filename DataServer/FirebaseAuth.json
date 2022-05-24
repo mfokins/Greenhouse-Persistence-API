@@ -1,0 +1,14 @@
+//Only development environment token
+
+{
+  "type": "service_account",
+  "project_id": "greehouse-controller",
+  "private_key_id": "d44bad1346d7d324085f1dd1f7e49001e8a494b7",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEuwIBADANBgkqhkiG9w0BAQEFAASCBKUwggShAgEAAoIBAQC2ViyZILzkpT2u\nAi0czqvLCe9tWAzF7dGh4D8BCcaogxCjLbjLEZsO9A9L+WMkG6hkfbi3bSBPFTDl\nk3A522cbSbO5X1XcgTIK8XQR8UyWKbSIe8vHo/Uh509Ixoi1AOrxrNZaFt+Y4wT0\nfIusSD6tK4hVU/yeKJU2ltCM8bMHM99XiE/NLs1dCxKQ4tleyEifM613gnRwuYNG\n3haICgLCN0ireOxGICfPybkLyEOXLzSH+ERLavwrVPD4vhLoiMJ7pgJJp1OrytiG\noOfBD32SnqemMCQFULEaPLQVwjWQ+qQA2LG5q01vmNHRxHDgEBha3zVRXmu/QJhT\n0Ji4+ZDXAgMBAAECgf9KbeLGnxZ8PvdukHTZzYNS3jtd5xNPuERaT69oPRVatCWW\ndpN4UTd6YyXbXXGay69xVeCQ/3qwzXWoQQcOlwD/opY6lS/3UsWasfUvXdBle6C2\nFdKZK9RkgodarbAgMr+051iYbb3YKtNa+XwKV3M+PQbpzd7QsMA4CFgZMJBj35b4\n0IxI5VxT1ld65sVFOtL2IJFLpoTpTZcuhrCIUeBpd/LwKxwZ9kadyIDQtZcR6Ag3\nbVQEaO+IOp/2U8cib4xkFTsKG4Jk291MtD362ucKz3keAVcD+6iM8WCBq6sc79fm\nHyVpHsJoLOjAQMHOssW/17zXR7ZmvAQyIjwZqjECgYEA9XSmAUPH1WaJrptfeXbV\nBQzUmnisKRxfeduq0yeRU/RmrWmmzGSFak7cw8z2a4n1OoEobwFOv563XFzoZekH\n90iV3R3v/lmXYhkhPK4V+ESkowboIx4XheGZOW0X9Ld+OBx9c4olpQIjueOx99iS\nd15RZpqq6SKvB23UBTovQBECgYEAviti3tRB3bFtYLtZHVdp2Inqo7h8G2himzd4\nK/XiPsWeuhuP3ROmEJqA4C5gKW85uggjA/ivVmnqXQVKrRd6OKNuKcU5DQy0qrWZ\nSdud8Vh6l8j68O3IDb3nBmtN9W/jaxHDP1TXTvHndTN+PhZMcB6Rg4vJbVga9EjV\njMw0KmcCgYAcZKLzUIDkOZlBnm174ngfvm01dTINC2Ar+3IWPOR9vq7F7ovB5vrb\n4kV9TM9Qf0PjwZ8IwDD4z4ZMY97qMvud6kKTsmvZk0mEqn2CxGx8LIyS4zClJ0z3\nSrJrxyfXQgaSvRDx9ZAHN2kkjqc+kUnYDwwBf3C3yTBP/q9g72sZ0QKBgQCtP+WR\nUBq5l/0n1Ua4nnyFlBA6G8alSZIcCormsdnuiiezMYz9QftWwQuMMXPWC8ixnNwZ\nsCQ9O70SBdIko3DrzKh+UXlKVDr8EvmV+giIaa02PxmvCVHqgwnIJVYetlKfps0U\nE30cJPJTKhhnA/WbZ532FBHsFgpoZzp2TUtxHQKBgC6cUjowzJzV10kLyRsYJFQv\n5NQflKAJ6gNvEUqJoeGaQkkrle/VX/I3kMPt6fOSg7o8b2WHxHaLaMOQ7P4oh3Hw\nTqWkbNvwgLsjOJLtyaA9hXqFNDbiRQXTzSVTpUiAjHvJJnSTUgVY46+gxxta8QT3\nR1djp1CByGiR8fkByRkm\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-8ro01@greehouse-controller.iam.gserviceaccount.com",
+  "client_id": "107931039628382935664",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-8ro01%40greehouse-controller.iam.gserviceaccount.com"
+}

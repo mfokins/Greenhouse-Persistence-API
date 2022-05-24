@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using DioxideCarbonMeasurement = Core.Models.DioxideCarbonMeasurement;
 using TemperatureMeasurement = Core.Models.TemperatureMeasurement;
 using HumidityMeasurement = Core.Models.HumidityMeasurement;
+using MoistureMeasurement = Core.Models.MoistureMeasurement;
 using Pot = Core.Models.Pot;
 
 namespace Api.Mappers
@@ -23,7 +24,7 @@ namespace Api.Mappers
             };
         }
 
-        
+
         public static HumidityMeasurement Convert(Models.HumidityMeasurement value)
         {
             return new HumidityMeasurement()
@@ -32,6 +33,7 @@ namespace Api.Mappers
                 Time = UnixTimeStampToDateTime(value.Time),
             };
         }
+
         public static DioxideCarbonMeasurement Convert(Models.DioxideCarbonMeasurement value)
         {
             return new DioxideCarbonMeasurement()
@@ -41,13 +43,35 @@ namespace Api.Mappers
             };
         }
 
+        public static MoistureMeasurement Convert(Models.MoistureMeasurement value)
+        {
+            return new MoistureMeasurement()
+            {
+                Moisture = value.Moisture,
+                Time = UnixTimeStampToDateTime(value.Time),
+            };
+        }
+
         public static Pot Convert(Models.Pot pot)
         {
             return new Pot()
             {
-                moistureThreshold = pot.LowerMoistureThreshold,
+                moistureThreshold = new Core.Models.Threshold()
+                {
+                    Type = ThresholdType.Moisture,
+                    LowerThreshold = pot.LowerMoistureThreshold
+                },
                 Name = pot.Name,
                 Id = pot.Id,
+            };
+        }
+
+        public static Core.Models.Threshold Convert(Models.Threshold threshold)
+        {
+            return new Core.Models.Threshold()
+            {
+                LowerThreshold = threshold.LowerThreshold,
+                HigherThreshold = threshold.HigherThreshold,
             };
         }
 

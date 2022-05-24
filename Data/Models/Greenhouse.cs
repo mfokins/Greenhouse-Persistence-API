@@ -1,4 +1,5 @@
-﻿using Data.Models.Measurements;
+﻿using System.Collections.Generic;
+using Data.Models.Measurements;
 using System.ComponentModel.DataAnnotations;
 
 namespace Data.Models
@@ -16,6 +17,8 @@ namespace Data.Models
         [Required]
         public IList<HumidityMeasurement> HumidityMeasurements { get; set; }
         
+        [Required]
+        public IList<Threshold> Thresholds { get; set; }
         [Required]
         public IList<Pot> Pots { get; set; }
 
