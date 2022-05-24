@@ -9,5 +9,6 @@ namespace Api.BridgeIot
     {
         public void HandleRxMessage(RxMessage message);
         public void HandleTxMessage(TxMessage message);
+        void setResponseAction(Action<TxMessage> responseAction);
     }
 }

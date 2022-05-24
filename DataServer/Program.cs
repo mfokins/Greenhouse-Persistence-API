@@ -21,7 +21,7 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddDbContext<GreenHouseDbContext>();
+builder.Services.AddTransient<GreenHouseDbContext>();
 
 builder.Services.AddScoped<ITemperatureRepository, TemperatureRepository>();
 builder.Services.AddScoped<ITemperatureService, TemperatureService>();
@@ -51,7 +51,7 @@ builder.Services.AddSingleton<INotificationService, NotificationService>();
 //builder.Services.AddHostedService<Class2>();
 builder.Services.AddScoped<IMessageHandler, MessageHandler>();
 builder.Services.AddHostedService<BridgeMain>();
-builder.Services.AddSingleton<DownlinkHandler>();
+builder.Services.AddScoped<DownlinkHandler>();
 //Class1.testMethod();
 
 var app = builder.Build();

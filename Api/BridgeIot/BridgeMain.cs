@@ -21,7 +21,6 @@ namespace Api.BridgeIot
 
         static ClientWebSocket ws = new ClientWebSocket();
         static IMessageHandler messageHandler;
-        static DownlinkHandler downlinkHandler;
 
         public BridgeMain(IServiceScopeFactory factory){
             _scopeFactory = factory;
@@ -34,10 +33,11 @@ namespace Api.BridgeIot
                 Console.WriteLine("no service!");
                 return;
             }
+            messageHandler.setResponseAction(this.send);
+
             /*new MessageHandler(_scopeFactory.CreateScope().ServiceProvider.GetService<ITemperatureService>(),
                 _scopeFactory.CreateScope().ServiceProvider.GetService<DownlinkHandler>(),
                 this);*/
-            downlinkHandler = new DownlinkHandler();
 
             Console.WriteLine(">>> Bridge: connection initialised!");
 
@@ -87,6 +87,7 @@ namespace Api.BridgeIot
 
         public void send(TxMessage message){
             //TODO finish the convert from object to socket
+
             string jsonMessage = message.getJson();
             //Console.WriteLine("message: "+jsonMessage);
             byte[] dataToServer = Encoding.ASCII.GetBytes(jsonMessage);
@@ -100,11 +101,11 @@ namespace Api.BridgeIot
             //wait until I get some message
             WebSocketReceiveResult answer = await ws.ReceiveAsync(dataFromServer,CancellationToken.None);
 
-            Console.WriteLine(">>> Bridge: Message received form lorawan");
-
             string response = Encoding.ASCII.GetString(dataFromServer, 0, answer.Count);
 
             LoraWANMessage? returnMessage = LoraWANMessage.getLoraWANMessage(response);//JsonSerializer.Deserialize<LoraWANMessage>(response);
+
+            Console.WriteLine(">>> Bridge: Message received form lorawan ("+ returnMessage.cmd +") , from: "+returnMessage.EUI);
 
             return returnMessage;
         }
