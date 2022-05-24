@@ -11,6 +11,7 @@ using Core.Models;
 using Api.BridgeIot.Domain;
 using Core.Interfaces.Humidity;
 using Core.Interfaces.DioxideCarbon;
+using Core.Interfaces.Pot;
 using Core.Interfaces;
 
 using Microsoft.Extensions.DependencyInjection;
@@ -26,16 +27,19 @@ namespace Api.BridgeIot
         private ITemperatureService _tempService;
         private IHumidityService _humService;
         private IDioxideCarbonService _Co2Service;
+        private IMoistureService _moistureService;
+        
 
         private DownlinkHandler _downlinkHandler;
         private Action<TxMessage> _socketResponse;
         public MessageHandler(ITemperatureService tempService, IHumidityService humService, 
-            IDioxideCarbonService co2Service, DownlinkHandler downlinkHandler)
+            IDioxideCarbonService co2Service, DownlinkHandler downlinkHandler, IMoistureService moistureService)
         {
             _tempService = tempService;
             _downlinkHandler = downlinkHandler;
             _humService = humService;
             _Co2Service = co2Service;
+            _moistureService = moistureService;
         }
 
         public void setResponseAction(Action<TxMessage> responseAction)
@@ -47,27 +51,47 @@ namespace Api.BridgeIot
             float? temperature = null;
             float? humidity = null;
             int? CO2 = null;
+            int[] moisture = null;
 
-            if (message.port == 2){
-                temperature = this.extractFromHexToInt(message.data, 2,3,true) /10.0F; //this is hardcoded value to know that temperature is on oth and 1st byte
-                Console.WriteLine(">>> Bridge: the temp is: {0}", temperature);
-            }
-            if (message.port == 3){
-                temperature = this.extractFromHexToInt(message.data, 0,1, true)/ 10.0F; //this is hardcoded value to know that temperature is on oth and 1st byte
-                Console.WriteLine(">>> Bridge: the temp (v3) is: {0}", temperature);
-            }
-            if (message.port == 4)
+            switch (message.port)
             {
-                temperature = this.extractFromHexToInt(message.data, 0, 1, true) / 10.0F; //this is hardcoded value to know that temperature is on oth and 1st byte
-                humidity = this.extractFromHexToInt(message.data, 2, 3, false) / 10.0F;
-                Console.WriteLine(">>> Bridge: the temp (v4) is: {0}, and humidity: {1}", temperature, humidity);
-            }
-            if (message.port == 5)
-            {
-                temperature = this.extractFromHexToInt(message.data, 0, 1, true) / 10.0F;
-                humidity = this.extractFromHexToInt(message.data, 2, 3, false) / 10.0F;
-                CO2 = this.extractFromHexToInt(message.data, 4, 5, false);
-                Console.WriteLine(">>> Bridge: the temp (v5) is: {0}, humidity: {1}, CO2: {2}", temperature, humidity,CO2);
+                case 2:
+                    temperature = this.extractFromHexToInt(message.data, 2, 3, true) / 10.0F; //this is hardcoded value to know that temperature is on oth and 1st byte
+                    Console.WriteLine(">>> Bridge: the temp is: {0}", temperature);
+                    break;
+
+                case 3:
+                    temperature = this.extractFromHexToInt(message.data, 0, 1, true) / 10.0F; //this is hardcoded value to know that temperature is on oth and 1st byte
+                    Console.WriteLine(">>> Bridge: the temp (v3) is: {0}", temperature);
+                    break;
+
+                case 4:
+                    temperature = this.extractFromHexToInt(message.data, 0, 1, true) / 10.0F; //this is hardcoded value to know that temperature is on oth and 1st byte
+                    humidity = this.extractFromHexToInt(message.data, 2, 3, false) / 10.0F;
+                    Console.WriteLine(">>> Bridge: the temp (v4) is: {0}, and humidity: {1}", temperature, humidity);
+                    break;
+
+                case 5:
+                    temperature = this.extractFromHexToInt(message.data, 0, 1, true) / 10.0F;
+                    humidity = this.extractFromHexToInt(message.data, 2, 3, false) / 10.0F;
+                    CO2 = this.extractFromHexToInt(message.data, 4, 5, false);
+                    Console.WriteLine(">>> Bridge: the temp (v5) is: {0}, humidity: {1}, CO2: {2}", temperature, humidity, CO2);
+                    break;
+
+                case 6:
+                    temperature = this.extractFromHexToInt(message.data, 0, 1, true) / 10.0F;
+                    humidity = this.extractFromHexToInt(message.data, 2, 3, false) / 10.0F;
+                    CO2 = this.extractFromHexToInt(message.data, 4, 5, false);
+                    Console.Write(">>> Bridge: the temp (v6) is: {0}, humidity: {1}, CO2: {2}, moisture: ", temperature, humidity, CO2);
+
+                    moisture = new int[6];
+                    for (int i = 0; i < 6; i++)
+                    {
+                        moisture[i] = this.extractFromHexToInt(message.data, i + 6, i + 6, false);
+                        Console.Write("{0}, ", moisture[i]);
+                    }
+                    Console.Write("\n");
+                    break;
             }
 
             string greenhouseEUI = message.EUI;
@@ -105,6 +129,23 @@ namespace Api.BridgeIot
                 thisCo2.Time = DateTimeOffset.FromUnixTimeSeconds(unixInSec).DateTime.ToLocalTime();
 
                 _Co2Service.Add(thisCo2);
+            }
+
+            if (moisture != null)
+            {
+                //we have 6 pots allways, they specify which of them did they set up
+                for (int i = 0; i< 6; i++)
+                {
+                    MoistureMeasurement thisMoisture = new MoistureMeasurement();
+                    thisMoisture.Moisture = moisture[i];
+                    thisMoisture.PotId = i;
+                    thisMoisture.GreenHouseId = greenhouseEUI;
+
+                    thisMoisture.Time = DateTimeOffset.FromUnixTimeSeconds(unixInSec).DateTime.ToLocalTime();
+
+                    _moistureService.Add(thisMoisture);
+                }
+                
             }
 
             sendTresholds(message.EUI); // checking if tresholds were updated and sending it
