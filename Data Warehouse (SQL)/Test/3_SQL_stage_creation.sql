@@ -1,10 +1,10 @@
-DROP DATABASE IF EXISTS [GreenHouseDWH]
+DROP DATABASE IF EXISTS [TestGreenHouseDWH]
 go
 
-CREATE DATABASE [GreenHouseDWH]
+CREATE DATABASE [TestGreenHouseDWH]
 go
 
-use [GreenHouseDWH];
+use [TestGreenHouseDWH];
 go
 
 create SCHEMA [stage];
@@ -32,8 +32,8 @@ CREATE TABLE stage.Dim_Pot (
 DROP TABLE IF EXISTS stage.Fact_Measurements
 CREATE TABLE stage.Fact_Measurements (
  GreenHouse_ID NVARCHAR(100) NOT NULL,
- Temperature DECIMAL,
- Humidity DECIMAL,
+ Temperature DECIMAL(7,2),
+ Humidity DECIMAL(7,2),
  CarbonDioxide INT,
   MeasurementDateTime DateTime
 );
@@ -46,7 +46,7 @@ DROP TABLE IF EXISTS stage.Fact_MoisturePots
 CREATE TABLE stage.Fact_MoisturePots (
  Pot_ID INT NOT NULL,
  GreenHouse_ID NVARCHAR(100) NOT NULL,
- Moisture DECIMAL,
+ Moisture DECIMAL(7,2),
   MeasurementDateTime DateTime
 );
 

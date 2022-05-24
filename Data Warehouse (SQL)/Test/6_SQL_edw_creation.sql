@@ -1,8 +1,8 @@
-/* -- To use GreenHouseDWH --*/
-USE [GreenHouseDWH]
+/* -- To use TestGreenHouseDWH --*/
+USE [TestGreenHouseDWH]
 GO
 
-/* -- CREATE EDW SCHEMA for GreenHouseDWH --*/
+/* -- CREATE EDW SCHEMA for TestGreenHouseDWH --*/
 CREATE SCHEMA [edw];
 GO
 
@@ -120,8 +120,8 @@ CREATE TABLE [edw].[Fact_Measurements] (
  G_ID INT NOT NULL,
  D_ID INT NOT NULL,
  T_ID INT NOT NULL,
- Temperature DECIMAL,
- Humidity DECIMAL,
+ Temperature DECIMAL(7,2),
+ Humidity DECIMAL(7,2),
  CarbonDioxide INT
 );
 
@@ -139,7 +139,7 @@ CREATE TABLE [edw].[Fact_MoisturePots] (
  G_ID INT NOT NULL,
  D_ID INT NOT NULL,
  T_ID INT NOT NULL,
- Moisture DECIMAL
+ Moisture DECIMAL(7,2)
 );
 
 ALTER TABLE [edw].[Fact_MoisturePots] ADD CONSTRAINT PK_Fact_MoisturePots PRIMARY KEY (MP_ID, P_ID, G_ID, D_ID, T_ID);
