@@ -49,7 +49,7 @@ namespace Api.Mappers
         {
             return new Api.Models.Threshold()
             {
-                HigherThreshold = threshold.HigherThreshold,
+                UpperThreshold = threshold.HigherThreshold,
                 LowerThreshold = threshold.LowerThreshold
             };
         }

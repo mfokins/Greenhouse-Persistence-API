@@ -71,7 +71,7 @@ namespace Api.Mappers
             return new Core.Models.Threshold()
             {
                 LowerThreshold = threshold.LowerThreshold,
-                HigherThreshold = threshold.HigherThreshold,
+                HigherThreshold = threshold.UpperThreshold,
             };
         }
 
