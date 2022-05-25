@@ -25,10 +25,10 @@ GO
 
 
 --populating log table in an 'initial load' way with timestamp on last date of transaction records
-INSERT INTO [etl].[LogUpdate] ([Table], [LastLoadDate]) VALUES ('Dim_Greenhouse', 20220505)
-INSERT INTO [etl].[LogUpdate] ([Table], [LastLoadDate]) VALUES ('Dim_Pot', 20220505)
-INSERT INTO [etl].[LogUpdate] ([Table], [LastLoadDate]) VALUES ('Fact_Measurements', 20220505)
-INSERT INTO [etl].[LogUpdate] ([Table], [LastLoadDate]) VALUES ('Fact_MoisturePots', 20220505)
+INSERT INTO [etl].[LogUpdate] ([Table], [LastLoadDate]) VALUES ('Dim_Greenhouse', 20220101)
+INSERT INTO [etl].[LogUpdate] ([Table], [LastLoadDate]) VALUES ('Dim_Pot', 20220101)
+INSERT INTO [etl].[LogUpdate] ([Table], [LastLoadDate]) VALUES ('Fact_Measurements', 20220101)
+INSERT INTO [etl].[LogUpdate] ([Table], [LastLoadDate]) VALUES ('Fact_MoisturePots', 20220101)
 GO
 
 --alter tables to add ValidTo and ValidFrom
@@ -41,10 +41,10 @@ GO
 
 --updating current records
 UPDATE [edw].[Dim_Greenhouse]
-set ValidFrom = 20220505, ValidTo = 99990101
+set ValidFrom = 20220101, ValidTo = 99990101
 
 UPDATE [edw].[Dim_Pot]
-set ValidFrom = 20220505, ValidTo = 99990101
+set ValidFrom = 20220101, ValidTo = 99990101
 GO
 
 
@@ -204,6 +204,12 @@ INSERT INTO [edw].[Fact_Measurements]
 	WHERE g.ValidTo = 99990101
 GO
 
+--to update last load date for measurements
+DECLARE @NewLoadDate int
+SET @NewLoadDate = CONVERT(CHAR(8), GETDATE(), 112)
+INSERT INTO [etl].[LogUpdate] ([Table], [LastLoadDate]) VALUES ('Fact_Measurements', @NewLoadDate)
+GO
+
 -------------------------------------------------------------------------------
 
 ---stage.Fact_MoisturePots table insert from source (only for data after the last load date)
@@ -259,4 +265,10 @@ INSERT INTO [edw].[Fact_MoisturePots]
 	AND t.Minute = DATEPART(MINUTE, m.MeasurementDateTime)
 	WHERE g.ValidTo = 99990101
 	and p.ValidTo = 99990101
+GO
+
+--to update last load date for moisture pots
+DECLARE @NewLoadDate int
+SET @NewLoadDate = CONVERT(CHAR(8), GETDATE(), 112)
+INSERT INTO [etl].[LogUpdate] ([Table], [LastLoadDate]) VALUES ('Fact_MoisturePots', @NewLoadDate)
 GO
