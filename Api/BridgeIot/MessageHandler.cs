@@ -12,6 +12,7 @@ using Api.BridgeIot.Domain;
 using Core.Interfaces.Humidity;
 using Core.Interfaces.DioxideCarbon;
 using Core.Interfaces.Pot;
+using Core.Interfaces.Greenhouse;
 using Core.Interfaces;
 
 using Microsoft.Extensions.DependencyInjection;
@@ -28,18 +29,21 @@ namespace Api.BridgeIot
         private IHumidityService _humService;
         private IDioxideCarbonService _Co2Service;
         private IMoistureService _moistureService;
+        private IPotService _potService;
         
 
         private DownlinkHandler _downlinkHandler;
         private Action<TxMessage> _socketResponse;
         public MessageHandler(ITemperatureService tempService, IHumidityService humService, 
-            IDioxideCarbonService co2Service, DownlinkHandler downlinkHandler, IMoistureService moistureService)
+            IDioxideCarbonService co2Service, DownlinkHandler downlinkHandler, IMoistureService moistureService,
+            IPotService potService)
         {
             _tempService = tempService;
             _downlinkHandler = downlinkHandler;
             _humService = humService;
             _Co2Service = co2Service;
             _moistureService = moistureService;
+            _potService = potService;
         }
 
         public void setResponseAction(Action<TxMessage> responseAction)
@@ -133,18 +137,22 @@ namespace Api.BridgeIot
 
             if (moisture != null)
             {
-                //we have 6 pots allways, they specify which of them did they set up
-                for (int i = 0; i< 6; i++)
+                //get all pots that need the data
+                IEnumerator<Pot> pots = _potService.GetAll(greenhouseEUI).GetEnumerator();
+                int index = 0;
+
+                while (pots.MoveNext() && index<6)
                 {
                     MoistureMeasurement thisMoisture = new MoistureMeasurement();
-                    thisMoisture.Moisture = moisture[i];
-                    thisMoisture.PotId = i;
+                    thisMoisture.Moisture = moisture[index++];
+                    thisMoisture.PotId = pots.Current.Id;
                     thisMoisture.GreenHouseId = greenhouseEUI;
 
                     thisMoisture.Time = DateTimeOffset.FromUnixTimeSeconds(unixInSec).DateTime.ToLocalTime();
 
                     _moistureService.Add(thisMoisture);
                 }
+                //we have 6 pots allways, they specify which of them did they set up
                 
             }
 
