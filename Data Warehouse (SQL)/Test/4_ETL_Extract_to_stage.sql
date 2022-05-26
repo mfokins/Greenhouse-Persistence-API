@@ -18,31 +18,7 @@ FROM [TestGreenHouseDB].[dbo].Greenhouses
     */
 
 
- /*     --Populating Fact Measurements (Outdated version)
-    TRUNCATE TABLE [stage].[Fact_Measurements]
-INSERT INTO [stage].[Fact_Measurements](
-    [GreenHouse_ID],
-    [Temperature],
-    [Humidity],
-    [CarbonDioxide],
-[MeasurementDateTime]
-)
-SELECT
-    grn.[GreenHouseId],
-    tmp.[Temperature],
-    hmd.[Humidity],
-    dioc.[Co2Measurement],
-    tmp.Time
-FROM [Greenhouse].[dbo].[Greenhouses] grn
-    left join [Greenhouse].[dbo].TemperatureMeasurement tmp
-on grn.GreenhouseId=tmp.GreenhouseId
-    left join [Greenhouse].[dbo].HumidityMeasurement hmd
-    on grn.GreenhouseId=hmd.GreenhouseId
-    left join [Greenhouse].[dbo].DioxideCarbonMeasurement dioc
-    on grn.GreenhouseId=dioc.GreenhouseId
-WHERE tmp.Time=hmd.Time AND tmp.Time=dioc.Time AND hmd.Time=dioc.Time  */
-
---version 2 of the fact measurement load
+--Populating Fact Measurements 
     use [TestGreenHouseDWH]
     TRUNCATE TABLE [stage].[Fact_Measurements]
 INSERT INTO [stage].[Fact_Measurements](

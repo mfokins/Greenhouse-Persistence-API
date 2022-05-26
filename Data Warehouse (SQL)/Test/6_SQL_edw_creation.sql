@@ -24,7 +24,7 @@ CREATE TABLE [edw].[Dim_Date] (
 DECLARE @StartDate DATETIME;
 DECLARE @EndDate DATETIME;
 
-SET @StartDate = '1969-01-01'  -- made 1969 instead of 2022 to also work with dummy data
+SET @StartDate = '2020-01-01'  -- made 1969 instead of 2022 to also work with dummy data
 SET @EndDate = DATEADD(YEAR, 100, getdate())
 
 WHILE @StartDate <= @EndDate
