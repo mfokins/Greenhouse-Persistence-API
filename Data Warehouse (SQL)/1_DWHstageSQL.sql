@@ -32,8 +32,8 @@ CREATE TABLE stage.Dim_Pot (
 DROP TABLE IF EXISTS stage.Fact_Measurements
 CREATE TABLE stage.Fact_Measurements (
  GreenHouse_ID NVARCHAR(100) NOT NULL,
- Temperature DECIMAL(7,2),
- Humidity DECIMAL(7,2),
+ Temperature REAL,
+ Humidity FLOAT,
  CarbonDioxide INT,
   MeasurementDateTime DateTime
 );
@@ -46,7 +46,7 @@ DROP TABLE IF EXISTS stage.Fact_MoisturePots
 CREATE TABLE stage.Fact_MoisturePots (
  Pot_ID INT NOT NULL,
  GreenHouse_ID NVARCHAR(100) NOT NULL,
- Moisture DECIMAL(7,2),
+ Moisture FLOAT,
   MeasurementDateTime DateTime
 );
 
