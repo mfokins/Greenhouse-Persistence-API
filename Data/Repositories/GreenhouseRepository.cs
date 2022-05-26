@@ -6,30 +6,30 @@ namespace Data.Repositories
 {
     public class GreenhouseRepository : IGreenhouseRepository
     {
-        private GreenHouseDbContext _dbContext;
-
-        public GreenhouseRepository(GreenHouseDbContext dbContext)
-        {
-            _dbContext = dbContext;
-        }
 
         public void Add(Greenhouse entity)
         {
-            _dbContext.Greenhouses.Add(DomToDb.Convert(entity));
-            _dbContext.SaveChanges();
+            using GreenHouseDbContext dbContext = new GreenHouseDbContext();
+
+            dbContext.Greenhouses.Add(DomToDb.Convert(entity));
+            dbContext.SaveChanges();
             
         }
 
         public void Delete(Greenhouse entity)
         {
-            _dbContext.Greenhouses.Remove(DomToDb.Convert(entity));
-            _dbContext.SaveChanges();
+            using GreenHouseDbContext dbContext = new GreenHouseDbContext();
+
+            dbContext.Greenhouses.Remove(DomToDb.Convert(entity));
+            dbContext.SaveChanges();
             
         }
 
         public Greenhouse Get(string id)
         {
-            var greenhouse = _dbContext.Greenhouses
+            using GreenHouseDbContext dbContext = new GreenHouseDbContext();
+
+            var greenhouse = dbContext.Greenhouses
                 .Where(greenhouse => greenhouse.GreenHouseId == id)
                 .FirstOrDefault();
 

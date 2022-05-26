@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Core.Interfaces.Humidity;
 using Core.Models;
 using Data.Mappers;
@@ -10,13 +7,6 @@ namespace Data.Repositories
 {
     public class HumidityRepository : IHumidityRepository
     {
-        private GreenHouseDbContext _dbContext;
-
-        public HumidityRepository(GreenHouseDbContext dbContext)
-        {
-            _dbContext = dbContext;
-        }
-
 
         public HumidityMeasurement Get(int id, string greenHouseId)
         {
@@ -25,7 +15,9 @@ namespace Data.Repositories
 
         public IEnumerable<HumidityMeasurement> GetAll(string greenhouseId, int pageNumber = 0, int pageSize = 25)
         {
-            return _dbContext.Greenhouses
+            using GreenHouseDbContext dbContext = new GreenHouseDbContext();
+
+            return dbContext.Greenhouses
                 .Include(g => g.HumidityMeasurements)
                 .FirstOrDefault(g => g.GreenHouseId == greenhouseId)
                 .HumidityMeasurements
@@ -37,7 +29,9 @@ namespace Data.Repositories
 
         public HumidityMeasurement GetLatest(string greenhouseId)
         {
-            return _dbContext.Greenhouses
+            using GreenHouseDbContext dbContext = new GreenHouseDbContext();
+            
+            return dbContext.Greenhouses
                 .Include(g => g.HumidityMeasurements)
                 .FirstOrDefault(g => g.GreenHouseId == greenhouseId)
                 .HumidityMeasurements
@@ -51,12 +45,14 @@ namespace Data.Repositories
 
         public void Add(HumidityMeasurement entity)
         {
-            _dbContext.Greenhouses
+            using GreenHouseDbContext dbContext = new GreenHouseDbContext();
+
+            dbContext.Greenhouses
                 .Include(g => g.HumidityMeasurements)
                 .FirstOrDefault(g => g.GreenHouseId == entity.GreenHouseId)
                 .HumidityMeasurements
                 .Add(DomToDb.Convert(entity));
-            _dbContext.SaveChanges();
+            dbContext.SaveChanges();
         }
 
         public void Update(HumidityMeasurement entity)
@@ -67,7 +63,9 @@ namespace Data.Repositories
 
         public void Delete(HumidityMeasurement entity)
         {
-            _dbContext.Greenhouses
+            using GreenHouseDbContext dbContext = new GreenHouseDbContext();
+            
+            dbContext.Greenhouses
                 .Include(g => g.HumidityMeasurements)
                 .FirstOrDefault(g => g.GreenHouseId == entity.GreenHouseId)
                 .HumidityMeasurements

@@ -9,45 +9,46 @@ namespace Data.Repositories
 {
     public class PotRepository : IPotRepository
     {
-        private GreenHouseDbContext _dbContext;
         private readonly IThresholdRepository _thresholdRepository;
 
-
-        public PotRepository(GreenHouseDbContext dbContext, IThresholdRepository thresholdRepository)
+        public PotRepository( IThresholdRepository thresholdRepository)
         {
-            _dbContext = dbContext;
             _thresholdRepository = thresholdRepository;
         }
 
         public void Add(Pot entity)
 
         {
-           
-            _dbContext.Greenhouses
+            using GreenHouseDbContext dbContext = new GreenHouseDbContext();
+
+            dbContext.Greenhouses
                 .Include(x => x.Pots)
                 .Include(z => z.Thresholds)
                 .FirstOrDefault(x => x.GreenHouseId == entity.GreenHouseId)
                 .Pots.Add(DomToDb.Convert(entity));
-            _dbContext.SaveChanges();
+            dbContext.SaveChanges();
 
         }
 
         public void Delete(Pot entity)
         {
-            _dbContext.Greenhouses
+            using GreenHouseDbContext dbContext = new GreenHouseDbContext();
+
+            dbContext.Greenhouses
                 .Include(x => x.Pots)
                 .Include(z => z.Thresholds)
                 .FirstOrDefault(x => x.GreenHouseId == entity.GreenHouseId)
                 .Pots.Remove(DomToDb.Convert(entity));
-            _dbContext.SaveChanges();
+            dbContext.SaveChanges();
 
         }
 
         public Pot Get(int id, string greenHouseId)
         {
+            using GreenHouseDbContext dbContext = new GreenHouseDbContext();
 
 
-            var converted = DbToDom.Convert(_dbContext.Greenhouses
+            var converted = DbToDom.Convert(dbContext.Greenhouses
                 .Include(x => x.Pots)
                 .FirstOrDefault(x => x.GreenHouseId == greenHouseId)
                 .Pots.FirstOrDefault(x => x.Id == id));
@@ -58,8 +59,9 @@ namespace Data.Repositories
         public IEnumerable<Pot> GetAll(string greenhouseId, int pageNumber = 0, int pageSize = 25)
         {
 
+            using GreenHouseDbContext dbContext = new GreenHouseDbContext();
 
-            return _dbContext.Greenhouses
+            return dbContext.Greenhouses
                 .Include(x => x.Pots)
                 .FirstOrDefault(x => x.GreenHouseId == greenhouseId)
                 .Pots.Skip(pageNumber * pageSize)
@@ -77,8 +79,9 @@ namespace Data.Repositories
 
         public void Update(Pot entity)
         {
-            _dbContext.Update(DomToDb.Convert(entity));
-            _dbContext.SaveChanges();
+            using GreenHouseDbContext dbContext = new GreenHouseDbContext();
+            dbContext.Update(DomToDb.Convert(entity));
+            dbContext.SaveChanges();
         }
     }
 }
