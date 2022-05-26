@@ -1,4 +1,4 @@
-﻿use [GreenHouseDWH]
+use [GreenHouseDWH]
 
 --Populating Greenhouse dimension
 
@@ -17,9 +17,8 @@ FROM [GreenhouseDB].[dbo].Greenhouses
     
     */
 
-
- /*     --Populating Fact Measurements (Outdated version)
-    TRUNCATE TABLE [stage].[Fact_Measurements]
+use [GreenHouseDWH]
+TRUNCATE TABLE [stage].[Fact_Measurements]
 INSERT INTO [stage].[Fact_Measurements](
     [GreenHouse_ID],
     [Temperature],
@@ -27,50 +26,16 @@ INSERT INTO [stage].[Fact_Measurements](
     [CarbonDioxide],
 [MeasurementDateTime]
 )
-SELECT
-    grn.[GreenHouseId],
-    tmp.[Temperature],
-    hmd.[Humidity],
-    dioc.[Co2Measurement],
-    tmp.Time
-FROM [Greenhouse].[dbo].[Greenhouses] grn
-    left join [Greenhouse].[dbo].TemperatureMeasurement tmp
-on grn.GreenhouseId=tmp.GreenhouseId
-    left join [Greenhouse].[dbo].HumidityMeasurement hmd
-    on grn.GreenhouseId=hmd.GreenhouseId
-    left join [Greenhouse].[dbo].DioxideCarbonMeasurement dioc
-    on grn.GreenhouseId=dioc.GreenhouseId
-WHERE tmp.Time=hmd.Time AND tmp.Time=dioc.Time AND hmd.Time=dioc.Time  */
-
---version 2 of the fact measurement load
-    use [GreenHouseDWH]
-    TRUNCATE TABLE [stage].[Fact_Measurements]
-INSERT INTO [stage].[Fact_Measurements](
-    [GreenHouse_ID],
-    [Temperature],
-    [Humidity],
-    [CarbonDioxide],
-[MeasurementDateTime]
-)
-SELECT DISTINCT
-    src.GreenHouseId,
+SELECT 
+    g.GreenHouseId,
     t.Temperature,
     h.[Humidity],
     c.[Co2Measurement],
-    src.Time
-FROM (
-         SELECT GreenHouseId,Temperature,Time
-         FROM [GreenhouseDB].[dbo].[TemperatureMeasurement]
-         UNION
-         SELECT GreenHouseId,Humidity,Time
-         FROM [GreenhouseDB].[dbo].[HumidityMeasurement]
-         UNION
-         SELECT GreenHouseId,Co2Measurement,Time
-         FROM [GreenhouseDB].[dbo].[DioxideCarbonMeasurement]
-     ) src
-         LEFT JOIN [GreenhouseDB].[dbo].[TemperatureMeasurement] t on (src.Time=t.Time and src.GreenHouseId=t.GreenHouseId)
-    LEFT JOIN [GreenhouseDB].[dbo].[HumidityMeasurement] h on (src.Time=h.Time and src.GreenHouseId=h.GreenHouseId)
-    LEFT JOIN [GreenhouseDB].[dbo].[DioxideCarbonMeasurement] c on (src.Time=c.Time and src.GreenHouseId=c.GreenHouseId)
+    t.Time
+FROM [GreenhouseDB].[dbo].Greenhouses g
+     JOIN [GreenhouseDB].[dbo].[TemperatureMeasurement] t on (g.GreenHouseId=t.GreenHouseId)
+     JOIN [GreenhouseDB].[dbo].[HumidityMeasurement] h on (g.GreenHouseId=h.GreenHouseId and t.Time = h.Time)
+     JOIN [GreenhouseDB].[dbo].[DioxideCarbonMeasurement] c on (g.GreenHouseId=c.GreenHouseId and t.Time = c.Time)
 
 
     --Populating Pot dimension for Fact_MoisturePots
