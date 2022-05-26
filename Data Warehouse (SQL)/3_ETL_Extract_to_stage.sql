@@ -17,6 +17,7 @@ FROM [GreenhouseDB].[dbo].Greenhouses
     
     */
 
+--Populating Fact Measurements 
 use [GreenHouseDWH]
 TRUNCATE TABLE [stage].[Fact_Measurements]
 INSERT INTO [stage].[Fact_Measurements](
