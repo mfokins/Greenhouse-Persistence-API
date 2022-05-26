@@ -18,7 +18,6 @@ CREATE TABLE stage.Dim_Greenhouse (
  City NVARCHAR(50)
 );
 
-/*ALTER TABLE stage.Dim_Greenhouse ADD CONSTRAINT PK_Dim_Greenhouse PRIMARY KEY (GreenHouse_ID);*/
 
 
 DROP TABLE IF EXISTS stage.Dim_Pot
@@ -27,7 +26,6 @@ CREATE TABLE stage.Dim_Pot (
  Plant NVARCHAR(100)
 );
 
-/*ALTER TABLE stage.Dim_Pot ADD CONSTRAINT PK_Dim_Pot PRIMARY KEY (Pot_ID);*/
 
 DROP TABLE IF EXISTS stage.Fact_Measurements
 CREATE TABLE stage.Fact_Measurements (
@@ -38,10 +36,6 @@ CREATE TABLE stage.Fact_Measurements (
   MeasurementDateTime DateTime
 );
 
-/*ALTER TABLE stage.Fact_Measurements ADD CONSTRAINT PK_Fact_Measurements PRIMARY KEY (Measurements_ID,GreenHouse_ID);
-ALTER TABLE stage.Fact_Measurements ADD CONSTRAINT FK_Fact_Measurements_0 FOREIGN KEY (GreenHouse_ID) REFERENCES stage.Dim_Greenhouse (GreenHouse_ID);
-*/
-
 DROP TABLE IF EXISTS stage.Fact_MoisturePots
 CREATE TABLE stage.Fact_MoisturePots (
  Pot_ID INT NOT NULL,
@@ -49,10 +43,3 @@ CREATE TABLE stage.Fact_MoisturePots (
  Moisture FLOAT,
   MeasurementDateTime DateTime
 );
-
-
-
-/*ALTER TABLE stage.Fact_MoisturePots ADD CONSTRAINT PK_Fact_MoisturePots PRIMARY KEY (MoisturePot_ID,Pot_ID,GreenHouse_ID);
-ALTER TABLE stage.Fact_MoisturePots ADD CONSTRAINT FK_Fact_MoisturePot_0 FOREIGN KEY (Pot_ID) REFERENCES stage.Dim_Pot (Pot_ID);
-ALTER TABLE stage.Fact_MoisturePots ADD CONSTRAINT FK_Fact_MoisturePot_1 FOREIGN KEY (GreenHouse_ID) REFERENCES stage.Dim_Greenhouse (GreenHouse_ID);
-*/
