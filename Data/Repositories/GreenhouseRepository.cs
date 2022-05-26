@@ -16,6 +16,11 @@ namespace Data.Repositories
             
         }
 
+        public void AddBulk(IEnumerable<Greenhouse> entities)
+        {
+            throw new NotImplementedException();
+        }
+
         public void Delete(Greenhouse entity)
         {
             using GreenHouseDbContext dbContext = new GreenHouseDbContext();

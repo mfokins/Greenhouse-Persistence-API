@@ -79,4 +79,9 @@ public class MoistureRepository : IMoistureRepository
             .Select(m => { return DbToDom.Convert(m); }
             );
     }
+
+    public void AddBulk(IEnumerable<MoistureMeasurement> entities)
+    {
+        throw new NotImplementedException();
+    }
 }

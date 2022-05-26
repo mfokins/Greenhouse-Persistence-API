@@ -39,39 +39,42 @@ bool night = false;
 
 DateTime time = DateTime.Now;
 time = new DateTime(2021, 12, time.Day, sunset[time.Month - 1].Hours - 2, time.Minute, time.Second);
-GreenHouseDbContext context = new GreenHouseDbContext();
-TemperatureRepository tempRep = new TemperatureRepository(context);
-HumidityRepository humRep = new HumidityRepository(context);
-DioxideCarbonRepository carbonRepository = new DioxideCarbonRepository(context);
-GreenhouseRepository greenhouseRepository = new GreenhouseRepository(context);
-//12.04
+TemperatureRepository tempRep = new TemperatureRepository();
+HumidityRepository humRep = new HumidityRepository();
+DioxideCarbonRepository carbonRepository = new DioxideCarbonRepository();
+GreenhouseRepository greenhouseRepository = new GreenhouseRepository();
+ICollection<Core.Models.TemperatureMeasurement> temps = new List<Core.Models.TemperatureMeasurement>();
+ICollection<Core.Models.HumidityMeasurement> hums = new List<Core.Models.HumidityMeasurement>();
+ICollection<Core.Models.DioxideCarbonMeasurement> carbons = new List<Core.Models.DioxideCarbonMeasurement>();
 for (int i = 0; i < 5; i++)
 {
-    string greenhouseid = DateTimeOffset.Now.ToUnixTimeSeconds().ToString();
+    string greenhouseid = Guid.NewGuid().ToString();
     greenhouseRepository.Add(new Core.Models.Greenhouse() { GreenHouseId = greenhouseid });
     double temp = 30;
     double humidity = 85;
     double co2 = 330;
+    time = new DateTime(2021, 12, time.Day, sunset[time.Month - 1].Hours - 2, time.Minute, time.Second);
+
     while (time < DateTime.Now)
     {
 
         double newTemp = generateTemp(temp, time);
         double newHumidity = generateHumidity(newTemp, humidity, temp);
         int newCo2 = (int)Math.Ceiling(generateCo2(co2));
-        tempRep.Add(new Core.Models.TemperatureMeasurement()
+        temps.Add(new Core.Models.TemperatureMeasurement()
         {
             GreenHouseId = greenhouseid,
             Temperature = (float)newTemp,
             Time = time
 
         });
-        humRep.Add(new Core.Models.HumidityMeasurement()
+        hums.Add(new Core.Models.HumidityMeasurement()
         {
             GreenHouseId = greenhouseid,
             Humidity = (float)newHumidity,
             Time = time
         });
-        carbonRepository.Add(new Core.Models.DioxideCarbonMeasurement()
+        carbons.Add(new Core.Models.DioxideCarbonMeasurement()
         {
             GreenHouseId = greenhouseid,
             Co2Measurement = newCo2,
@@ -83,7 +86,14 @@ for (int i = 0; i < 5; i++)
         humidity = newHumidity;
         co2 = newCo2;
         //Thread.Sleep(50);
+
     }
+    tempRep.AddBulk(temps);
+    humRep.AddBulk(hums);
+    carbonRepository.AddBulk(carbons);
+    temps.Clear();
+    hums.Clear();
+    carbons.Clear();
 }
 
 double generateCo2(double oldCo2)

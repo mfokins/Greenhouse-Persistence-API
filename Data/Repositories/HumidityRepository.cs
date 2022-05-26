@@ -70,6 +70,20 @@ namespace Data.Repositories
                 .FirstOrDefault(g => g.GreenHouseId == entity.GreenHouseId)
                 .HumidityMeasurements
                 .Remove(DomToDb.Convert(entity));
+            dbContext.SaveChanges();
+
+        }
+
+        public void AddBulk(IEnumerable<HumidityMeasurement> entities)
+        {
+            using GreenHouseDbContext dbContext = new GreenHouseDbContext();
+
+            dbContext.Greenhouses
+                .Include(g => g.HumidityMeasurements)
+                .FirstOrDefault(g => g.GreenHouseId == entities.FirstOrDefault().GreenHouseId)
+                .HumidityMeasurements.AddRange(entities.Select(entity => DomToDb.Convert(entity)));
+            dbContext.SaveChanges();
+            
         }
     }
 }

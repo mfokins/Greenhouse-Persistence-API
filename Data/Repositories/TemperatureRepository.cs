@@ -26,19 +26,17 @@ namespace Data.Repositories
             dbContext.SaveChanges();
         }
 
-        //public void AddBulk(TemperatureMeasurement entity)
-        //{
-        //    dbContext.Greenhouses
-        //        .Include(g => g.TemperatureMesurments)
-        //        .FirstOrDefault(g => g.GreenHouseId == entity.GreenHouseId)
-        //        .TemperatureMesurments.AddRange(DomToDb.Convert(entity));
-        //    ;            dbContext.Greenhouses
-        //        .Include(g => g.TemperatureMesurments)
-        //        .FirstOrDefault(g => g.GreenHouseId == entity.GreenHouseId)
-        //        .TemperatureMesurments
-        //            .Add(DomToDb.Convert(entity));
-        //    dbContext.SaveChanges();
-        //}
+        public void AddBulk(IEnumerable<TemperatureMeasurement> entities)
+        {
+            using GreenHouseDbContext dbContext = new GreenHouseDbContext();
+
+            dbContext.Greenhouses
+                .Include(g => g.TemperatureMesurments)
+                .FirstOrDefault(g => g.GreenHouseId == entities.FirstOrDefault().GreenHouseId)
+                .TemperatureMesurments.AddRange(entities.Select(entity => DomToDb.Convert(entity)));
+            dbContext.SaveChanges();
+
+        }
 
         public void Delete(TemperatureMeasurement entity)
         {

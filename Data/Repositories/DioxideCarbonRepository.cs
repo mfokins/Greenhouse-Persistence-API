@@ -68,5 +68,17 @@ namespace Data.Repositories
                 .Remove(DomToDb.Convert(entity));
             dbContext.SaveChanges();
         }
+
+        public void AddBulk(IEnumerable<DioxideCarbonMeasurement> entities)
+        {
+            using GreenHouseDbContext dbContext = new GreenHouseDbContext();
+
+            dbContext.Greenhouses
+                .Include(g => g.DioxideCarbonMeasurements)
+                .FirstOrDefault(g => g.GreenHouseId == entities.FirstOrDefault().GreenHouseId)
+                .DioxideCarbonMeasurements.AddRange(entities.Select(entity => DomToDb.Convert(entity)));
+            dbContext.SaveChanges();
+
+        }
     }
 }
