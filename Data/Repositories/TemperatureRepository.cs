@@ -30,6 +30,20 @@ namespace Data.Repositories
             _dbContext.SaveChanges();
         }
 
+        //public void AddBulk(TemperatureMeasurement entity)
+        //{
+        //    _dbContext.Greenhouses
+        //        .Include(g => g.TemperatureMesurments)
+        //        .FirstOrDefault(g => g.GreenHouseId == entity.GreenHouseId)
+        //        .TemperatureMesurments.AddRange(DomToDb.Convert(entity));
+        //    ;            _dbContext.Greenhouses
+        //        .Include(g => g.TemperatureMesurments)
+        //        .FirstOrDefault(g => g.GreenHouseId == entity.GreenHouseId)
+        //        .TemperatureMesurments
+        //            .Add(DomToDb.Convert(entity));
+        //    _dbContext.SaveChanges();
+        //}
+
         public void Delete(TemperatureMeasurement entity)
         {
             _dbContext.Greenhouses
