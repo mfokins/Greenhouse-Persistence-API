@@ -7,15 +7,11 @@ namespace Data.Repositories
 {
     public class ThresholdRepository : IThresholdRepository
     {
-        private GreenHouseDbContext _dbContext;
 
-        public ThresholdRepository(GreenHouseDbContext dbContext)
-        {
-            _dbContext = dbContext;
-        }
         private Threshold GetThreshold(string greenhouseId, ThresholdType type)
         {
-            var thresholds = _dbContext.Greenhouses
+            using GreenHouseDbContext dbContext = new GreenHouseDbContext();
+            var thresholds = dbContext.Greenhouses
                 .Include(g => g.Thresholds)
                 ?.FirstOrDefault(t => t.GreenHouseId == greenhouseId)?.Thresholds
                 .Where(th => th.Type == (Models.ThresholdType)type);
@@ -27,7 +23,9 @@ namespace Data.Repositories
         }
         private void SetThreshold(string greenhouseId, Threshold threshold)
         {
-            var thresholds = _dbContext.Greenhouses
+            using GreenHouseDbContext dbContext = new GreenHouseDbContext();
+            
+            var thresholds = dbContext.Greenhouses
                  .Include(g => g.Thresholds)
                 ?.FirstOrDefault(t => t.GreenHouseId == greenhouseId)?
                 .Thresholds;
@@ -36,7 +34,7 @@ namespace Data.Repositories
             if (thresholdsWithRightType.Count() == 0)
             {
                 thresholds.Add(DomToDb.Convert(threshold));
-                _dbContext.SaveChanges();
+                dbContext.SaveChanges();
 
             }
             else
@@ -44,12 +42,13 @@ namespace Data.Repositories
                 var editableThreshold = thresholdsWithRightType.FirstOrDefault();
                 editableThreshold.LowerThreshold = threshold.LowerThreshold;
                 editableThreshold.HigherThreshold = threshold.HigherThreshold;
-                _dbContext.SaveChanges();
+                dbContext.SaveChanges();
             }
         }
 
         public Threshold GetDioxideCarbonThresholds(string greenhouseId)
         {
+
             return GetThreshold(greenhouseId, ThresholdType.DioxideCarbon);
         }
 
@@ -60,7 +59,9 @@ namespace Data.Repositories
 
         public Threshold GetMoisturehresholds(string greenhouseId, int potId)
         {
-            var pot = _dbContext.Greenhouses
+            using GreenHouseDbContext dbContext = new GreenHouseDbContext();
+            
+            var pot = dbContext.Greenhouses
                            .Include(g => g.Pots)
                            ?.FirstOrDefault(t => t.GreenHouseId == greenhouseId)?.Pots?
                            .FirstOrDefault(t => t.Id == potId);
@@ -68,7 +69,7 @@ namespace Data.Repositories
             {
                 return Threshold.Empty;
             }
-            return pot.MoistureThresholdId == null ? Threshold.Empty : DbToDom.Convert(_dbContext.Find<Models.Threshold>(pot.MoistureThresholdId));
+            return pot.MoistureThresholdId == null ? Threshold.Empty : DbToDom.Convert(dbContext.Find<Models.Threshold>(pot.MoistureThresholdId));
         }
 
         public Threshold GetTemperatureThresholds(string greenhouseId)
@@ -88,7 +89,9 @@ namespace Data.Repositories
 
         public void SetMoistureThresholds(string greenhouseId, int potId, Threshold threshold)
         {
-            var pot = _dbContext.Greenhouses
+            using GreenHouseDbContext dbContext = new GreenHouseDbContext();
+            
+            var pot = dbContext.Greenhouses
                .Include(g => g.Pots)
                ?.FirstOrDefault(t => t.GreenHouseId == greenhouseId)?.Pots?
                .FirstOrDefault(t => t.Id == potId);

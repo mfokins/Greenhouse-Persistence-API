@@ -9,18 +9,18 @@ namespace Data.Models
         [Key]
         public string GreenHouseId { get; set; }
         [Required]
-        public IList<TemperatureMeasurement> TemperatureMesurments { get; set; }
+        public List<TemperatureMeasurement> TemperatureMesurments { get; set; }
         
         [Required]
-        public IList<DioxideCarbonMeasurement> DioxideCarbonMeasurements { get; set; }
+        public List<DioxideCarbonMeasurement> DioxideCarbonMeasurements { get; set; }
         
         [Required]
-        public IList<HumidityMeasurement> HumidityMeasurements { get; set; }
+        public List<HumidityMeasurement> HumidityMeasurements { get; set; }
         
         [Required]
-        public IList<Threshold> Thresholds { get; set; }
+        public List<Threshold> Thresholds { get; set; }
         [Required]
-        public IList<Pot> Pots { get; set; }
+        public List<Pot> Pots { get; set; }
 
     }
 }

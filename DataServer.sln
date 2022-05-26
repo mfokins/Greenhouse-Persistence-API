@@ -13,7 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core", "Core\Core.csproj", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Data", "Data\Data.csproj", "{A2E616FA-D6CE-49F4-B134-A3B7F266C6A1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api.BridgeIot", "Api\BridgeIot\Api.BridgeIot.csproj", "{3BF024DD-B9F0-40C3-A738-B72F552E9A6B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Api.BridgeIot", "Api\BridgeIot\Api.BridgeIot.csproj", "{3BF024DD-B9F0-40C3-A738-B72F552E9A6B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DummyDataGenerator", "DummyDataGenerator\DummyDataGenerator.csproj", "{E674CF22-78AB-481D-A526-430F94B06622}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{3BF024DD-B9F0-40C3-A738-B72F552E9A6B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3BF024DD-B9F0-40C3-A738-B72F552E9A6B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3BF024DD-B9F0-40C3-A738-B72F552E9A6B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E674CF22-78AB-481D-A526-430F94B06622}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E674CF22-78AB-481D-A526-430F94B06622}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E674CF22-78AB-481D-A526-430F94B06622}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E674CF22-78AB-481D-A526-430F94B06622}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

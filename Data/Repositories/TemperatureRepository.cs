@@ -12,33 +12,44 @@ namespace Data.Repositories
 {
     public class TemperatureRepository : ITemperatureRepository
     {
-        private GreenHouseDbContext _dbContext;
 
-        public TemperatureRepository(GreenHouseDbContext dbContext)
-        {
-            _dbContext = dbContext;
-        }
 
         public void Add(TemperatureMeasurement entity)
         {
+            using GreenHouseDbContext dbContext = new GreenHouseDbContext();
 
-            _dbContext.Greenhouses
+            dbContext.Greenhouses
                 .Include(g => g.TemperatureMesurments)
                 .FirstOrDefault(g => g.GreenHouseId == entity.GreenHouseId)
                 .TemperatureMesurments
                     .Add(DomToDb.Convert(entity));
-            _dbContext.SaveChanges();
+            dbContext.SaveChanges();
         }
+
+        //public void AddBulk(TemperatureMeasurement entity)
+        //{
+        //    dbContext.Greenhouses
+        //        .Include(g => g.TemperatureMesurments)
+        //        .FirstOrDefault(g => g.GreenHouseId == entity.GreenHouseId)
+        //        .TemperatureMesurments.AddRange(DomToDb.Convert(entity));
+        //    ;            dbContext.Greenhouses
+        //        .Include(g => g.TemperatureMesurments)
+        //        .FirstOrDefault(g => g.GreenHouseId == entity.GreenHouseId)
+        //        .TemperatureMesurments
+        //            .Add(DomToDb.Convert(entity));
+        //    dbContext.SaveChanges();
+        //}
 
         public void Delete(TemperatureMeasurement entity)
         {
-            _dbContext.Greenhouses
+            using GreenHouseDbContext dbContext = new GreenHouseDbContext();
+
+            dbContext.Greenhouses
                 .Include(g => g.TemperatureMesurments)
                 .FirstOrDefault(g => g.GreenHouseId == entity.GreenHouseId)
                 .TemperatureMesurments
                     .Remove(DomToDb.Convert(entity));
-            //_dbContext.TemperatureMesurments.Remove(DomToDb.Convert(entity));
-            _dbContext.SaveChanges();
+            dbContext.SaveChanges();
         }
 
         public TemperatureMeasurement Get(int id, string greenHouseId)
@@ -50,7 +61,9 @@ namespace Data.Repositories
 
         public IEnumerable<TemperatureMeasurement> GetAll(string greenhouseId, int pageNumber = 0, int pageSize = 25)
         {
-            return _dbContext.Greenhouses
+            using GreenHouseDbContext dbContext = new GreenHouseDbContext();
+
+            return dbContext.Greenhouses
                     .Include(g => g.TemperatureMesurments)
                     .FirstOrDefault(g => g.GreenHouseId == greenhouseId)
                     .TemperatureMesurments
@@ -58,15 +71,15 @@ namespace Data.Repositories
                         .Skip(pageNumber * pageSize)
                         .Take(pageSize)
                         .Select(t => DbToDom.Convert(t));
-            // return _dbContext.TemperatureMesurments.Where(i => i.GreenHouseId == greenhouseId).Select(x => DbToDom.Convert(x));
         }
 
 
 
         public TemperatureMeasurement GetLatest(string greenhouseId)
         {
+            using GreenHouseDbContext dbContext = new GreenHouseDbContext();
 
-            return _dbContext.Greenhouses
+            return dbContext.Greenhouses
                     .Include(g => g.TemperatureMesurments)
                     .FirstOrDefault(g => g.GreenHouseId == greenhouseId)
                     .TemperatureMesurments
@@ -74,7 +87,7 @@ namespace Data.Repositories
                      .Take(1)
                      .Select(x => DbToDom.Convert(x))
                      .FirstOrDefault();
-            //return _dbContext.TemperatureMesurments
+            //return dbContext.TemperatureMesurments
 
         }
 

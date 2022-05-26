@@ -8,13 +8,6 @@ namespace Data.Repositories
 {
     public class DioxideCarbonRepository : IDioxideCarbonRepository
     {
-        private GreenHouseDbContext _dbContext;
-
-        public DioxideCarbonRepository(GreenHouseDbContext dbContext)
-        {
-            _dbContext = dbContext;
-        }
-
         public DioxideCarbonMeasurement Get(int id, string greenHouseId)
         {
             throw new NotImplementedException();
@@ -22,7 +15,9 @@ namespace Data.Repositories
         
         public DioxideCarbonMeasurement GetLatest(string greenhouseId)
         {
-            return _dbContext.Greenhouses
+            using GreenHouseDbContext dbContext = new GreenHouseDbContext();
+
+            return dbContext.Greenhouses
                 .Include(g => g.DioxideCarbonMeasurements)
                 .FirstOrDefault(g => g.GreenHouseId == greenhouseId)
                 .DioxideCarbonMeasurements
@@ -35,7 +30,9 @@ namespace Data.Repositories
         public IEnumerable<DioxideCarbonMeasurement> GetAll(string greenhouseId,
             int pageNumber = 0, int pageSize = 25)
         {
-            return _dbContext.Greenhouses
+            using GreenHouseDbContext dbContext = new GreenHouseDbContext();
+
+            return dbContext.Greenhouses
                 .Include(g => g.DioxideCarbonMeasurements)
                 .FirstOrDefault(g => g.GreenHouseId == greenhouseId)
                 .DioxideCarbonMeasurements
@@ -47,11 +44,12 @@ namespace Data.Repositories
 
         public  void Add(DioxideCarbonMeasurement entity)
         {
+            using GreenHouseDbContext dbContext = new GreenHouseDbContext();
 
-            _dbContext.Greenhouses.Include(g => g.DioxideCarbonMeasurements)
+            dbContext.Greenhouses.Include(g => g.DioxideCarbonMeasurements)
                 .FirstOrDefault(g => g.GreenHouseId == entity.GreenHouseId)
                 .DioxideCarbonMeasurements.Add(DomToDb.Convert(entity));
-             _dbContext.SaveChanges();
+             dbContext.SaveChanges();
         }
 
         public async void Update(DioxideCarbonMeasurement entity)
@@ -61,12 +59,14 @@ namespace Data.Repositories
 
         public void Delete(DioxideCarbonMeasurement entity)
         {
-            _dbContext.Greenhouses
+            using GreenHouseDbContext dbContext = new GreenHouseDbContext();
+            
+            dbContext.Greenhouses
                 .Include(g => g.DioxideCarbonMeasurements)
                 .FirstOrDefault(g => g.GreenHouseId == entity.GreenHouseId)
                 .DioxideCarbonMeasurements
                 .Remove(DomToDb.Convert(entity));
-            _dbContext.SaveChanges();
+            dbContext.SaveChanges();
         }
     }
 }

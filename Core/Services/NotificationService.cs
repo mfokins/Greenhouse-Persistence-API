@@ -8,22 +8,42 @@ namespace Core.Services
     public class NotificationService : INotificationService
     {
         private readonly FirebaseMessaging firebaseMessaging;
+        private bool notificationServiceSetUp = false;
         public NotificationService()
         {
-            var app = FirebaseApp.Create(new AppOptions() { Credential = GoogleCredential.FromFile("FirebaseAuth.json").CreateScoped("https://www.googleapis.com/auth/firebase.messaging") });
-            firebaseMessaging = FirebaseMessaging.GetMessaging(app);
+            try
+            {
+                var app = FirebaseApp.Create(new AppOptions() { Credential = GoogleCredential.FromFile("FirebaseAuth.json").CreateScoped("https://www.googleapis.com/auth/firebase.messaging") });
+                firebaseMessaging = FirebaseMessaging.GetMessaging(app);
+                notificationServiceSetUp = true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Notification serivice not set up! ");
+                Console.WriteLine(ex.Message);
+                notificationServiceSetUp = false;
+            }
         }
 
         public async Task SendMoistureThreshold(string potname, string greenhouseId)
         {
-            var msg = new Message();
-            msg.Topic = greenhouseId;
-            msg.Notification = new Notification()
+            if (notificationServiceSetUp)
             {
-                Title = "Low water warning !!!",
-                Body = $"{potname} is  running low on water :/, time to water it."
-            };
-            await firebaseMessaging.SendAsync(msg);
+                var msg = new Message();
+                msg.Topic = greenhouseId;
+                msg.Notification = new Notification()
+                {
+                    Title = "Low water warning !!!",
+                    Body = $"{potname} is  running low on water :/, time to water it."
+                };
+                await firebaseMessaging.SendAsync(msg);
+            }
+            else
+            {
+                Console.WriteLine("Notification serivice not set up! ");
+
+            }
+
         }
     }
 }

@@ -22,19 +22,24 @@ namespace Api.BridgeIot
         static ClientWebSocket ws = new ClientWebSocket();
         static IMessageHandler messageHandler;
 
-        public BridgeMain(IServiceScopeFactory factory){
+        public BridgeMain(IServiceScopeFactory factory)
+        {
             _scopeFactory = factory;
         }
 
-        protected override async Task ExecuteAsync(CancellationToken stoppingToken){
-            messageHandler = _scopeFactory.CreateScope().ServiceProvider.GetService<IMessageHandler>();
-            if (messageHandler == null)
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+        {
+            //Added this, hope it doesnt breake bridge /klaus
+            using (var scope = _scopeFactory.CreateScope())
             {
-                Console.WriteLine("no service!");
-                return;
+                messageHandler = scope.ServiceProvider.GetRequiredService<IMessageHandler>();
+                if (messageHandler == null)
+                {
+                    Console.WriteLine("no service!");
+                    return;
+                }
+                messageHandler.setResponseAction(this.send);
             }
-            messageHandler.setResponseAction(this.send);
-
             /*new MessageHandler(_scopeFactory.CreateScope().ServiceProvider.GetService<ITemperatureService>(),
                 _scopeFactory.CreateScope().ServiceProvider.GetService<DownlinkHandler>(),
                 this);*/
@@ -50,23 +55,26 @@ namespace Api.BridgeIot
             }
 
             Uri loraWanUri = new Uri("wss://iotnet.teracom.dk/app?token=" + token);
-            await ws.ConnectAsync(loraWanUri,CancellationToken.None);
+            await ws.ConnectAsync(loraWanUri, CancellationToken.None);
 
             Thread.Sleep(2000);
             Console.WriteLine(">>> Bridge: connected sucessfully!");
             //messageHandler.testMethod("0004A30B00E7E7C1");
-            
-            while (!stoppingToken.IsCancellationRequested){
+
+            while (!stoppingToken.IsCancellationRequested)
+            {
                 LoraWANMessage message = await readFromDevices();
                 receive(message);
             }
-             
+
             Console.WriteLine(">>> Bridge: connection gonna close");
-            await ws.CloseAsync(WebSocketCloseStatus.NormalClosure,null,CancellationToken.None);
+            await ws.CloseAsync(WebSocketCloseStatus.NormalClosure, null, CancellationToken.None);
         }
 
-        private void receive(LoraWANMessage message){
-            switch (message.cmd){
+        private void receive(LoraWANMessage message)
+        {
+            switch (message.cmd)
+            {
                 case "rx": //this is message from arduino
                     RxMessage theMessage = RxMessage.GetRxMessage(message.json);
                     messageHandler.HandleRxMessage(theMessage);
@@ -85,27 +93,29 @@ namespace Api.BridgeIot
             }
         }
 
-        public void send(TxMessage message){
+        public void send(TxMessage message)
+        {
             //TODO finish the convert from object to socket
 
             string jsonMessage = message.getJson();
             //Console.WriteLine("message: "+jsonMessage);
             byte[] dataToServer = Encoding.ASCII.GetBytes(jsonMessage);
-            ws.SendAsync(dataToServer,WebSocketMessageType.Text,true,CancellationToken.None);
+            ws.SendAsync(dataToServer, WebSocketMessageType.Text, true, CancellationToken.None);
         }
 
-        private static async Task<LoraWANMessage> readFromDevices(){
+        private static async Task<LoraWANMessage> readFromDevices()
+        {
             // make a buffer that will be big eneught to get json from lorawan
             byte[] dataFromServer = new byte[3000];
 
             //wait until I get some message
-            WebSocketReceiveResult answer = await ws.ReceiveAsync(dataFromServer,CancellationToken.None);
+            WebSocketReceiveResult answer = await ws.ReceiveAsync(dataFromServer, CancellationToken.None);
 
             string response = Encoding.ASCII.GetString(dataFromServer, 0, answer.Count);
 
             LoraWANMessage? returnMessage = LoraWANMessage.getLoraWANMessage(response);//JsonSerializer.Deserialize<LoraWANMessage>(response);
 
-            Console.WriteLine(">>> Bridge: Message received form lorawan ("+ returnMessage.cmd +") , from: "+returnMessage.EUI);
+            Console.WriteLine(">>> Bridge: Message received form lorawan (" + returnMessage.cmd + ") , from: " + returnMessage.EUI);
 
             return returnMessage;
         }

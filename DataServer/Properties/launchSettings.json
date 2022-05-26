@@ -13,6 +13,9 @@
       "commandName": "Project",
       "launchBrowser": true,
       "launchUrl": "swagger",
+      "environmentVariables": {
+        "BRIDGE_TOKEN": "vnoUeQAAABFpb3RuZXQudGVyYWNvbS5kayL9sv9it8LFL5jggp-rve4="
+      },
       "applicationUrl": "https://localhost:7296;http://localhost:5296",
       "dotnetRunMessages": true
     },
