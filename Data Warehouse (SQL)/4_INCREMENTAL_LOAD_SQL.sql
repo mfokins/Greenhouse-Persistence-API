@@ -1,8 +1,8 @@
---use dwh
+--USE GreenhouseDWH
 use GreenHouseDWH
 GO
 
---create etl schema
+--CREATE etl schema
 IF NOT EXISTS 
   (SELECT  *
 	FROM    sys.schemas
@@ -24,31 +24,33 @@ EXEC
 GO
 
 
---populating log table in an 'initial load' way with timestamp on last date of transaction records
+--POPULATE log table in an 'initial load' way with timestamp on last date of transaction records
 INSERT INTO [etl].[LogUpdate] ([Table], [LastLoadDate]) VALUES ('Dim_Greenhouse', 20210101)
 INSERT INTO [etl].[LogUpdate] ([Table], [LastLoadDate]) VALUES ('Dim_Pot', 20210101)
 INSERT INTO [etl].[LogUpdate] ([Table], [LastLoadDate]) VALUES ('Fact_Measurements', 20210101)
 INSERT INTO [etl].[LogUpdate] ([Table], [LastLoadDate]) VALUES ('Fact_MoisturePots', 20210101)
 GO
 
---alter tables to add ValidTo and ValidFrom
+--UPDATING Pot Dimension table to ADD ValidTo and ValidFrom
 alter table [edw].[Dim_Pot]
 add ValidFrom int, ValidTo int
 
+--UPDATING Greenhouse Dimension table to ADD ValidTo and ValidFrom
 alter table [edw].[Dim_Greenhouse]
 add ValidFrom int, ValidTo int
 GO
 
---updating current records
+--UPDATE Greenhouse Dimension current records 
 UPDATE [edw].[Dim_Greenhouse]
 set ValidFrom = 20210101, ValidTo = 99990101
 
+--UPDATE Pot Dimension current records 
 UPDATE [edw].[Dim_Pot]
 set ValidFrom = 20210101, ValidTo = 99990101
 GO
 
 
---to insert changed/new data into Dim_Greenhouse
+-- DECLARING variables for dates
 DECLARE @LastLoadDate int
 SET @LastLoadDate = (SELECT MAX([LastLoadDate]) FROM [etl].[LogUpdate] where [Table]='Dim_Greenhouse')
 DECLARE @NewLoadDate int
@@ -56,6 +58,8 @@ SET @NewLoadDate = CONVERT(CHAR(8), GETDATE(), 112)
 DECLARE @FutureDate int
 SET @FutureDate = 99990101
 
+--INSERT UPDATED rows in the Greenhouse Dimension 
+-- AND UPDATING the ValidFrom and ValidTo attribute accordingly 
 INSERT INTO [edw].[Dim_Greenhouse]
     (
     [GreenHouse_ID]
@@ -76,11 +80,12 @@ FROM [stage].[Dim_Greenhouse] EXCEPT SELECT [GreenHouse_ID]
 FROM [edw].[Dim_Greenhouse]
 WHERE ValidTo = 99990101)
 
+--UPDATING Log table 
 INSERT INTO [etl].[LogUpdate] ([Table], [LastLoadDate]) VALUES ('Dim_Greenhouse', @NewLoadDate)
 GO
 
 
---to insert changed/new data into Dim_Pot
+-- DECLARING variables for dates
 DECLARE @LastLoadDate int
 SET @LastLoadDate = (SELECT MAX([LastLoadDate]) FROM [etl].[LogUpdate] where [Table]='Dim_Pot')
 DECLARE @NewLoadDate int
@@ -88,6 +93,8 @@ SET @NewLoadDate = CONVERT(CHAR(8), GETDATE(), 112)
 DECLARE @FutureDate int
 SET @FutureDate = 99990101
 
+--INSERT UPDATED rows in the Greenhouse Dimension 
+-- AND UPDATING the ValidFrom and ValidTo attribute accordingly 
 INSERT INTO [edw].[Dim_Pot]
     (
     [Pot_ID]
@@ -106,6 +113,7 @@ FROM [stage].[Dim_Pot] EXCEPT SELECT [Pot_ID]
 FROM [edw].[Dim_Pot]
 WHERE ValidTo = 99990101)
 
+--UPDATING Log table 
 INSERT INTO [etl].[LogUpdate] ([Table], [LastLoadDate]) VALUES ('Dim_Pot', @NewLoadDate)
 GO
 
@@ -140,43 +148,33 @@ WHERE [Pot_ID] in
 ---stage.Fact_Measurements table insert from source (only for data after the last load date)
 
 ---getting last load date for fact staging
+--DECLARING Date variables for updates
 DECLARE @LastLoadDate datetime
 SET @LastLoadDate = (SELECT [Date]
 FROM [edw].[Dim_Date]
 WHERE D_ID in (SELECT MAX([LastLoadDate]) FROM [etl].[LogUpdate] where [Table]='Fact_Measurements'))
 
 TRUNCATE TABLE [stage].[Fact_Measurements]
-INSERT INTO [stage].[Fact_Measurements](
-    [GreenHouse_ID],
+INSERT INTO [stage].[Fact_Measurements]([GreenHouse_ID],
     [Temperature],
     [Humidity],
     [CarbonDioxide],
-[MeasurementDateTime]
-)
-SELECT DISTINCT
-    src.GreenHouseId,
-    t.Temperature,
-    h.[Humidity],
-    c.[Co2Measurement],
-    src.Time
-FROM (
-         SELECT GreenHouseId,Temperature,Time
-         FROM [GreenhouseDB].[dbo].[TemperatureMeasurement]
-         UNION
-         SELECT GreenHouseId,Humidity,Time
-         FROM [GreenhouseDB].[dbo].[HumidityMeasurement]
-         UNION
-         SELECT GreenHouseId,Co2Measurement,Time
-         FROM [GreenhouseDB].[dbo].[DioxideCarbonMeasurement]
-     ) src
-         LEFT JOIN [GreenhouseDB].[dbo].[TemperatureMeasurement] t on (src.Time=t.Time and src.GreenHouseId=t.GreenHouseId)
-    LEFT JOIN [GreenhouseDB].[dbo].[HumidityMeasurement] h on (src.Time=h.Time and src.GreenHouseId=h.GreenHouseId)
-    LEFT JOIN [GreenhouseDB].[dbo].[DioxideCarbonMeasurement] c on (src.Time=c.Time and src.GreenHouseId=c.GreenHouseId)
+[MeasurementDateTime])
+SELECT g.GreenHouseId,
+       t.Temperature,
+       h.[Humidity],
+       c.[Co2Measurement],
+       t.Time
+FROM [GreenhouseDB].[dbo].Greenhouses g
+    JOIN [GreenhouseDB].[dbo].[TemperatureMeasurement] t
+on (g.GreenHouseId=t.GreenHouseId)
+    JOIN [GreenhouseDB].[dbo].[HumidityMeasurement] h on (g.GreenHouseId=h.GreenHouseId and t.Time = h.Time)
+    JOIN [GreenhouseDB].[dbo].[DioxideCarbonMeasurement] c on (g.GreenHouseId= c.GreenHouseId and t.Time = c.Time)
   WHERE src.[Time] > (@LastLoadDate)
 GO
 
 
---to insert all data into Fact_Measurements after staging relevant data
+--INSERT new updates from stage 
 INSERT INTO [edw].[Fact_Measurements]
 	([G_ID]
       ,[D_ID]
@@ -204,7 +202,7 @@ INSERT INTO [edw].[Fact_Measurements]
 	WHERE g.ValidTo = 99990101
 GO
 
---to update last load date for measurements
+--UPDATE last load date for Measurement Fact TABLE 
 DECLARE @NewLoadDate int
 SET @NewLoadDate = CONVERT(CHAR(8), GETDATE(), 112)
 INSERT INTO [etl].[LogUpdate] ([Table], [LastLoadDate]) VALUES ('Fact_Measurements', @NewLoadDate)
@@ -214,7 +212,7 @@ GO
 
 ---stage.Fact_MoisturePots table insert from source (only for data after the last load date)
 
----getting last load date for fact staging
+--UPDATE stage last changes in Fact Moisture TABLE
 DECLARE @LastLoadDate datetime
 SET @LastLoadDate = (SELECT [Date]
 FROM [edw].[Dim_Date]
@@ -238,7 +236,7 @@ on mst.potId=pot.Id
   WHERE mst.[Time] > (@LastLoadDate)
 GO
 
---to insert all data into Fact_MoisturePots after staging relevant data
+--UPDATE data warehouse last changes in Fact Moisture TABLE
 INSERT INTO [edw].[Fact_MoisturePots]
 	([P_ID]
       ,[G_ID]
@@ -267,7 +265,7 @@ INSERT INTO [edw].[Fact_MoisturePots]
 	and p.ValidTo = 99990101
 GO
 
---to update last load date for moisture pots
+--UPDATE last load date for Fact Moisture TABLE
 DECLARE @NewLoadDate int
 SET @NewLoadDate = CONVERT(CHAR(8), GETDATE(), 112)
 INSERT INTO [etl].[LogUpdate] ([Table], [LastLoadDate]) VALUES ('Fact_MoisturePots', @NewLoadDate)

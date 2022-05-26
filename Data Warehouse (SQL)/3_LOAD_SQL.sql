@@ -1,8 +1,10 @@
-/* -- To use GreenHouseDWH --*/
+--SUB-STEP 1 Creating data warehouse entities-- 
+
+-- To use GreenHouseDWH 
 USE [GreenHouseDWH]
 GO
 
-/* -- CREATE EDW SCHEMA for GreenHouseDWH --*/
+-- CREATE EDW SCHEMA for GreenHouseDWH
 IF NOT EXISTS 
   (SELECT  *
 	FROM    sys.schemas
@@ -10,8 +12,9 @@ IF NOT EXISTS
 EXEC
 	('CREATE SCHEMA [edw]');
 GO
+--!!!!! MAKE SURE YOUR USER HAS RIGHTS TO MAKE CHANGES TO THE CREATED SCHEMA !!!!!!--
 
-/* -- CREATE and populate Dim_Date TABLE --*/
+ -- CREATE Date Dimension  
 IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id=OBJECT_ID(N'[edw].[Dim_Date]') AND type IN (N'U'))
 CREATE TABLE [edw].[Dim_Date] (
  [D_ID] INT NOT NULL,
@@ -26,12 +29,16 @@ CREATE TABLE [edw].[Dim_Date] (
  [MonthName] NVARCHAR(10) NOT NULL
 ) ON [PRIMARY]
 
+-- CREATE boundary values for date 
 DECLARE @StartDate DATETIME;
 DECLARE @EndDate DATETIME;
 
-SET @StartDate = '2020-01-01'  -- made 1969 instead of 2022 to also work with dummy data
+-- SETTING the start date AND end date
+SET @StartDate = '2020-01-01'  
 SET @EndDate = DATEADD(YEAR, 100, getdate())
 
+ -- GENERATES in a loop the the date starting from the given start date 
+-- and inserts the data into the dimension table
 WHILE @StartDate <= @EndDate
     BEGIN
         INSERT INTO [edw].[Dim_Date]
@@ -57,25 +64,29 @@ WHILE @StartDate <= @EndDate
             DATENAME(weekday, @StartDate) as WeekdayName,
 			DATENAME(month, @StartDate) as MonthName
     
-        SET @StartDate = DATEADD(dd, 1, @StartDate) --adding one day for loop to go forward
+        SET @StartDate = DATEADD(dd, 1, @StartDate) 
     END
 GO
 
 ALTER TABLE [edw].[Dim_Date] ADD CONSTRAINT PK_Dim_Date PRIMARY KEY (D_ID);
 GO
 
-/* -- CREATE and populate Dim_Time TABLE --*/
+ -- CREATE Time Dimension 
 CREATE TABLE [edw].[Dim_Time] (
 			[T_ID] INT NOT NULL,
 			[Hour] INT NOT NULL,
 			[Minute] INT NOT NULL) ON [PRIMARY]
 
+-- SETTING the start date AND end date
 DECLARE @StartTime DATETIME;
 DECLARE @EndTime DATETIME;
 
+-- SETTING the start date AND end date
 SET @StartTime = '2022-01-01'
 SET @EndTime = '2022-01-02'
 
+ -- GENERATES in a loop the the date starting from the given start date 
+-- and inserts the data into the dimension table
 WHILE @StartTime < @EndTime
     BEGIN
         INSERT INTO [edw].[Dim_Time]
@@ -98,7 +109,7 @@ GO
 ALTER TABLE [edw].[Dim_Time] ADD CONSTRAINT PK_Dim_Time PRIMARY KEY (T_ID);
 GO
 
-/* -- CREATE Dim_Greenhouse TABLE --*/
+-- CREATE Greenhouse Dimension TABLE
 CREATE TABLE [edw].[Dim_Greenhouse] (
  G_ID INT IDENTITY NOT NULL,
  GreenHouse_ID NVARCHAR(100) NOT NULL,
@@ -109,7 +120,7 @@ CREATE TABLE [edw].[Dim_Greenhouse] (
 ALTER TABLE [edw].[Dim_Greenhouse] ADD CONSTRAINT PK_Dim_Greenhouse PRIMARY KEY (G_ID);
 GO
 
-/* -- CREATE Dim_Pot TABLE --*/
+-- CREATE Pot Dimension TABLE
 CREATE TABLE [edw].[Dim_Pot] (
  P_ID INT IDENTITY NOT NULL,
  Pot_ID INT NOT NULL,
@@ -119,7 +130,7 @@ CREATE TABLE [edw].[Dim_Pot] (
 ALTER TABLE [edw].[Dim_Pot] ADD CONSTRAINT PK_Dim_Pot PRIMARY KEY (P_ID);
 GO
 
-/* -- CREATE Fact_Measurements TABLE --*/
+-- CREATE Measurement Fact TABLE
 CREATE TABLE [edw].[Fact_Measurements] (
  M_ID INT IDENTITY NOT NULL,
  G_ID INT NOT NULL,
@@ -129,7 +140,7 @@ CREATE TABLE [edw].[Fact_Measurements] (
  Humidity FLOAT,
  CarbonDioxide INT
 );
-
+-- ADDING constraints to Measurement Fact TABLE
 ALTER TABLE [edw].[Fact_Measurements] ADD CONSTRAINT PK_Fact_Measurements PRIMARY KEY (M_ID, G_ID, D_ID, T_ID);
 
 ALTER TABLE [edw].[Fact_Measurements] ADD CONSTRAINT FK_Fact_Measurements_0  FOREIGN KEY (G_ID) REFERENCES [edw].[Dim_Greenhouse] (G_ID);
@@ -137,7 +148,7 @@ ALTER TABLE [edw].[Fact_Measurements] ADD CONSTRAINT FK_Fact_Measurements_1  FOR
 ALTER TABLE [edw].[Fact_Measurements] ADD CONSTRAINT FK_Fact_Measurements_2  FOREIGN KEY (T_ID) REFERENCES [edw].[Dim_Time] (T_ID);
 GO
 
-/* -- CREATE Fact_MoisturePots TABLE --*/
+-- CREATE Moisture Fact TABLE
 CREATE TABLE [edw].[Fact_MoisturePots] (
  MP_ID INT IDENTITY NOT NULL,
  P_ID INT NOT NULL,
@@ -146,7 +157,7 @@ CREATE TABLE [edw].[Fact_MoisturePots] (
  T_ID INT NOT NULL,
  Moisture FLOAT
 );
-
+-- ADDING constraints to Moisture Fact TABLE
 ALTER TABLE [edw].[Fact_MoisturePots] ADD CONSTRAINT PK_Fact_MoisturePots PRIMARY KEY (MP_ID, P_ID, G_ID, D_ID, T_ID);
 
 ALTER TABLE [edw].[Fact_MoisturePots] ADD CONSTRAINT FK_Fact_MoisturePots_0  FOREIGN KEY (P_ID) REFERENCES [edw].[Dim_Pot] (P_ID);
@@ -159,6 +170,7 @@ GO
 use [GreenHouseDWH]
 go
 
+-- POPULATE Pot Dimension TABLE
 --TRUNCATE TABLE [edw].[Dim_Pot]
 INSERT INTO [edw].[Dim_Pot]
 	([Pot_ID]
@@ -168,6 +180,7 @@ SELECT
     [Plant]
 FROM [stage].[Dim_Pot]
 
+-- POPULATE Greenhouse Dimension TABLE
 --TRUNCATE TABLE [edw].[Dim_Greenhouse]
 INSERT INTO [edw].[Dim_Greenhouse]
 ([GreenHouse_ID],
@@ -179,7 +192,7 @@ SELECT
     [City]
 FROM [stage].[Dim_Greenhouse]
 
-
+-- POPULATE Measurement Fact TABLE
 --TRUNCATE TABLE [edw].[Fact_Measurements]
 INSERT INTO [edw].[Fact_Measurements]
 ([G_ID]
@@ -206,6 +219,7 @@ on g.GreenHouse_ID = ms.GreenHouse_ID
     on t.Hour = DATEPART(HOUR, ms.MeasurementDateTime)
     AND t.Minute = DATEPART(MINUTE, ms.MeasurementDateTime)
 
+-- POPULATE Fact Moisture TABLE
 --TRUNCATE TABLE [edw].[Fact_MoisturePots]
 INSERT INTO [edw].[Fact_MoisturePots]
 ([P_ID]
