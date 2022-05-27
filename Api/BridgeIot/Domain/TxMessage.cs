@@ -1,3 +1,9 @@
+/*
+ * MessageHandler.cs
+ *
+ *  Author: Lukas
+ */
+
 using System.Text.Json;
 
 namespace Api.BridgeIot.Domain
@@ -7,6 +13,7 @@ namespace Api.BridgeIot.Domain
         public bool confirmed {get;set;}
         public int port {get;set;}
         public string data {get;set;}
+        public string? error { set; get; }
         public TxMessage(string cmd, string EUI, string json, bool confirmed, int port, string data): base(cmd,EUI,json) {
             this.confirmed = confirmed;
             this.port = port;

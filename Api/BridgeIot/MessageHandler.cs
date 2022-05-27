@@ -196,14 +196,17 @@ namespace Api.BridgeIot
             //I include last and also first byte
             string myString = data;
 
+            if (number < 0)
+            { //if the number is negative make it second compliment
+                number += (int) Math.Pow(16, lastByte - firstByte + 1); 
+            }
+
             while(lastByte>=firstByte){
                 char tmpCh;
                 int tempNum = number% 16;
                 number = number/16;
 
-                if (number < 0) tempNum += 16; // in case if the number is negative make it to compliment
-
-                if (tempNum >=0 && tempNum <9) tmpCh = Convert.ToChar(tempNum + '0');
+                if (tempNum >=0 && tempNum <=9) tmpCh = Convert.ToChar(tempNum + '0');
                 else tmpCh = Convert.ToChar(tempNum - 10 + 'a');
                 myString = tmpCh + myString;
                 lastByte--;
