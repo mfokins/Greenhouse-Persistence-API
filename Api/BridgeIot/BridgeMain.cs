@@ -93,7 +93,7 @@ namespace Api.BridgeIot
             }
         }
 
-        public void send(TxMessage message)
+        private void send(TxMessage message)
         {
             //TODO finish the convert from object to socket
 

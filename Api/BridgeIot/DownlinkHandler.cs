@@ -49,7 +49,7 @@ namespace Api.BridgeIot
 
                 //because max treshold can be null I need to check it
                 if (tempTreshold.HigherThreshold != null) max_temp = (int) tempTreshold.HigherThreshold;
-                Console.WriteLine("temperature got changed");
+                //Console.WriteLine("temperature got changed");
             }
 
             int min_co2 = 0;
