@@ -41,6 +41,7 @@ namespace Api.Mappers
             return new Api.Models.MoistureMeasurement()
             {       
                 Moisture = moistureMeasurement.Moisture,
+                PotId = moistureMeasurement.PotId,
                 Time = ((DateTimeOffset) moistureMeasurement.Time).ToUnixTimeSeconds()
             };
         }

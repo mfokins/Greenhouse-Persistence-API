@@ -44,6 +44,7 @@ namespace Data.Mappers
             return new Core.Models.MoistureMeasurement()
             {
                 Moisture = moistureMeasurement.Moisture,
+                PotId = moistureMeasurement.PotId,
                 Time = moistureMeasurement.Time
             };
         }

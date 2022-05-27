@@ -48,6 +48,7 @@ namespace Api.Mappers
             return new MoistureMeasurement()
             {
                 Moisture = value.Moisture,
+                PotId = value.PotId,
                 Time = UnixTimeStampToDateTime(value.Time),
             };
         }
