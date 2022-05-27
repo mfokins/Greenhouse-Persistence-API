@@ -33,7 +33,6 @@ namespace Data.Mappers
             return new Models.Measurements.MoistureMeasurement()
             {
                 Moisture = entity.Moisture,
-                PotId = entity.PotId,
                 Time = entity.Time
             };
         }

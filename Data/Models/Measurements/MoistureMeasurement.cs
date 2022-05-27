@@ -12,7 +12,6 @@ namespace Data.Models.Measurements
         [Required]
         public DateTime Time { get; set; }
         
-        public int PotId { get; set; }
         
     }
 }
