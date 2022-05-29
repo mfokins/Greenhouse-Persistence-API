@@ -258,5 +258,17 @@ namespace Api.BridgeIot
             }
             throw new ArgumentOutOfRangeException("char is not a letter form a to F or number");
         }
+
+        public void HandleGwMessage(GwMessage message)
+        {
+            string greenhouseId = message.EUI;
+
+            //from my observation the closest tower, and the one that arduiono connects to is first in list
+            Gateway connectedGateway = message.gws.ToArray()[0];
+
+            double lon = connectedGateway.lon;
+            double lat = connectedGateway.lat;
+            //TODO send this to an interface when there will be some
+        }
     }
 }
