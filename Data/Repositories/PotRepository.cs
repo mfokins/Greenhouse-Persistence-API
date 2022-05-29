@@ -27,12 +27,16 @@ namespace Data.Repositories
                 .FirstOrDefault(x => x.GreenHouseId == entity.GreenHouseId)
                 .Pots.Add(DomToDb.Convert(entity));
             dbContext.SaveChanges();
-
         }
 
         public void AddBulk(IEnumerable<Pot> entities)
         {
-            throw new NotImplementedException();
+            using GreenHouseDbContext dbContext = new GreenHouseDbContext();
+            dbContext.Greenhouses
+                .Include(g => g.Pots)
+                .FirstOrDefault(g => g.GreenHouseId == entities.FirstOrDefault().GreenHouseId)
+                .Pots.AddRange(entities.Select(entity => DomToDb.Convert(entity)));
+            dbContext.SaveChanges();
         }
 
         public void Delete(Pot entity)
@@ -45,7 +49,6 @@ namespace Data.Repositories
                 .FirstOrDefault(x => x.GreenHouseId == entity.GreenHouseId)
                 .Pots.Remove(DomToDb.Convert(entity));
             dbContext.SaveChanges();
-
         }
 
         public Pot Get(int id, string greenHouseId)
@@ -63,7 +66,6 @@ namespace Data.Repositories
 
         public IEnumerable<Pot> GetAll(string greenhouseId, int pageNumber = 0, int pageSize = 25)
         {
-
             using GreenHouseDbContext dbContext = new GreenHouseDbContext();
 
             return dbContext.Greenhouses
@@ -72,14 +74,13 @@ namespace Data.Repositories
                 .Pots.Skip(pageNumber * pageSize)
                 .Take(pageSize)
                 .Select(t =>
-                {
-                    var pot = DbToDom.Convert(t);
-                    pot.moistureThreshold = _thresholdRepository.GetMoisturehresholds(greenhouseId, t.Id);
-                    pot.GreenHouseId = greenhouseId;
-                    return pot;
-                }
+                    {
+                        var pot = DbToDom.Convert(t);
+                        pot.moistureThreshold = _thresholdRepository.GetMoisturehresholds(greenhouseId, t.Id);
+                        pot.GreenHouseId = greenhouseId;
+                        return pot;
+                    }
                 );
-
         }
 
         public int GetPotIdBySensorId(int sensorId, string greenhouseId)

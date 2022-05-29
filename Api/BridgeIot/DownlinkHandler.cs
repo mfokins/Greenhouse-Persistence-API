@@ -54,7 +54,7 @@ namespace Api.BridgeIot
 
             int min_co2 = 0;
             int max_co2 = 5000;
-            Threshold co2Treshold = _thresholdService.GetHumidityThresholds(EUI);
+            Threshold co2Treshold = _thresholdService.GetDioxideCarbonThresholds(EUI);
             if (co2Treshold.Type != ThresholdType.Empty)
             {
                 min_co2 = (int)co2Treshold.LowerThreshold;
