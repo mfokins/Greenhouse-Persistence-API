@@ -23,12 +23,19 @@ namespace Core.Services
 
         public Pot Get(int id, string greenHouseId)
         {
-            return _potRepository.Get( id,  greenHouseId);
+            return _potRepository.Get(id, greenHouseId);
         }
 
         public IEnumerable<Pot> GetAll(string greenhouseId, int pageNumber = 0, int pageSize = 25)
         {
             return _potRepository.GetAll(greenhouseId, pageNumber, pageSize);
+        }
+
+        public int GetPotIdBySensorId(int sensorId, string greenhouseId)
+        {
+
+            try { return _potRepository.GetPotIdBySensorId(sensorId, greenhouseId); }
+            catch (Exception) { return -1; }
         }
 
         public void Update(Pot entity)
