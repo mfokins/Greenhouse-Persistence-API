@@ -131,7 +131,7 @@ namespace Api.BridgeIot
                 thisCo2.GreenHouseId = greenhouseEUI;
 
                 thisCo2.Time = DateTimeOffset.FromUnixTimeSeconds(unixInSec).DateTime.ToLocalTime();
-
+                
                 _Co2Service.Add(thisCo2);
             }
 
@@ -147,7 +147,7 @@ namespace Api.BridgeIot
 
                     thisMoisture.Time = DateTimeOffset.FromUnixTimeSeconds(unixInSec).DateTime.ToLocalTime();
 
-                    _moistureService.Add(thisMoisture);
+                    _moistureService.Add(thisMoisture, i);
                 }
                 /*//get all pots that need the data
                 IEnumerator<Pot> pots = _potService.GetAll(greenhouseEUI).GetEnumerator();
