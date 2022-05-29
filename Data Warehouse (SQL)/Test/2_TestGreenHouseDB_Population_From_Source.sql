@@ -5,11 +5,16 @@ GO
 
 
   INSERT INTO [dbo].[Greenhouses] (
-  [GreenHouseId]
+  [GreenHouseId],
+  [Latitude],
+  [Longitude]
   )
-  SELECT [GreenHouseId]
-  FROM [GreenHouseDB].[dbo].[Greenhouses]
- -- WHERE [GreenHouseId]%10 = 7 
+SELECT
+    [GreenHouseId],
+    [Latitude],
+    [Longitude]
+FROM [GreenHouseDB].[dbo].[Greenhouses]
+    -- WHERE [GreenHouseId]%10 = 7 
 
 
 	set identity_insert [dbo].[Pot] on

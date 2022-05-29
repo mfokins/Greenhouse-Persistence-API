@@ -63,15 +63,15 @@ SET @FutureDate = 99990101
 INSERT INTO [edw].[Dim_Greenhouse]
     (
     [GreenHouse_ID]
-	,[Country]
-	,[City]
+	,[Latitude]
+	,[Longitude]
 	,[ValidFrom]
 	,[ValidTo]
     )
 SELECT
      [GreenHouse_ID]
-	  ,[Country]
-	  ,[City]
+        ,[Latitude]
+        ,[Longitude]
 	  , @NewLoadDate
 	  , @FutureDate
 FROM [GreenhouseDWH].[stage].[Dim_Greenhouse]
