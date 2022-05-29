@@ -45,7 +45,7 @@ namespace Data.Mappers
                 Name = pot.Name,
                 Id = pot.Id,
                 MoistureSensorId = pot.MoistureSensorId,
-
+                MoistureSensorStatus = new SensorStatus() { IsWorking = true, Type = SensorType.Moisture },
             };
         }
 
