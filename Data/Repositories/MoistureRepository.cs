@@ -2,7 +2,7 @@
 using Core.Models;
 using Data.Mappers;
 using Microsoft.EntityFrameworkCore;
-using Greenhouse = Data.Models.Greenhouse;
+
 
 namespace Data.Repositories;
 
@@ -10,17 +10,16 @@ public class MoistureRepository : IMoistureRepository
 {
     public void Add(MoistureMeasurement entity)
     {
-
         using GreenHouseDbContext dbContext = new GreenHouseDbContext();
 
         dbContext.Greenhouses.Include(pot => pot.Pots)
             .ThenInclude(m => m.MoistureMeasurements)
             .FirstOrDefault(g => g.GreenHouseId == entity.GreenHouseId)
             .Pots.FirstOrDefault(p => p.Id == entity.PotId).MoistureMeasurements.Add(DomToDb.Convert(entity));
-        dbContext.SaveChangesAsync();
+        dbContext.SaveChanges();
     }
 
-    //Not really needed
+
     public void Update(MoistureMeasurement entity)
     {
         using GreenHouseDbContext dbContext = new GreenHouseDbContext();
@@ -29,7 +28,7 @@ public class MoistureRepository : IMoistureRepository
         dbContext.SaveChanges();
     }
 
-    //Not really needed
+
     public void Delete(MoistureMeasurement entity)
     {
         using GreenHouseDbContext dbContext = new GreenHouseDbContext();
@@ -38,7 +37,7 @@ public class MoistureRepository : IMoistureRepository
             .Include(x => x.Pots)
             .FirstOrDefault(x => x.GreenHouseId == entity.GreenHouseId)
             .Pots.FirstOrDefault(p => p.Id == entity.PotId).MoistureMeasurements.Remove(DomToDb.Convert(entity));
-        dbContext.SaveChangesAsync();
+        dbContext.SaveChanges();
     }
 
     public MoistureMeasurement GetLatest(string greenhouseId, int potId)
@@ -82,6 +81,13 @@ public class MoistureRepository : IMoistureRepository
 
     public void AddBulk(IEnumerable<MoistureMeasurement> entities)
     {
-        throw new NotImplementedException();
+        using GreenHouseDbContext dbContext = new GreenHouseDbContext();
+
+        dbContext.Greenhouses
+            .Include(g => g.Pots).ThenInclude(m=>m.MoistureMeasurements)
+            .FirstOrDefault(g => g.GreenHouseId == entities.FirstOrDefault().GreenHouseId).Pots.
+            FirstOrDefault(p=>p.Id==entities.FirstOrDefault().PotId).MoistureMeasurements
+            .AddRange(entities.Select(entity => DomToDb.Convert(entity)));
+        dbContext.SaveChanges();
     }
 }

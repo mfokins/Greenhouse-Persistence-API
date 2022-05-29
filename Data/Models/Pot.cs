@@ -15,6 +15,6 @@ namespace Data.Models
         [ForeignKey("MoistureThresholdId")]
         public Threshold MoistureThreshold { get; set; }
         [Required]
-        public IList<MoistureMeasurement> MoistureMeasurements { get; set; }
+        public List<MoistureMeasurement> MoistureMeasurements { get; set; }
     }
 }
