@@ -11,6 +11,7 @@ namespace Data.Models
         [Required]
 
         public string Name { get; set; }
+        public int MoistureSensorId { get; set; }
         public int MoistureThresholdId { get; set; }
         [ForeignKey("MoistureThresholdId")]
         public Threshold MoistureThreshold { get; set; }

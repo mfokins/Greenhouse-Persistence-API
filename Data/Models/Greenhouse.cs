@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Data.Models.Measurements;
+﻿using Data.Models.Measurements;
 using System.ComponentModel.DataAnnotations;
 
 namespace Data.Models

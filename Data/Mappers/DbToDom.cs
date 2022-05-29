@@ -39,29 +39,31 @@ namespace Data.Mappers
                 Time = humidityMeasurement.Time
             };
         }
-        public static Core.Models.MoistureMeasurement Convert(Models.Measurements.MoistureMeasurement moistureMeasurement)
+        public static Core.Models.MoistureMeasurement Convert(Models.Measurements.MoistureMeasurement moistureMeasurement, int potId)
         {
             return new Core.Models.MoistureMeasurement()
             {
                 Moisture = moistureMeasurement.Moisture,
-                PotId = moistureMeasurement.PotId,
-                Time = moistureMeasurement.Time
+                Time = moistureMeasurement.Time,
+                PotId = potId
             };
         }
 
-        internal static Core.Models.Pot Convert(Pot t)
+        internal static Core.Models.Pot Convert(Pot pot)
         {
             return new Core.Models.Pot
             {
-                Id = t.Id,
-                moistureThreshold = Convert(t.MoistureThreshold),
-                Name = t.Name,
+                Id = pot.Id,
+                moistureThreshold = Convert(pot.MoistureThreshold),
+                Name = pot.Name,
+                MoistureSensorId = pot.MoistureSensorId,
+                
             };
         }
-
+        
         public static Core.Models.Threshold Convert(Threshold threshold)
         {
-            if(threshold == null)
+            if (threshold == null)
                 return Core.Models.Threshold.Empty;
             return new Core.Models.Threshold()
             {

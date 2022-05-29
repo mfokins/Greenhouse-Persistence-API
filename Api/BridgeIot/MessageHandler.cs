@@ -149,8 +149,9 @@ namespace Api.BridgeIot
                     thisMoisture.GreenHouseId = greenhouseEUI;
 
                     thisMoisture.Time = DateTimeOffset.FromUnixTimeSeconds(unixInSec).DateTime.ToLocalTime();
-
-                    _moistureService.Add(thisMoisture);
+                    //Add here the id of the sensor
+                    var sendorId = 3;
+                    _moistureService.Add(thisMoisture, sendorId);
                 }
                 //we have 6 pots allways, they specify which of them did they set up
                 

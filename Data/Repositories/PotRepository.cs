@@ -83,6 +83,17 @@ namespace Data.Repositories
                 );
         }
 
+        public int GetPotIdBySensorId(int sensorId, string greenhouseId)
+        {
+            using GreenHouseDbContext dbContext = new GreenHouseDbContext();
+            return dbContext.Greenhouses
+                .Include(x => x.Pots)
+                .FirstOrDefault(gh => gh.GreenHouseId == greenhouseId)
+                .Pots
+                .FirstOrDefault(p => p.MoistureSensorId == sensorId)
+                .Id;
+        }
+
         public void Update(Pot entity)
         {
             using GreenHouseDbContext dbContext = new GreenHouseDbContext();

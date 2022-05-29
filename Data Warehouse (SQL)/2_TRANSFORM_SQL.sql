@@ -1,13 +1,11 @@
 -- USE the GreenHouseDWH DATABASE
 USE [GreenHouseDWH]
 GO
---UPDATE the Greenhouse Dimension to replace the NULL attributes values to UNKNOWN
 UPDATE [stage].[Dim_Greenhouse]
-SET City = 'UNKNOWN' WHERE City IS NULL
+SET Latitude = -1 WHERE City IS NULL
 
---UPDATE the Greenhouse Dimension  to replace the NULL attributes values to UNKNOWN
 UPDATE [stage].[Dim_Greenhouse]
-SET Country = 'UNKNOWN' WHERE Country IS NULL
+SET Longitude = -1 WHERE Country IS NULL
 
 --UPDATE the Greenhouse Dimension to replace the NULL attributes values to UNKNOWN
 UPDATE [stage].[Dim_Pot]

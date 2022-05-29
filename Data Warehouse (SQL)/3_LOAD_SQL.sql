@@ -113,8 +113,8 @@ GO
 CREATE TABLE [edw].[Dim_Greenhouse] (
  G_ID INT IDENTITY NOT NULL,
  GreenHouse_ID NVARCHAR(100) NOT NULL,
- Country NVARCHAR(50),
- City NVARCHAR(50)
+    Latitude DECIMAL(8,6),
+    Longitude DECIMAL(9,6)
 );
 
 ALTER TABLE [edw].[Dim_Greenhouse] ADD CONSTRAINT PK_Dim_Greenhouse PRIMARY KEY (G_ID);
@@ -184,12 +184,12 @@ FROM [stage].[Dim_Pot]
 --TRUNCATE TABLE [edw].[Dim_Greenhouse]
 INSERT INTO [edw].[Dim_Greenhouse]
 ([GreenHouse_ID],
-    [Country],
-[City])
+    [Latitude],
+[Longitude])
 SELECT
     [GreenHouse_ID],
-    [Country],
-    [City]
+    [Latitude],
+    [Longitude]
 FROM [stage].[Dim_Greenhouse]
 
 -- POPULATE Measurement Fact TABLE

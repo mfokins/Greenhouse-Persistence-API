@@ -20,8 +20,8 @@ DROP TABLE IF EXISTS stage.Dim_Greenhouse
 CREATE TABLE stage.Dim_Greenhouse
 (
     GreenHouse_ID NVARCHAR(100) PRIMARY KEY NOT NULL,
-    Country       NVARCHAR(50),
-    City          NVARCHAR(50)
+    Latitude DECIMAL(8,6),
+    Longitude DECIMAL(9,6)
 );
 
 

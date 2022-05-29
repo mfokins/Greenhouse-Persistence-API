@@ -2,10 +2,10 @@ USE [TestGreenHouseDWH]
 GO
 
 UPDATE [stage].[Dim_Greenhouse]
-SET City = 'UNKNOWN' WHERE City IS NULL
+SET Latitude = -1 WHERE City IS NULL
 
 UPDATE [stage].[Dim_Greenhouse]
-SET Country = 'UNKNOWN' WHERE Country IS NULL
+SET Longitude = -1 WHERE Country IS NULL
 
 UPDATE [stage].[Dim_Pot]
 SET Plant = 'UNKNOWN' WHERE Plant IS NULL

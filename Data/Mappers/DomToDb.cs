@@ -16,7 +16,7 @@ namespace Data.Mappers
 
         public static Models.Greenhouse Convert(Core.Models.Greenhouse entity)
         {
-            return new Models.Greenhouse() {GreenHouseId = entity.GreenHouseId};
+            return new Models.Greenhouse() { GreenHouseId = entity.GreenHouseId };
         }
 
         public static Models.Measurements.DioxideCarbonMeasurement Convert(Core.Models.DioxideCarbonMeasurement entity)
@@ -33,18 +33,19 @@ namespace Data.Mappers
             return new Models.Measurements.MoistureMeasurement()
             {
                 Moisture = entity.Moisture,
-                PotId = entity.PotId,
                 Time = entity.Time
             };
         }
 
-        internal static Models.Pot Convert(Core.Models.Pot entity)
+        internal static Models.Pot Convert(Core.Models.Pot pot)
         {
             return new Models.Pot
             {
-                MoistureThreshold = Convert(entity.moistureThreshold),
-                Name = entity.Name,
-                Id = entity.Id,
+                MoistureThreshold = Convert(pot.moistureThreshold),
+                Name = pot.Name,
+                Id = pot.Id,
+                MoistureSensorId = pot.MoistureSensorId,
+
             };
         }
 
@@ -54,7 +55,7 @@ namespace Data.Mappers
             {
                 HigherThreshold = threshold.HigherThreshold,
                 LowerThreshold = threshold.LowerThreshold,
-                Type = (ThresholdType) threshold.Type
+                Type = (ThresholdType)threshold.Type
             };
         }
 

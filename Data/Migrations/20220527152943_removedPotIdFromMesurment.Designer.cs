@@ -4,6 +4,7 @@ using Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(GreenHouseDbContext))]
-    partial class GreenHouseDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220527152943_removedPotIdFromMesurment")]
+    partial class removedPotIdFromMesurment
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -139,9 +141,6 @@ namespace Data.Migrations
 
                     b.Property<string>("GreenHouseId")
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("MoistureSensorId")
-                        .HasColumnType("int");
 
                     b.Property<int>("MoistureThresholdId")
                         .HasColumnType("int");

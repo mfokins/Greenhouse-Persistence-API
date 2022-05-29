@@ -11,7 +11,6 @@ public class MoistureRepository : IMoistureRepository
     public void Add(MoistureMeasurement entity)
     {
         using GreenHouseDbContext dbContext = new GreenHouseDbContext();
-
         dbContext.Greenhouses.Include(pot => pot.Pots)
             .ThenInclude(m => m.MoistureMeasurements)
             .FirstOrDefault(g => g.GreenHouseId == entity.GreenHouseId)
@@ -48,7 +47,7 @@ public class MoistureRepository : IMoistureRepository
             .Include(pot => pot.Pots)
             .ThenInclude(m => m.MoistureMeasurements)
             .FirstOrDefault(g => g.GreenHouseId == greenhouseId).Pots.FirstOrDefault(p => p.Id == potId)
-            .MoistureMeasurements.OrderByDescending(t => t.Time).FirstOrDefault());
+            .MoistureMeasurements.OrderByDescending(t => t.Time).FirstOrDefault(), potId);
     }
 
     public MoistureMeasurement Get(int id, string greenhouseId)
@@ -75,7 +74,7 @@ public class MoistureRepository : IMoistureRepository
             .Pots.FirstOrDefault(p => p.Id == potId).MoistureMeasurements
             .Skip(pageNumber * pageSize)
             .Take(pageSize)
-            .Select(m => { return DbToDom.Convert(m); }
+            .Select(m => { return DbToDom.Convert(m, potId); }
             );
     }
 
