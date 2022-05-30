@@ -19,6 +19,11 @@ namespace Core.Services
             }
             catch (Exception ex)
             {
+                foreach (var path in Directory.GetFiles(""))
+                {
+                    Console.WriteLine(path); // full path
+                    Console.WriteLine(System.IO.Path.GetFileName(path)); // file name
+                }
                 Console.WriteLine("Notification serivice not set up! ");
                 Console.WriteLine(ex.Message);
                 notificationServiceSetUp = false;
