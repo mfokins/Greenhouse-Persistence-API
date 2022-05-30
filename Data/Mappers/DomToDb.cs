@@ -36,7 +36,7 @@ namespace Data.Mappers
                 Time = entity.Time
             };
         }
-
+        
         internal static Models.Pot Convert(Core.Models.Pot pot)
         {
             return new Models.Pot
@@ -45,7 +45,6 @@ namespace Data.Mappers
                 Name = pot.Name,
                 Id = pot.Id,
                 MoistureSensorId = pot.MoistureSensorId,
-                MoistureSensorStatus = new SensorStatus() { IsWorking = true, Type = SensorType.Moisture },
             };
         }
 
@@ -66,6 +65,11 @@ namespace Data.Mappers
                 Humidity = entity.Humidity,
                 Time = entity.Time
             };
+        }
+
+        internal static SensorStatus Convert(Core.Models.SensorStatus sensorStatus)
+        {
+            throw new NotImplementedException();
         }
     }
 }
