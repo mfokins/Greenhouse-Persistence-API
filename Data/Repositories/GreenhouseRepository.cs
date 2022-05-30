@@ -43,7 +43,11 @@ namespace Data.Repositories
 
         public void Update(Greenhouse entity)
         {
-            throw new NotImplementedException();
+            using GreenHouseDbContext dbContext = new GreenHouseDbContext();
+
+            dbContext.Greenhouses.Update(DomToDb.Convert(entity));
+            Console.WriteLine("Coordinates: "+entity.Latitude+" "+entity.Longitude);
+            dbContext.SaveChanges();
         }
     }
 }

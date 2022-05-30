@@ -1,5 +1,4 @@
-﻿
-using Core.Interfaces.Greenhouse;
+﻿using Core.Interfaces.Greenhouse;
 using Core.Models;
 
 namespace Core.Services
@@ -12,10 +11,12 @@ namespace Core.Services
         {
             _repository = repository;
         }
+
         public void Create(string id)
         {
-            _repository.Add(new Greenhouse() { GreenHouseId = id });
+            _repository.Add(new Greenhouse() {GreenHouseId = id});
         }
+
         public Greenhouse Get(string id)
         {
             return _repository.Get(id);
@@ -28,7 +29,7 @@ namespace Core.Services
 
         public void UpdateGreenhouse(Greenhouse greenhouse)
         {
-            throw new NotImplementedException();
+            _repository.Update(greenhouse);
         }
     }
 }

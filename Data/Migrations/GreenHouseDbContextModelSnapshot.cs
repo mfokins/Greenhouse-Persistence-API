@@ -27,6 +27,12 @@ namespace Data.Migrations
                     b.Property<string>("GreenHouseId")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<float>("Latitude")
+                        .HasColumnType("real");
+
+                    b.Property<float>("Longitude")
+                        .HasColumnType("real");
+
                     b.HasKey("GreenHouseId");
 
                     b.ToTable("Greenhouses");

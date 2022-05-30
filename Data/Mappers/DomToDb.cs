@@ -16,7 +16,12 @@ namespace Data.Mappers
 
         public static Models.Greenhouse Convert(Core.Models.Greenhouse entity)
         {
-            return new Models.Greenhouse() { GreenHouseId = entity.GreenHouseId };
+            return new Models.Greenhouse()
+            {
+                GreenHouseId = entity.GreenHouseId,
+                Latitude = entity.Latitude,
+                Longitude = entity.Longitude
+            };
         }
 
         public static Models.Measurements.DioxideCarbonMeasurement Convert(Core.Models.DioxideCarbonMeasurement entity)

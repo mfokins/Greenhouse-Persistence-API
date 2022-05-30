@@ -7,6 +7,8 @@ namespace Data.Models
     {
         [Key]
         public string GreenHouseId { get; set; }
+        public float Latitude { get; set; }
+        public float Longitude { get; set; }
         [Required]
         public List<TemperatureMeasurement> TemperatureMesurments { get; set; }
         
