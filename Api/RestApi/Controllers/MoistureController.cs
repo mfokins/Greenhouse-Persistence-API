@@ -31,13 +31,13 @@ public class MoistureController : ControllerBase
         }
     }
     
-    [HttpPost("{potId}")]
-    public void Post([FromRoute] string greenhouseId,[FromRoute] int potId, [FromBody] MoistureMeasurement value)
+    [HttpPost("{sensorId}")]
+    public void Post([FromRoute] string greenhouseId,[FromRoute] int sensorId, [FromBody] MoistureMeasurement value)
     {
         var convertedValue = ApiToDom.Convert(value);
         convertedValue.GreenHouseId = greenhouseId;
-        convertedValue.PotId = potId;
-        _service.Add(convertedValue);
+        convertedValue.PotId = sensorId;
+        _service.Add(convertedValue, sensorId);
         
     }
 }

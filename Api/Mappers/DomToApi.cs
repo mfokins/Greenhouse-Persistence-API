@@ -18,7 +18,14 @@ namespace Api.Mappers
             };
         }
 
-
+        public static SensorStatus Convert(Core.Models.SensorStatus status)
+        {
+            return new SensorStatus
+            {
+                Sensor = status.Type.ToString(),
+                Status = status.IsWorking
+            };
+        }
 
         public static Models.HumidityMeasurement Convert(HumidityMeasurement humidityMeasurement)
         {
@@ -31,18 +38,18 @@ namespace Api.Mappers
         public static Models.DioxideCarbonMeasurement Convert(DioxideCarbonMeasurement dioxideCarbonMeasurement)
         {
             return new Api.Models.DioxideCarbonMeasurement()
-            {       
+            {
                 Co2Measurement = dioxideCarbonMeasurement.Co2Measurement,
-                Time = ((DateTimeOffset) dioxideCarbonMeasurement.Time).ToUnixTimeSeconds()
+                Time = ((DateTimeOffset)dioxideCarbonMeasurement.Time).ToUnixTimeSeconds()
             };
         }
         public static Models.MoistureMeasurement Convert(MoistureMeasurement moistureMeasurement)
         {
             return new Api.Models.MoistureMeasurement()
-            {       
+            {
                 Moisture = moistureMeasurement.Moisture,
                 PotId = moistureMeasurement.PotId,
-                Time = ((DateTimeOffset) moistureMeasurement.Time).ToUnixTimeSeconds()
+                Time = ((DateTimeOffset)moistureMeasurement.Time).ToUnixTimeSeconds()
             };
         }
 
@@ -64,6 +71,8 @@ namespace Api.Mappers
                 LowerMoistureThreshold = pot.moistureThreshold.LowerThreshold,
                 Name = pot.Name,
                 Id = pot.Id,
+                MoistureSensorId = pot.MoistureSensorId,
+
             };
         }
     }

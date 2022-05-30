@@ -4,7 +4,7 @@ namespace Core.Interfaces;
 
 public interface IMoistureService
 {
-    void Add(MoistureMeasurement entity);
+    void Add(MoistureMeasurement entity,int sensorId);
     void Update(MoistureMeasurement entity);
     void Delete(MoistureMeasurement entity);
     MoistureMeasurement Get(int id, string greenHouseId);

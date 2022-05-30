@@ -1,10 +1,6 @@
 ﻿using Api.Models;
 using Core.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 using DioxideCarbonMeasurement = Core.Models.DioxideCarbonMeasurement;
 using TemperatureMeasurement = Core.Models.TemperatureMeasurement;
 using HumidityMeasurement = Core.Models.HumidityMeasurement;
@@ -64,6 +60,7 @@ namespace Api.Mappers
                 },
                 Name = pot.Name,
                 Id = pot.Id,
+                MoistureSensorId = pot.MoistureSensorId,
             };
         }
 

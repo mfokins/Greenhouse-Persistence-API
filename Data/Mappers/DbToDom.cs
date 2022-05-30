@@ -22,6 +22,19 @@ namespace Data.Mappers
             };
         }
 
+        public static Core.Models.SensorStatus Convert(SensorStatus? sensorstatus)
+        {
+            if (sensorstatus == null)
+            {
+                return Core.Models.SensorStatus.Empty;
+            }
+            return new Core.Models.SensorStatus()
+            {
+                IsWorking = sensorstatus.IsWorking,
+                Type = (Core.Models.SensorType)sensorstatus.Type
+            };
+        }
+
         internal static Core.Models.Greenhouse Convert(Greenhouse greenhouse)
         {
             return new()
@@ -43,19 +56,21 @@ namespace Data.Mappers
         {
             return new Core.Models.MoistureMeasurement()
             {
-                Moisture = moistureMeasurement.Moisture,
-                Time = moistureMeasurement.Time,
+                Moisture = moistureMeasurement == null ? 0 : moistureMeasurement.Moisture,
+                Time = moistureMeasurement == null ? DateTime.Now : moistureMeasurement.Time,
                 PotId = potId
             };
         }
 
-        internal static Core.Models.Pot Convert(Pot t)
+        internal static Core.Models.Pot Convert(Pot pot)
         {
             return new Core.Models.Pot
             {
-                Id = t.Id,
-                moistureThreshold = Convert(t.MoistureThreshold),
-                Name = t.Name,
+                Id = pot.Id,
+                moistureThreshold = Convert(pot.MoistureThreshold),
+                Name = pot.Name,
+                MoistureSensorId = pot.MoistureSensorId,
+
             };
         }
 

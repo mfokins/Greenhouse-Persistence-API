@@ -24,8 +24,14 @@ public class MoistureService : IMoistureService
         _potService = potService;
     }
 
-    public void Add(MoistureMeasurement entity)
+    public void Add(MoistureMeasurement entity, int sensorId)
     {
+        entity.PotId = _potService.GetPotIdBySensorId(sensorId, entity.GreenHouseId);
+        if (entity.PotId == -1)
+        {
+            return;
+        }
+
         if (!_greenhouseService.IsCreated(entity.GreenHouseId))
         {
             _greenhouseService.Create(entity.GreenHouseId);
