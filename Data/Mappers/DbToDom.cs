@@ -22,13 +22,17 @@ namespace Data.Mappers
             };
         }
 
-        internal static Core.Models.SensorStatus Convert(SensorStatus? sensorstatuses)
+        public static Core.Models.SensorStatus Convert(SensorStatus? sensorstatus)
         {
-            throw new System.NotImplementedException();
-            if (sensorstatuses == null)
+            if (sensorstatus == null)
             {
-                //return SensorStatus.Empty;
+                return Core.Models.SensorStatus.Empty;
             }
+            return new Core.Models.SensorStatus()
+            {
+                IsWorking = sensorstatus.IsWorking,
+                Type = (Core.Models.SensorType)sensorstatus.Type
+            };
         }
 
         internal static Core.Models.Greenhouse Convert(Greenhouse greenhouse)

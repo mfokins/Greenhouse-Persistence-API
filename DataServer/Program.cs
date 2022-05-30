@@ -4,6 +4,7 @@ using Core.Interfaces.DioxideCarbon;
 using Core.Interfaces.Greenhouse;
 using Core.Interfaces.Humidity;
 using Core.Interfaces.Pot;
+using Core.Interfaces.Sensors;
 using Core.Interfaces.Temperature;
 using Core.Services;
 using Core.Services.Interfaces;
@@ -39,6 +40,8 @@ builder.Services.AddScoped<IMoistureService, MoistureService>();
 builder.Services.AddScoped<IPotRepository, PotRepository>();
 builder.Services.AddScoped<IPotService, PotService>();
 
+builder.Services.AddScoped<ISensorRepository, SensorRepository>();
+builder.Services.AddScoped<ISensorService, SensorService>();
 
 builder.Services.AddScoped<IGreenhouseService, GreenhouseService>();
 builder.Services.AddScoped<IGreenhouseRepository, GreenhouseRepository>();

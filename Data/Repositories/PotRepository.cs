@@ -21,11 +21,13 @@ namespace Data.Repositories
         {
             using GreenHouseDbContext dbContext = new GreenHouseDbContext();
 
+            var converted = DomToDb.Convert(entity);
+            converted.MoistureSensorStatus = new Models.SensorStatus() { Type = Models.SensorType.Moisture, IsWorking = false };
             dbContext.Greenhouses
                 .Include(x => x.Pots)
                 .Include(z => z.Thresholds)
                 .FirstOrDefault(x => x.GreenHouseId == entity.GreenHouseId)
-                .Pots.Add(DomToDb.Convert(entity));
+                .Pots.Add(converted);
             dbContext.SaveChanges();
         }
 
@@ -35,7 +37,12 @@ namespace Data.Repositories
             dbContext.Greenhouses
                 .Include(g => g.Pots)
                 .FirstOrDefault(g => g.GreenHouseId == entities.FirstOrDefault().GreenHouseId)
-                .Pots.AddRange(entities.Select(entity => DomToDb.Convert(entity)));
+                .Pots.AddRange(entities.Select(entity =>
+                {
+                    var converted = DomToDb.Convert(entity);
+                    converted.MoistureSensorStatus = new Models.SensorStatus() { Type = Models.SensorType.Moisture, IsWorking = false };
+                    return converted;
+                }));
             dbContext.SaveChanges();
         }
 
@@ -96,9 +103,22 @@ namespace Data.Repositories
 
         public void Update(Pot entity)
         {
-            using GreenHouseDbContext dbContext = new GreenHouseDbContext();
-            dbContext.Update(DomToDb.Convert(entity));
-            dbContext.SaveChanges();
+            Models.Pot converted;
+            using (GreenHouseDbContext dbContext = new GreenHouseDbContext())
+            {
+                 converted = DomToDb.Convert(entity);
+                converted.MoistureSensorStatus = dbContext.Greenhouses
+                    .Include(x => x.Pots)
+                    .ThenInclude(s => s.MoistureSensorStatus)
+                    .FirstOrDefault(gh => gh.GreenHouseId == entity.GreenHouseId)
+                    .Pots.FirstOrDefault(p => p.Id == entity.Id)
+                    .MoistureSensorStatus;
+            }
+            using (GreenHouseDbContext dbContext = new GreenHouseDbContext())
+            {
+                dbContext.Update(converted);
+                dbContext.SaveChanges();
+            }
         }
     }
 }
