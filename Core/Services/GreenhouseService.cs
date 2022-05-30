@@ -26,7 +26,7 @@ namespace Core.Services
             return _repository.Get(id) != null;
         }
 
-        public void UpdateGreenhouse(string greenhouseId, float latitude, float longitude)
+        public void UpdateGreenhouse(Greenhouse greenhouse)
         {
             throw new NotImplementedException();
         }
