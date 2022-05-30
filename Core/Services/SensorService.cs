@@ -18,7 +18,7 @@ namespace Core.Services
             potStatuses.AddRange(greenhouseStatuses);
             return potStatuses;
         }
-
+        
         public void SetSensorStatus(SensorStatus sensorStatus, string greenhouseId, int? sensorId)
         {
             if (sensorId == null)

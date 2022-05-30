@@ -22,6 +22,15 @@ namespace Data.Mappers
             };
         }
 
+        internal static Core.Models.SensorStatus Convert(SensorStatus? sensorstatuses)
+        {
+            throw new System.NotImplementedException();
+            if (sensorstatuses == null)
+            {
+                //return SensorStatus.Empty;
+            }
+        }
+
         internal static Core.Models.Greenhouse Convert(Greenhouse greenhouse)
         {
             return new()
