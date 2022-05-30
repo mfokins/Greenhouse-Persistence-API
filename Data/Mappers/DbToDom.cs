@@ -52,8 +52,8 @@ namespace Data.Mappers
         {
             return new Core.Models.MoistureMeasurement()
             {
-                Moisture = moistureMeasurement.Moisture,
-                Time = moistureMeasurement.Time,
+                Moisture = moistureMeasurement == null ? 0 : moistureMeasurement.Moisture,
+                Time = moistureMeasurement == null ? DateTime.Now : moistureMeasurement.Time,
                 PotId = potId
             };
         }
@@ -66,10 +66,10 @@ namespace Data.Mappers
                 moistureThreshold = Convert(pot.MoistureThreshold),
                 Name = pot.Name,
                 MoistureSensorId = pot.MoistureSensorId,
-                
+
             };
         }
-        
+
         public static Core.Models.Threshold Convert(Threshold threshold)
         {
             if (threshold == null)

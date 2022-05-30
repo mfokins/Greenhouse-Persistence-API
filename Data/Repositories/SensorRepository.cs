@@ -15,11 +15,8 @@ namespace Data.Repositories
                 .Include(g => g.Pots)
                 ?.FirstOrDefault(gh => gh.GreenHouseId == greenhouseId)
                 ?.Pots
-                .Select(pots => pots.MoistureSensorStatus);
-            throw new NotImplementedException();
-
-            //return DbToDom.Convert(sensorstatuses);
-
+                .Select(pots => DbToDom.Convert(pots.MoistureSensorStatus)).ToList();
+            return sensorstatuses == null ? new List<SensorStatus>() : sensorstatuses;
 
         }
 
