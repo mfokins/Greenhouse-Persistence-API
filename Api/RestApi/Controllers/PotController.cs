@@ -22,18 +22,19 @@ namespace Api.RestApi.Controllers
         [HttpGet]
         public IEnumerable<Pot> Get([FromRoute] string greenhouseId, [FromQuery] int page = 0, [FromQuery] int itemsPerPage = 25)
         {
-            var pots = _potService.GetAll(greenhouseId, page, itemsPerPage).Select(x => DomToApi.Convert(x));
-            foreach (var pot in pots)
-            {
-                pot.LatestMoisture = _moistureService.GetLatest(greenhouseId, pot.Id).Moisture;
-            }
+            List<Pot> pots = _potService.GetAll(greenhouseId, page, itemsPerPage).Select(x => DomToApi.Convert(x)).ToList();
+            //Android team wanted this last minute
+            pots.ForEach(x => x.LatestMoisture = _moistureService.GetLatest(greenhouseId, x.Id).Moisture);
+
             return pots;
         }
 
         [HttpGet("{PotId:int}")]
         public Pot GetById([FromRoute] string greenhouseId, [FromRoute] int PotId)
         {
-            return DomToApi.Convert(_potService.Get(PotId, greenhouseId));
+            var converted = DomToApi.Convert(_potService.Get(PotId, greenhouseId));
+            converted.LatestMoisture = _moistureService.GetLatest(greenhouseId, PotId).Moisture;
+            return converted;
         }
 
         [HttpPost]
