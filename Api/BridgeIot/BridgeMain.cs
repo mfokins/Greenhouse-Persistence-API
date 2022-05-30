@@ -76,14 +76,14 @@ namespace Api.BridgeIot
             switch (message.cmd)
             {
                 case "rx": //this is message from arduino
-                    //RxMessage theMessage = RxMessage.GetRxMessage(message.json);
-                    //messageHandler.HandleRxMessage(theMessage);
+                    RxMessage theMessage = RxMessage.GetRxMessage(message.json);
+                    messageHandler.HandleRxMessage(theMessage);
                     break;
                 case "tx": //this is message from lorawan about succesfull enquee
                     //do nothing this just say that the messsage was enqued
                     //Console.WriteLine(message.json);
-                    //TxMessage txMessage = TxMessage.GetTxMessage(message.json);
-                    //messageHandler.HandleTxMessage(txMessage);
+                    TxMessage txMessage = TxMessage.GetTxMessage(message.json);
+                    messageHandler.HandleTxMessage(txMessage);
                     break;
                 case "gw": //this message do not have reason for our project, it gives info about gateway
                     GwMessage gwMessage = GwMessage.GetGwMessage(message.json);

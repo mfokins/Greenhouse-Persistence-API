@@ -56,6 +56,7 @@ namespace Api.BridgeIot
             float? humidity = null;
             int? CO2 = null;
             int[] moisture = null;
+            HardwareStatus? status = null;
 
             switch (message.port)
             {
@@ -87,14 +88,23 @@ namespace Api.BridgeIot
                     humidity = this.extractFromHexToInt(message.data, 2, 3, false) / 10.0F;
                     CO2 = this.extractFromHexToInt(message.data, 4, 5, false);
                     Console.Write(">>> Bridge: the temp (v6) is: {0}, humidity: {1}, CO2: {2}, moisture: ", temperature, humidity, CO2);
-
-                    moisture = new int[6];
-                    for (int i = 0; i < 6; i++)
-                    {
-                        moisture[i] = this.extractFromHexToInt(message.data, i + 6, i + 6, false);
-                        Console.Write("{0}, ", moisture[i]);
-                    }
+                    moisture = this.readMoisture(message.data);
                     Console.Write("\n");
+                    break;
+                case 7:
+                    //the same as the above
+                    temperature = this.extractFromHexToInt(message.data, 0, 1, true) / 10.0F;
+                    humidity = this.extractFromHexToInt(message.data, 2, 3, false) / 10.0F;
+                    CO2 = this.extractFromHexToInt(message.data, 4, 5, false);
+                    Console.Write(">>> Bridge: the temp (v7) is: {0}, humidity: {1}, CO2: {2}, moisture: ", temperature, humidity, CO2);
+                    moisture = this.readMoisture(message.data);
+                    Console.Write("\n");
+
+                    //read sensor status here
+                    int sensorStatuses = extractFromHexToInt(message.data, 12, 12, false);
+                    // this is a char converted to int - ones on bit positions mean working zero means not working
+
+                    status = HardwareStatus.fromCharToHardwareStatus(sensorStatuses, 0, 1, 2, 3);
                     break;
             }
 
@@ -156,12 +166,32 @@ namespace Api.BridgeIot
                 
             }
 
+            if (status != null)
+            {
+                Console.WriteLine("temp: {0}, hum: {1}, co2: {2}, moisture: {3}",
+                    status.temperatureWorking,status.humidityWorking,status.co2Working,status.moistureWorking);
+
+                // interface for this is not finished
+            }
+            //return;
             sendTresholds(message.EUI); // checking if tresholds were updated and sending it
         }
 
         public void HandleTxMessage(TxMessage message)
         {
             return;
+        }
+
+        private int[] readMoisture(string messageData)
+        {
+            int[] moisture = new int[6];
+            for (int i = 0; i < 6; i++)
+            {
+                moisture[i] = this.extractFromHexToInt(messageData, i + 6, i + 6, false);
+                Console.Write("{0}, ", moisture[i]);
+            }
+            
+            return moisture;
         }
 
         private void sendTresholds(string EUI){
