@@ -1,5 +1,5 @@
 /*
- * MessageHandler.cs
+ * TxMessage.cs
  *
  *  Author: Lukas
  */

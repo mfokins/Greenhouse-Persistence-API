@@ -1,4 +1,10 @@
-﻿using System;
+﻿/*
+ * HardwareStatus.cs
+ *
+ *  Author: Lukas
+ */
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;

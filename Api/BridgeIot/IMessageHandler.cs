@@ -1,3 +1,9 @@
+/*
+ * IMessageHandler.cs
+ *
+ *  Author: Lukas
+ */
+
 using System.Collections;
 using Core.Interfaces.Temperature;
 using Core.Models;
