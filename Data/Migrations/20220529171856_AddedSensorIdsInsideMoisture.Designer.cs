@@ -4,6 +4,7 @@ using Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(GreenHouseDbContext))]
-    partial class GreenHouseDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220529171856_AddedSensorIdsInsideMoisture")]
+    partial class AddedSensorIdsInsideMoisture
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -143,9 +145,6 @@ namespace Data.Migrations
                     b.Property<int>("MoistureSensorId")
                         .HasColumnType("int");
 
-                    b.Property<int>("MoistureSensorStatusId")
-                        .HasColumnType("int");
-
                     b.Property<int>("MoistureThresholdId")
                         .HasColumnType("int");
 
@@ -157,35 +156,9 @@ namespace Data.Migrations
 
                     b.HasIndex("GreenHouseId");
 
-                    b.HasIndex("MoistureSensorStatusId");
-
                     b.HasIndex("MoistureThresholdId");
 
                     b.ToTable("Pot");
-                });
-
-            modelBuilder.Entity("Data.Models.SensorStatus", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("GreenHouseId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<bool>("IsWorking")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("Type")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("GreenHouseId");
-
-                    b.ToTable("SensorStatus");
                 });
 
             modelBuilder.Entity("Data.Models.Threshold", b =>
@@ -249,28 +222,13 @@ namespace Data.Migrations
                         .WithMany("Pots")
                         .HasForeignKey("GreenHouseId");
 
-                    b.HasOne("Data.Models.SensorStatus", "MoistureSensorStatus")
-                        .WithMany()
-                        .HasForeignKey("MoistureSensorStatusId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Data.Models.Threshold", "MoistureThreshold")
                         .WithMany()
                         .HasForeignKey("MoistureThresholdId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("MoistureSensorStatus");
-
                     b.Navigation("MoistureThreshold");
-                });
-
-            modelBuilder.Entity("Data.Models.SensorStatus", b =>
-                {
-                    b.HasOne("Data.Models.Greenhouse", null)
-                        .WithMany("SensorStatuses")
-                        .HasForeignKey("GreenHouseId");
                 });
 
             modelBuilder.Entity("Data.Models.Threshold", b =>
@@ -287,8 +245,6 @@ namespace Data.Migrations
                     b.Navigation("HumidityMeasurements");
 
                     b.Navigation("Pots");
-
-                    b.Navigation("SensorStatuses");
 
                     b.Navigation("TemperatureMesurments");
 

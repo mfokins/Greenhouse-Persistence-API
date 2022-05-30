@@ -11,10 +11,13 @@ namespace Data.Models
         [Required]
 
         public string Name { get; set; }
+        public int MoistureSensorId { get; set; }
         public int MoistureThresholdId { get; set; }
+        public SensorStatus MoistureSensorStatus { get; set; }
         [ForeignKey("MoistureThresholdId")]
         public Threshold MoistureThreshold { get; set; }
         [Required]
-        public IList<MoistureMeasurement> MoistureMeasurements { get; set; }
+        public List<MoistureMeasurement> MoistureMeasurements { get; set; }
+        
     }
 }

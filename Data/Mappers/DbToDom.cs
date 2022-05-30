@@ -49,16 +49,18 @@ namespace Data.Mappers
             };
         }
 
-        internal static Core.Models.Pot Convert(Pot t)
+        internal static Core.Models.Pot Convert(Pot pot)
         {
             return new Core.Models.Pot
             {
-                Id = t.Id,
-                moistureThreshold = Convert(t.MoistureThreshold),
-                Name = t.Name,
+                Id = pot.Id,
+                moistureThreshold = Convert(pot.MoistureThreshold),
+                Name = pot.Name,
+                MoistureSensorId = pot.MoistureSensorId,
+                
             };
         }
-
+        
         public static Core.Models.Threshold Convert(Threshold threshold)
         {
             if (threshold == null)

@@ -131,31 +131,48 @@ namespace Api.BridgeIot
                 thisCo2.GreenHouseId = greenhouseEUI;
 
                 thisCo2.Time = DateTimeOffset.FromUnixTimeSeconds(unixInSec).DateTime.ToLocalTime();
-
+                
                 _Co2Service.Add(thisCo2);
             }
 
             if (moisture != null)
             {
-                //get all pots that need the data
+                for (int i = 0; i < moisture.Length; i++)
+                {
+                    MoistureMeasurement thisMoisture = new MoistureMeasurement();
+
+                    thisMoisture.Moisture = moisture[i];
+                    thisMoisture.PotId = i;
+                    thisMoisture.GreenHouseId = greenhouseEUI;
+
+                    thisMoisture.Time = DateTimeOffset.FromUnixTimeSeconds(unixInSec).DateTime.ToLocalTime();
+
+                    _moistureService.Add(thisMoisture, i);
+                }
+                /*//get all pots that need the data
                 IEnumerator<Pot> pots = _potService.GetAll(greenhouseEUI).GetEnumerator();
+
+                
                 int index = 0;
 
                 while (pots.MoveNext() && index<6)
                 {
                     MoistureMeasurement thisMoisture = new MoistureMeasurement();
+                    
                     thisMoisture.Moisture = moisture[index++];
                     thisMoisture.PotId = pots.Current.Id;
                     thisMoisture.GreenHouseId = greenhouseEUI;
 
                     thisMoisture.Time = DateTimeOffset.FromUnixTimeSeconds(unixInSec).DateTime.ToLocalTime();
-
-                    _moistureService.Add(thisMoisture);
+                    //Add here the id of the sensor
+                    var sendorId = 3;
+                    _moistureService.Add(thisMoisture, sendorId);
                 }
-                //we have 6 pots allways, they specify which of them did they set up
+                //we have 6 sensors allways, they specify which of them did they set up*/
                 
             }
 
+            //return; // during testing of bridge do not send thresholds, so the quee will not be filled up
             sendTresholds(message.EUI); // checking if tresholds were updated and sending it
         }
 

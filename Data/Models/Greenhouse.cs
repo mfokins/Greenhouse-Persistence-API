@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Data.Models.Measurements;
+﻿using Data.Models.Measurements;
 using System.ComponentModel.DataAnnotations;
 
 namespace Data.Models
@@ -21,6 +20,9 @@ namespace Data.Models
         public List<Threshold> Thresholds { get; set; }
         [Required]
         public List<Pot> Pots { get; set; }
+        [Required]
+        public List<SensorStatus> SensorStatuses { get; set; }
+
 
     }
 }

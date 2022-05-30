@@ -8,6 +8,8 @@ namespace Core.Models
         public string Name { get; set; }
         public Threshold moistureThreshold { get; set; }
         public string GreenHouseId { get; set; }
-        
+        public int MoistureSensorId { get; set; }
+
+
     }
 }

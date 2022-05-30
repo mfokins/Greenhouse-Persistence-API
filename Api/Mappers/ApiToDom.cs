@@ -64,6 +64,7 @@ namespace Api.Mappers
                 },
                 Name = pot.Name,
                 Id = pot.Id,
+                MoistureSensorId = pot.MoistureSensorId,
             };
         }
 
