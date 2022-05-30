@@ -6,6 +6,6 @@ namespace Core.Interfaces.Sensors
     {
         //sensorId is for if u want to set a status for a moisture sensor
         void SetSensorStatus(SensorStatus sensorStatus, string greenhouseId, int? sensorId);
-        IList<SensorStatus> GetSensorStatuses();
+        IList<SensorStatus> GetSensorStatuses(string greenhouseId);
     }
 }
