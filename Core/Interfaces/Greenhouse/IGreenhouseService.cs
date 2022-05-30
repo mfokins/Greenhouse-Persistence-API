@@ -9,5 +9,6 @@ namespace Core.Interfaces.Greenhouse
         Models.Greenhouse Get(string id);
         
         bool IsCreated(string id);
+        void UpdateGreenhouse(string greenhouseId, float latitude, float longitude);
     }
 }
