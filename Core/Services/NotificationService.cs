@@ -11,19 +11,16 @@ namespace Core.Services
         private bool notificationServiceSetUp = false;
         public NotificationService()
         {
+
+
             try
             {
-                var app = FirebaseApp.Create(new AppOptions() { Credential = GoogleCredential.FromFile("FirebaseAuth.json").CreateScoped("https://www.googleapis.com/auth/firebase.messaging") });
+                var app = FirebaseApp.Create(new AppOptions() { Credential = GoogleCredential.FromFile("appsettings.json").CreateScoped("https://www.googleapis.com/auth/firebase.messaging") });
                 firebaseMessaging = FirebaseMessaging.GetMessaging(app);
                 notificationServiceSetUp = true;
             }
             catch (Exception ex)
             {
-                foreach (var path in Directory.GetFiles(""))
-                {
-                    Console.WriteLine(path); // full path
-                    Console.WriteLine(System.IO.Path.GetFileName(path)); // file name
-                }
                 Console.WriteLine("Notification serivice not set up! ");
                 Console.WriteLine(ex.Message);
                 notificationServiceSetUp = false;
