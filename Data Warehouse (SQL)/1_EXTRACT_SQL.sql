@@ -67,13 +67,13 @@ use
 TRUNCATE TABLE [stage].[Dim_Greenhouse]
 INSERT INTO [stage].[Dim_Greenhouse](
      [GreenHouse_ID]
-    [Country] ,
-     [City]
+    [Latitude] ,
+     [Longitude]
 )
 SELECT
     [GreenHouseId]
-    [Country],
-    [City]
+    [Latitude],
+    [Longitude]
 FROM [GreenhouseDB].[dbo].Greenhouses
 
 

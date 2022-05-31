@@ -30,6 +30,6 @@ namespace Core.Services
         public void UpdateGreenhouse(Greenhouse greenhouse)
         {
             _repository.Update(greenhouse);
-        }
+        }        
     }
 }

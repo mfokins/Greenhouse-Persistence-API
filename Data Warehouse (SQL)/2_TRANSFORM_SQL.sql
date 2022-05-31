@@ -2,10 +2,10 @@
 USE [GreenHouseDWH]
 GO
 UPDATE [stage].[Dim_Greenhouse]
-SET Latitude = -1 WHERE City IS NULL
+SET Latitude = -1 WHERE Latitude IS NULL
 
 UPDATE [stage].[Dim_Greenhouse]
-SET Longitude = -1 WHERE Country IS NULL
+SET Longitude = -1 WHERE Longitude IS NULL
 
 --UPDATE the Greenhouse Dimension to replace the NULL attributes values to UNKNOWN
 UPDATE [stage].[Dim_Pot]

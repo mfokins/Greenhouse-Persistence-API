@@ -24,7 +24,5 @@ namespace Data.Models
         public List<Pot> Pots { get; set; }
         [Required]
         public List<SensorStatus> SensorStatuses { get; set; }
-
-
     }
 }

@@ -68,7 +68,8 @@ for (int i = 0; i < 5; i++)
 
     generatePots(greenhouseid, generateThreshold());
     IEnumerable<Pot> currentPots = potRepository.GetAll(greenhouseid, 0, 25);
-    List<Pot> potList = currentPots.ToList();
+    var enumerable = currentPots.ToList();
+    List<Pot> potList = enumerable.ToList();
 
     while (time < DateTime.Now)
     {
@@ -95,10 +96,9 @@ for (int i = 0; i < 5; i++)
             Time = time
         });
 
-        for (int potLoop = 0; potLoop <= currentPots.Count() - 1; potLoop++)
+        for (int potLoop = 0; potLoop <= enumerable.Count() - 1; potLoop++)
         {
-            double newMoisture = generateMoisture(newTemp, moisture, temp);
-            moisture = newMoisture;
+            double newMoisture = generateTemp(temp, time);
             if (checkMoisture(potList[potLoop].moistureThreshold, newMoisture))
             {
                 var diff = potList[potLoop].moistureThreshold.LowerThreshold - newMoisture;
@@ -125,7 +125,6 @@ for (int i = 0; i < 5; i++)
         co2 = newCo2;
         if (temps.Count >= 1000)
         {
-            
             tempRep.AddBulk(temps);
             humRep.AddBulk(hums);
             carbonRepository.AddBulk(carbons);
@@ -138,6 +137,7 @@ for (int i = 0; i < 5; i++)
         }
         //Thread.Sleep(50);
     }
+
     Console.WriteLine("Added 1000 elements");
     tempRep.AddBulk(temps);
     humRep.AddBulk(hums);
@@ -294,6 +294,7 @@ void generatePots(string greenhouseId, Threshold threshold)
     var randomPlant = rnd.Next(0, nameOfPlants.Length);
     for (int i = 0; i < 6; i++)
     {
+        randomPlant = rnd.Next(0, nameOfPlants.Length);
         pots.Add(new Core.Models.Pot()
         {
             GreenHouseId = greenhouseId,
