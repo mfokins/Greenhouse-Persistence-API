@@ -69,7 +69,11 @@ namespace Data.Mappers
 
         internal static SensorStatus Convert(Core.Models.SensorStatus sensorStatus)
         {
-            throw new NotImplementedException();
+            return new SensorStatus
+            {
+                IsWorking = sensorStatus.IsWorking,
+                Type = (SensorType)sensorStatus.Type
+            };
         }
     }
 }
