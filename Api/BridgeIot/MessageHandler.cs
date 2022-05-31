@@ -14,6 +14,7 @@ using Core.Interfaces.DioxideCarbon;
 using Core.Interfaces.Pot;
 using Core.Interfaces.Greenhouse;
 using Core.Interfaces;
+using Core.Interfaces.Sensors;
 
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -30,13 +31,15 @@ namespace Api.BridgeIot
         private IDioxideCarbonService _Co2Service;
         private IMoistureService _moistureService;
         private IPotService _potService;
-        
+        private ISensorService _sensorService;
+        private IGreenhouseService _greenhouseService;
+
 
         private DownlinkHandler _downlinkHandler;
         private Action<TxMessage> _socketResponse;
         public MessageHandler(ITemperatureService tempService, IHumidityService humService, 
             IDioxideCarbonService co2Service, DownlinkHandler downlinkHandler, IMoistureService moistureService,
-            IPotService potService)
+            IPotService potService, ISensorService sensorService, IGreenhouseService greenhouseService)
         {
             _tempService = tempService;
             _downlinkHandler = downlinkHandler;
@@ -44,6 +47,8 @@ namespace Api.BridgeIot
             _Co2Service = co2Service;
             _moistureService = moistureService;
             _potService = potService;
+            _sensorService = sensorService;
+            _greenhouseService = greenhouseService;
         }
 
         public void setResponseAction(Action<TxMessage> responseAction)
@@ -56,6 +61,7 @@ namespace Api.BridgeIot
             float? humidity = null;
             int? CO2 = null;
             int[] moisture = null;
+            HardwareStatus? status = null;
 
             switch (message.port)
             {
@@ -87,14 +93,23 @@ namespace Api.BridgeIot
                     humidity = this.extractFromHexToInt(message.data, 2, 3, false) / 10.0F;
                     CO2 = this.extractFromHexToInt(message.data, 4, 5, false);
                     Console.Write(">>> Bridge: the temp (v6) is: {0}, humidity: {1}, CO2: {2}, moisture: ", temperature, humidity, CO2);
-
-                    moisture = new int[6];
-                    for (int i = 0; i < 6; i++)
-                    {
-                        moisture[i] = this.extractFromHexToInt(message.data, i + 6, i + 6, false);
-                        Console.Write("{0}, ", moisture[i]);
-                    }
+                    moisture = this.readMoisture(message.data);
                     Console.Write("\n");
+                    break;
+                case 7:
+                    //the same as the above
+                    temperature = this.extractFromHexToInt(message.data, 0, 1, true) / 10.0F;
+                    humidity = this.extractFromHexToInt(message.data, 2, 3, false) / 10.0F;
+                    CO2 = this.extractFromHexToInt(message.data, 4, 5, false);
+                    Console.Write(">>> Bridge: the temp (v7) is: {0}, humidity: {1}, CO2: {2}, moisture: ", temperature, humidity, CO2);
+                    moisture = this.readMoisture(message.data);
+                    Console.Write("\n");
+
+                    //read sensor status here
+                    int sensorStatuses = extractFromHexToInt(message.data, 12, 12, false);
+                    // this is a char converted to int - ones on bit positions mean working zero means not working
+
+                    status = HardwareStatus.fromCharToHardwareStatus(sensorStatuses, 0, 1, 2, 3);
                     break;
             }
 
@@ -172,13 +187,50 @@ namespace Api.BridgeIot
                 
             }
 
-            //return; // during testing of bridge do not send thresholds, so the quee will not be filled up
+            if (status != null)
+            {
+                Console.WriteLine(">>> Bridge: statuses: [ temp: {0}, hum: {1}, co2: {2}, moisture: {3} ] ",
+                    status.temperatureWorking,status.humidityWorking,status.co2Working,status.moistureWorking);
+
+                try
+                {
+                    // storing statuses in database
+                    //saving status for temperature
+                    SensorStatus tempSensor = new SensorStatus() { Type = SensorType.Temperature, IsWorking = status.temperatureWorking };
+                    _sensorService.SetSensorStatus(tempSensor, greenhouseEUI, null);
+
+                    //saving status for humidity
+                    SensorStatus humiditySensor = new SensorStatus() { Type = SensorType.Humidity, IsWorking = status.humidityWorking };
+                    _sensorService.SetSensorStatus(humiditySensor, greenhouseEUI, null);
+
+                    //making it for co2
+                    SensorStatus co2Sensor = new SensorStatus() { Type = SensorType.Co2, IsWorking = status.co2Working };
+                    _sensorService.SetSensorStatus(co2Sensor, greenhouseEUI, null);
+                } catch (NotImplementedException ex)
+                {
+                    Console.WriteLine("!!!!!!!!!!!!! sensor state is not implemented in data part!!!");
+                }
+                
+            }
+            //return;
             sendTresholds(message.EUI); // checking if tresholds were updated and sending it
         }
 
         public void HandleTxMessage(TxMessage message)
         {
             return;
+        }
+
+        private int[] readMoisture(string messageData)
+        {
+            int[] moisture = new int[6];
+            for (int i = 0; i < 6; i++)
+            {
+                moisture[i] = this.extractFromHexToInt(messageData, i + 6, i + 6, false);
+                Console.Write("{0}, ", moisture[i]);
+            }
+            
+            return moisture;
         }
 
         private void sendTresholds(string EUI){
@@ -274,6 +326,32 @@ namespace Api.BridgeIot
                 return ch - '0';
             }
             throw new ArgumentOutOfRangeException("char is not a letter form a to F or number");
+        }
+
+        public void HandleGwMessage(GwMessage message)
+        {
+            string greenhouseId = message.EUI;
+
+            //from my observation the closest tower, and the one that arduiono connects to is first in list
+            Gateway connectedGateway = message.gws.ToArray()[0];
+
+            float lon = connectedGateway.lon;
+            float lat = connectedGateway.lat;
+            //TODO send this to an interface when there will be some
+
+            try
+            {
+                Greenhouse greenhouse = new Greenhouse()
+                {
+                    GreenHouseId = greenhouseId,
+                    Latitude = lat,
+                    Longitude = lon
+                };
+                _greenhouseService.UpdateGreenhouse(greenhouse);
+            } catch (NotImplementedException ex)
+            {
+                Console.WriteLine("!!!!!!!updating greenhouse location is not made");
+            }
         }
     }
 }

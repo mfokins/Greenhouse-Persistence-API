@@ -1,3 +1,9 @@
+/*
+ * IMessageHandler.cs
+ *
+ *  Author: Lukas
+ */
+
 using System.Collections;
 using Core.Interfaces.Temperature;
 using Core.Models;
@@ -9,6 +15,7 @@ namespace Api.BridgeIot
     {
         public void HandleRxMessage(RxMessage message);
         public void HandleTxMessage(TxMessage message);
+        public void HandleGwMessage(GwMessage message);
         void setResponseAction(Action<TxMessage> responseAction);
     }
 }

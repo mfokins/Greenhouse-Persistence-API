@@ -4,7 +4,8 @@ namespace Data.Mappers
 {
     public class DbToDom
     {
-        public static Core.Models.TemperatureMeasurement Convert(Models.Measurements.TemperatureMeasurement temperatureMeasurement)
+        public static Core.Models.TemperatureMeasurement Convert(
+            Models.Measurements.TemperatureMeasurement temperatureMeasurement)
         {
             return new Core.Models.TemperatureMeasurement()
             {
@@ -13,7 +14,8 @@ namespace Data.Mappers
             };
         }
 
-        public static Core.Models.DioxideCarbonMeasurement Convert(Models.Measurements.DioxideCarbonMeasurement dioxideCarbonMeasurement)
+        public static Core.Models.DioxideCarbonMeasurement Convert(
+            Models.Measurements.DioxideCarbonMeasurement dioxideCarbonMeasurement)
         {
             return new Core.Models.DioxideCarbonMeasurement()
             {
@@ -28,10 +30,11 @@ namespace Data.Mappers
             {
                 return Core.Models.SensorStatus.Empty;
             }
+
             return new Core.Models.SensorStatus()
             {
                 IsWorking = sensorstatus.IsWorking,
-                Type = (Core.Models.SensorType)sensorstatus.Type
+                Type = (Core.Models.SensorType) sensorstatus.Type
             };
         }
 
@@ -40,11 +43,14 @@ namespace Data.Mappers
             return new()
             {
                 GreenHouseId = greenhouse.GreenHouseId,
+                Latitude = greenhouse.Latitude,
+                Longitude = greenhouse.Longitude
             };
         }
 
 
-        public static Core.Models.HumidityMeasurement Convert(Models.Measurements.HumidityMeasurement humidityMeasurement)
+        public static Core.Models.HumidityMeasurement Convert(
+            Models.Measurements.HumidityMeasurement humidityMeasurement)
         {
             return new Core.Models.HumidityMeasurement()
             {
@@ -52,7 +58,9 @@ namespace Data.Mappers
                 Time = humidityMeasurement.Time
             };
         }
-        public static Core.Models.MoistureMeasurement Convert(Models.Measurements.MoistureMeasurement moistureMeasurement, int potId)
+
+        public static Core.Models.MoistureMeasurement Convert(
+            Models.Measurements.MoistureMeasurement moistureMeasurement, int potId)
         {
             return new Core.Models.MoistureMeasurement()
             {
@@ -70,7 +78,6 @@ namespace Data.Mappers
                 moistureThreshold = Convert(pot.MoistureThreshold),
                 Name = pot.Name,
                 MoistureSensorId = pot.MoistureSensorId,
-
             };
         }
 
@@ -82,9 +89,8 @@ namespace Data.Mappers
             {
                 HigherThreshold = threshold.HigherThreshold,
                 LowerThreshold = threshold.LowerThreshold,
-                Type = (Core.Models.ThresholdType)threshold.Type
+                Type = (Core.Models.ThresholdType) threshold.Type
             };
         }
     }
-
 }

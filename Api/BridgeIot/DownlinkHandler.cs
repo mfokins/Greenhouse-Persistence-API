@@ -1,3 +1,11 @@
+/*
+ * DownlinkHandler.cs
+ * 
+ * this class is responsible for handing thresholds
+ *
+ *  Author: Lukas
+ */
+
 using System.Collections.Generic;
 using Core.Interfaces;
 using Core.Models;

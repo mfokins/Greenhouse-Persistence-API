@@ -17,9 +17,9 @@ namespace Api.BridgeIot.Domain
 {
     public class GwMessage :LoraWANMessage
     {
-        public IEnumerable<Gateway> gws { get; set; }
+        public List<Gateway> gws { get; set; }
 
-        public GwMessage(string cmd, string EUI, string json, IEnumerable<Gateway> gws) :base(cmd,EUI,json)
+        public GwMessage(string cmd, string EUI, string json, List<Gateway> gws) :base(cmd,EUI,json)
         {
             this.gws = gws;
         }

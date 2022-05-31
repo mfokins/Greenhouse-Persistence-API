@@ -1,3 +1,9 @@
+/*
+ * BridgeMain.cs
+ *
+ *  Author: Lukas
+ */
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -86,6 +92,8 @@ namespace Api.BridgeIot
                     messageHandler.HandleTxMessage(txMessage);
                     break;
                 case "gw": //this message do not have reason for our project, it gives info about gateway
+                    GwMessage gwMessage = GwMessage.GetGwMessage(message.json);
+                    messageHandler.HandleGwMessage(gwMessage);
                     break;
                 case "txd": //this is confirmation about downlik if requested
                     //Console.WriteLine(">>> Bridge: "+message.json);
