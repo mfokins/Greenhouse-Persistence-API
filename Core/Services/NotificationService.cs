@@ -18,6 +18,8 @@ namespace Core.Services
                 var app = FirebaseApp.Create(new AppOptions() { Credential = GoogleCredential.FromFile("appsettings.json").CreateScoped("https://www.googleapis.com/auth/firebase.messaging") });
                 firebaseMessaging = FirebaseMessaging.GetMessaging(app);
                 notificationServiceSetUp = true;
+                Console.WriteLine("Notification serivice is running! ");
+
             }
             catch (Exception ex)
             {
@@ -39,6 +41,8 @@ namespace Core.Services
                     Body = $"{potname} is  running low on water :/, time to water it."
                 };
                 await firebaseMessaging.SendAsync(msg);
+                Console.WriteLine("Notification sent about Moisture threshold! ");
+
             }
             else
             {
