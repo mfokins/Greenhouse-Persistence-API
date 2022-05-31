@@ -96,9 +96,9 @@ GO
 /* -- CREATE Dim_Greenhouse TABLE --*/
 CREATE TABLE [edw].[Dim_Greenhouse] (
     G_ID INT IDENTITY NOT NULL,
-    GreenHouse_ID NVARCHAR(100) NOT NULL,
-    Latitude DECIMAL(8,6),
-    Longitude DECIMAL(9,6)
+    GreenHouse_ID NVARCHAR(450) NOT NULL,
+    Latitude real,
+    Longitude real 
     );
 
 ALTER TABLE [edw].[Dim_Greenhouse] ADD CONSTRAINT PK_Dim_Greenhouse PRIMARY KEY (G_ID);
