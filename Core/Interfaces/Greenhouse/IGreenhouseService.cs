@@ -6,6 +6,6 @@
         Models.Greenhouse Get(string id);
 
         bool IsCreated(string id);
-        void UpdateGreenhouse(Models.Greenhouse greenhouse)
+        void UpdateGreenhouse(Models.Greenhouse greenhouse);
     }
 }
