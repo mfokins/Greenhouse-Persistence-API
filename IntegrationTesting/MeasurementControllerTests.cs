@@ -23,15 +23,6 @@ public class MeasurementControllerTests
     {
         var appFactory = new WebApplicationFactory<Program>().WithWebHostBuilder(builder =>
         {
-            builder.ConfigureServices(services =>
-            {
-                services.RemoveAll(typeof(GreenHouseDbContext));
-                services.AddDbContext<GreenHouseDbContext>(options =>
-                {
-                    options.UseInMemoryDatabase("GreenHouse"); 
-                    
-                });
-            });
         });
         TestClient = appFactory.CreateClient();
         

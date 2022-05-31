@@ -32,4 +32,5 @@ app.MapControllers();
 
 
 app.Run();
+//Needed for intigration tests
 public partial class Program { }
