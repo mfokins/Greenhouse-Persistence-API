@@ -22,7 +22,7 @@ namespace Api.Mappers
         {
             return new SensorStatus
             {
-                Sensor = status.Type.ToString(),
+                Sensor = status.Name == "" ? status.Type.ToString() : status.Name,
                 Status = status.IsWorking
             };
         }

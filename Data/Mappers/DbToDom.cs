@@ -24,7 +24,7 @@ namespace Data.Mappers
             };
         }
 
-        public static Core.Models.SensorStatus Convert(SensorStatus? sensorstatus)
+        public static Core.Models.SensorStatus Convert(SensorStatus? sensorstatus, string name = "")
         {
             if (sensorstatus == null)
             {
@@ -33,6 +33,7 @@ namespace Data.Mappers
 
             return new Core.Models.SensorStatus()
             {
+                Name = name,
                 IsWorking = sensorstatus.IsWorking,
                 Type = (Core.Models.SensorType) sensorstatus.Type
             };

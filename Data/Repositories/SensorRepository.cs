@@ -15,7 +15,7 @@ namespace Data.Repositories
                 .ThenInclude(p => p.MoistureSensorStatus)
                 ?.FirstOrDefault(gh => gh.GreenHouseId == greenhouseId)
                 ?.Pots
-                .Select(pot => pot.MoistureSensorStatus == null ? SensorStatus.Empty : DbToDom.Convert(pot.MoistureSensorStatus)).ToList();
+                .Select(pot => pot.MoistureSensorStatus == null ? SensorStatus.Empty : DbToDom.Convert(pot.MoistureSensorStatus,pot.Name)).ToList();
             return sensorstatuses ?? new List<SensorStatus>();
 
         }

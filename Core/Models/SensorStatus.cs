@@ -13,6 +13,7 @@ namespace Core.Models
     {
         public SensorType Type { get; set; }
         public bool IsWorking { get; set; }
+        public string Name { get; set; }
         public static SensorStatus Empty
         {
             get
