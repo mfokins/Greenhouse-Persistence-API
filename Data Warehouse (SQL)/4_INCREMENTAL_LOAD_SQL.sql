@@ -170,7 +170,7 @@ FROM [GreenhouseDB].[dbo].Greenhouses g
 on (g.GreenHouseId=t.GreenHouseId)
     JOIN [GreenhouseDB].[dbo].[HumidityMeasurement] h on (g.GreenHouseId=h.GreenHouseId and t.Time = h.Time)
     JOIN [GreenhouseDB].[dbo].[DioxideCarbonMeasurement] c on (g.GreenHouseId= c.GreenHouseId and t.Time = c.Time)
-  WHERE src.[Time] > (@LastLoadDate)
+  WHERE t.[Time] > (@LastLoadDate)
 GO
 
 

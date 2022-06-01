@@ -3,7 +3,7 @@ DROP
 DATABASE IF EXISTS [GreenHouseDWH]
 go
 -- CREATE GreenHouseDWH DATABASE
-DATABASE [GreenHouseDWH]
+CREATE DATABASE [GreenHouseDWH]
 go
 -- USE the GreenHouseDWH DATABASE
 use [GreenHouseDWH];
@@ -110,15 +110,17 @@ FROM [GreenhouseDB].[dbo].Pot
 
 --POPULATE Fact Moisture Pots
     TRUNCATE TABLE [stage].[Fact_MoisturePots]
-INSERT
-INTO [stage].[Fact_MoisturePots]([Pot_ID],
+INSERT INTO [stage].[Fact_MoisturePots](
+    [Pot_ID],
     [GreenHouse_ID],
     [Moisture],
-[MeasurementDateTime])
-SELECT pot.[Id],
-       pot.[GreenHouseId],
-       mst.[Moisture],
-       mst.Time
+[MeasurementDateTime]
+)
+SELECT
+    pot.[Id],
+    pot.[GreenHouseId],
+    mst.[Moisture],
+    mst.Time
 FROM [GreenhouseDB].[dbo].[Pot] pot
     inner join [GreenhouseDB].[dbo].MoistureMeasurement mst
 on mst.potId=pot.Id
