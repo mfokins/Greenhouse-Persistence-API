@@ -22,7 +22,6 @@ namespace IntegrationTesting;
 public class TemperatureMeasurementTest : MeasurementControllerTests
 {
     private Greenhouse _testGreenhouse;
-
     [Fact]
     public async Task GetLatestTemperatureMeasurement_Null()
     {
@@ -42,7 +41,7 @@ public class TemperatureMeasurementTest : MeasurementControllerTests
         float temperatureMeasurement = model[0].Temperature;
 
         //Assert
-        Assert.Equal(4, model.Count);
+        Assert.Equal(12, temperatureMeasurement);
     }
 
     [Fact]
@@ -139,6 +138,7 @@ public class TemperatureMeasurementTest : MeasurementControllerTests
         var response =
             await TestClient.GetAsync(
                 $"Temperature/{_testGreenhouse.GreenHouseId}?latest=false&page=0&itemsPerPage=25");
+        
         model = await response.Content.ReadAsAsync<List<TemperatureMeasurement>>();
         float temperatureMeasurement = model[model.Count - 1].Temperature;
 

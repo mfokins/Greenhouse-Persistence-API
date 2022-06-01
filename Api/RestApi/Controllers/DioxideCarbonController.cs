@@ -17,8 +17,7 @@ public class DioxideCarbonController : ControllerBase
     {
         _service = service;
     }
-
-
+    
     [HttpGet]
     public IEnumerable<DioxideCarbonMeasurement> Get([FromRoute] string greenhouseId, [FromQuery] bool latest,
         [FromQuery] int page = 0, [FromQuery] int itemsPerPage = 25)

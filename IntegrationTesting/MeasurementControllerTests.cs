@@ -18,11 +18,16 @@ namespace IntegrationTesting;
 public class MeasurementControllerTests
 {
     protected readonly HttpClient TestClient;
-   
     protected MeasurementControllerTests()
     {
         var appFactory = new WebApplicationFactory<Program>().WithWebHostBuilder(builder =>
         {
+            // builder.ConfigureServices(services =>
+            // {
+            //     services.RemoveAll(typeof(DbContext));
+            //     services.AddDbContext<GreenHouseDbContext>(options =>
+            //         options.UseInMemoryDatabase("Greenhouse"));
+            // });
         });
         TestClient = appFactory.CreateClient();
         
@@ -46,11 +51,5 @@ public class MeasurementControllerTests
     {
         var response = await TestClient.PostAsJsonAsync($"DioxideCarbon/{GreenhouseId}", request);
         return await response.Content.ReadAsAsync<Api.Models.HumidityMeasurement>();
-    }
-
-    protected async Task<Api.Models.Pot> CreatePotAsync(string GreenhouseId,Api.Models.Pot request)
-    {
-        var response = await TestClient.PostAsJsonAsync($"Pot/{GreenhouseId}", request);
-        return await response.Content.ReadAsAsync<Api.Models.Pot>();
     }
 }

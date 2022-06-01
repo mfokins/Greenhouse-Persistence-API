@@ -59,7 +59,13 @@ ICollection<Core.Models.MoistureMeasurement> moistures = new List<Core.Models.Mo
 for (int i = 0; i < 5; i++)
 {
     string greenhouseid = Guid.NewGuid().ToString();
-    greenhouseRepository.Add(new Core.Models.Greenhouse() {GreenHouseId = greenhouseid});
+    greenhouseRepository.Add(new Core.Models.Greenhouse()
+    {
+        GreenHouseId = greenhouseid,
+        Latitude = generateCoordinates(),
+        Longitude = generateCoordinates()
+    });
+    
     double temp = 30;
     double humidity = 85;
     double co2 = 330;
@@ -322,4 +328,9 @@ Threshold generateThreshold()
 bool checkMoisture(Threshold threshold, double currentMoisture)
 {
     return currentMoisture < threshold.LowerThreshold;
+}
+
+float generateCoordinates()
+{
+    return  new Random().NextSingle() * (180 - 0) + 0;
 }
