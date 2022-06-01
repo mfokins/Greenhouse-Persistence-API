@@ -58,5 +58,5 @@ SELECT AVG(Co2Measurement) as CarbonDioxideAvgSource FROM [TestGreenHouseDB].[db
 SELECT DISTINCT AVG(CarbonDioxide) as CarbonDioxideAvgWarehouse FROM [TestGreenHouseDWH].[edw].[Fact_Measurements] WHERE CarbonDioxide != -1
 
 --testing sum of non-duplicate moisture measurements in Fact_MoisturePots
-SELECT AVG(Moisture) FROM [TestGreenHouseDB].[dbo].[MoistureMeasurement]
+SELECT AVG(Moisture)  as MoistureAvgSource FROM [TestGreenHouseDB].[dbo].[MoistureMeasurement]
 SELECT DISTINCT AVG(Moisture) as MoistureAvgWarehouse FROM [TestGreenHouseDWH].[edw].[Fact_MoisturePots] WHERE Moisture != -1
