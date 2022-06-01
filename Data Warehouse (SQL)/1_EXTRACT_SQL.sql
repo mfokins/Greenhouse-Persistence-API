@@ -66,12 +66,12 @@ use
 --POPULATE Greenhouse dimension
 TRUNCATE TABLE [stage].[Dim_Greenhouse]
 INSERT INTO [stage].[Dim_Greenhouse](
-     [GreenHouse_ID]
+     [GreenHouse_ID],
     [Latitude] ,
      [Longitude]
 )
 SELECT
-    [GreenHouseId]
+    [GreenHouseId],
     [Latitude],
     [Longitude]
 FROM [GreenhouseDB].[dbo].Greenhouses
